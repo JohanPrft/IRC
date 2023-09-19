@@ -9,7 +9,8 @@ class User {
 private:
 	std::string _nickname;
 	std::string _username;
-	std::string _realname;
+	std::string _fullname;
+    std::string _hostname;
 
 	class InvalidNickException : public std::exception {
 		virtual const char *what() const throw() {
@@ -34,6 +35,11 @@ public:
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
+
+    std::string getNickname() const;
+    std::string getUsername() const;
+    std::string getFullname() const;
+    std::string getHostname() const;
 
 };
 
