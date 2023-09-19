@@ -5,6 +5,8 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <cstdlib>
+#include <vector>
+#include <poll.h>
 
 using std::cout;
 using std::endl;

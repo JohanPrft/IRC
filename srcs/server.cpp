@@ -10,6 +10,38 @@ Server::Server(int port, string password) :
 Server::~Server()
 {}
 
+int handleClient(int clientSocket, std::vector<int>& clients)
+{
+	char buffer[1024];
+  	ssize_t bytesRead;
+
+	bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+	if (bytesRead > 0)
+	{
+		std::cout << clientSocket << " says: ";
+    	std::cout.write(buffer, bytesRead);
+	}
+	if (bytesRead == -1)
+	{
+		std::cerr << "Error receiving data from client" << std::endl;
+		return -1;
+	}
+	if (bytesRead == 0)
+	{
+		std::cout << "Client " << clientSocket << " disconnected" << std::endl;
+		return -1;
+	}
+    for (size_t i = 0; i < clients.size(); ++i)
+	{
+ 		if (clients[i] != clientSocket) // don't send the message back to the client that sent it
+		{  
+    		send(clients[i], buffer, bytesRead, 0);
+  		}
+	}
+    bzero(buffer, sizeof(buffer));
+	return 0;
+}
+
 void	Server::initServer()
 {
 	_serverAddress.sin_family = AF_INET;
@@ -39,30 +71,78 @@ void	Server::initServer()
 	// }
 	std::cout << "Listening..." << std::endl;
 
-	int clientSocket = accept(_serverSocket, NULL, NULL); //addr and addr_len unknown
-	cout << _serverSocket << endl;
+	//accept a call
 
-	cout << clientSocket << endl;
-	if (clientSocket == -1)
+	// Create a pollfd struct for the server socket
+	pollfd serverFd;
+	serverFd.fd = _serverSocket;
+	serverFd.events = POLLIN;
+
+	std::vector<pollfd> clientFds;
+	std::vector<int> clients;
+	while (true)
 	{
-		std::cerr << "Error accepting client socket" << std::endl;
-		return ;
-	}
-	std::cout << "Client connected" << std::endl;
+		// Add the server socket to the pollfd vector
+    	clientFds.clear();
+    	clientFds.push_back(serverFd);
 
-	char buffer[1024];
-	ssize_t bytesRead;
-	while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0)
+    	// Add the client sockets to the pollfd vector
+    	for (size_t i = 0; i < clients.size(); ++i)
+		{
+        	pollfd clientFd;
+        	clientFd.fd = clients[i];
+        	clientFd.events = POLLIN;
+        	clientFds.push_back(clientFd);
+    	}
+
+    	// Use poll to wait for activity on any of the file descriptors
+    	int activity = poll(&clientFds[0], clientFds.size(), -1);
+
+    	if (activity > 0)
+		{
+        	for (size_t i = 0; i < clientFds.size(); ++i)
+			{
+            	if (clientFds[i].revents & POLLIN)
+				{
+                	if (clientFds[i].fd == _serverSocket)
+					{
+                    	// New client connection
+                    	int clientSocket = accept(_serverSocket, NULL, NULL);
+                    	if (clientSocket == -1)
+						{
+                        	std::cerr << "Error accepting client socket" << std::endl;
+                        	return;
+                    	}
+                    	std::cout << "Client " << clientSocket << " connected" << std::endl;
+                    	clients.push_back(clientSocket);
+                	} 
+					else
+					{
+						// Existing client has incoming data
+						if(handleClient(clientFds[i].fd, clients) == -1)
+						{
+							close(clientFds[i].fd);
+						}
+                    
+                	}
+            	}
+        	}
+    	}
+		else if (activity == -1)
+		{
+        	std::cerr << "Error polling" << std::endl;
+			return;
+    	}
+		else 
+		{
+       	std::cout << "Poll timed out" << std::endl;
+	   	return;
+    	}
+
+	}
+	for (size_t i = 0; i < clients.size(); ++i)
 	{
-		std::cout << "Received " << bytesRead << " bytes from client :" << std::endl;
-		std::cout.write(buffer, bytesRead);
-		bzero(buffer, sizeof(buffer));
+		close(clients[i]);
 	}
-
-	if (bytesRead == -1)
-		std::cerr << "Error receiving data from client" << std::endl;
-
-	close(clientSocket);
 	close(_serverSocket);
-
 }
