@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <vector>
 #include <poll.h>
+#include <algorithm>
 
 using std::cout;
 using std::endl;

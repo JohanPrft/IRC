@@ -97,7 +97,6 @@ void	Server::initServer()
 
     	// Use poll to wait for activity on any of the file descriptors
     	int activity = poll(&clientFds[0], clientFds.size(), -1);
-
     	if (activity > 0)
 		{
         	for (size_t i = 0; i < clientFds.size(); ++i)
@@ -121,6 +120,7 @@ void	Server::initServer()
 						// Existing client has incoming data
 						if(handleClient(clientFds[i].fd, clients) == -1)
 						{
+							clients.erase(std::remove(clients.begin(), clients.end(), clientFds[i].fd), clients.end());
 							close(clientFds[i].fd);
 						}
                     
@@ -132,11 +132,6 @@ void	Server::initServer()
 		{
         	std::cerr << "Error polling" << std::endl;
 			return;
-    	}
-		else 
-		{
-       	std::cout << "Poll timed out" << std::endl;
-	   	return;
     	}
 
 	}
