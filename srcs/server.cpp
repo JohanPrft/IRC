@@ -32,14 +32,16 @@ void	Server::initServer()
 		std::cerr << "Error listening on socket" << std::endl;
 		return; // gere ici exeception
 	}
-	if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
-	{
-		std::cerr << "Error putting socket on non bloking mode" << std::endl;
-		return; // gere ici exeception
-	}
+	// if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
+	// {
+	// 	std::cerr << "Error putting socket on non bloking mode" << std::endl;
+	// 	return; // gere ici exeception
+	// }
 	std::cout << "Listening..." << std::endl;
 
 	int clientSocket = accept(_serverSocket, NULL, NULL); //addr and addr_len unknown
+	cout << _serverSocket << endl;
+
 	cout << clientSocket << endl;
 	if (clientSocket == -1)
 	{
