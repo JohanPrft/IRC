@@ -12,7 +12,10 @@ using std::cerr;
 class Server {
 
 		public :
+			Server(int port, string password);
+			~Server();
 
+			
 
 		private :
 			
