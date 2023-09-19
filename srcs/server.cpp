@@ -12,9 +12,9 @@ Server::~Server()
 
 void	Server::initServer()
 {
-	serverAddress.sin_family = AF_INET;
-	serverAddress.sin_port = htons(_port);
-	serverAddress.sin_addr.s_addr = INADDR_ANY;
+	_serverAddress.sin_family = AF_INET;
+	_serverAddress.sin_port = htons(_port);
+	_serverAddress.sin_addr.s_addr = INADDR_ANY;
 
 
 	// permet de retutiliser rapidement une socket meme si elle a ete kill
