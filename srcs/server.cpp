@@ -20,6 +20,20 @@ int handleClient(int clientSocket, std::vector<int>& clients)
 	{
 		std::cout << clientSocket << " says: ";
     	std::cout.write(buffer, bytesRead);
+		for (size_t i = 0; i < clients.size(); ++i)
+		{
+			if (clients[i] != clientSocket) // don't send the message back to the client that sent it
+			{  
+				write(clients[i], "Client ", 7);
+
+				char clientSocketStr[10];
+				std::sprintf(clientSocketStr, "%d", clientSocket);
+
+				write(clients[i], clientSocketStr, strlen(clientSocketStr));
+				write(clients[i], " says: ", 7);
+				write(clients[i], buffer, bytesRead);
+			}
+		}
 	}
 	if (bytesRead == -1)
 	{
@@ -30,13 +44,6 @@ int handleClient(int clientSocket, std::vector<int>& clients)
 	{
 		std::cout << "Client " << clientSocket << " disconnected" << std::endl;
 		return -1;
-	}
-    for (size_t i = 0; i < clients.size(); ++i)
-	{
- 		if (clients[i] != clientSocket) // don't send the message back to the client that sent it
-		{  
-    		send(clients[i], buffer, bytesRead, 0);
-  		}
 	}
     bzero(buffer, sizeof(buffer));
 	return 0;
