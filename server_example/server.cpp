@@ -58,7 +58,6 @@ int main(void)
 	ssize_t bytesRead;
 	while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0)
 	{
-		std::cout << "Received " << bytesRead << " bytes from client :" << std::endl;
 		std::cout.write(buffer, bytesRead);
 		bzero(buffer, sizeof(buffer));
 	}
