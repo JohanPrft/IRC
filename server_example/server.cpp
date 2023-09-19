@@ -4,7 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-
+using namespace std;
 /*
  *	Use for server:
  *		make
@@ -20,6 +20,8 @@ int main(void)
 {
 	//create a socket
 	int serverSocket = socket(AF_INET, SOCK_STREAM, 0); //AF_INET = IPv4, SOCK_STREAM = TCP, 0 = automatic protocol
+	cout << serverSocket << endl;
+
 	if (serverSocket == -1)
 	{
 		std::cerr << "Error creating socket" << std::endl;
@@ -37,7 +39,7 @@ int main(void)
 		return 1;
 	}
 
-	//put socket into listening mode
+	//put socket into listening mode~
 	if (listen(serverSocket, 5) == -1) //backlog max in queue
 	{
 		std::cerr << "Error listening on socket" << std::endl;
@@ -47,6 +49,7 @@ int main(void)
 
 	//accept a call
 	int clientSocket = accept(serverSocket, NULL, NULL); //addr and addr_len unknown
+	cout << clientSocket << endl;
 	if (clientSocket == -1)
 	{
 		std::cerr << "Error accepting client socket" << std::endl;
