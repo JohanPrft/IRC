@@ -3,9 +3,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <cstdlib>
 
-using namespace std;
+
 /*
  *	Use for server:
  *		make
@@ -21,8 +20,6 @@ int main(void)
 {
 	//create a socket
 	int serverSocket = socket(AF_INET, SOCK_STREAM, 0); //AF_INET = IPv4, SOCK_STREAM = TCP, 0 = automatic protocol
-	cout << serverSocket << endl;
-
 	if (serverSocket == -1)
 	{
 		std::cerr << "Error creating socket" << std::endl;
@@ -50,7 +47,6 @@ int main(void)
 
 	//accept a call
 	int clientSocket = accept(serverSocket, NULL, NULL); //addr and addr_len unknown
-	cout << clientSocket << endl;
 	if (clientSocket == -1)
 	{
 		std::cerr << "Error accepting client socket" << std::endl;

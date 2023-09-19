@@ -4,7 +4,10 @@ Server::Server(int port, string password) :
 	_port(port),
 	_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
 	_password(password)
-	{}
+{
+	cout << "Server password is :" << _password << endl;
+	cout << "Server running on port :" << _port << endl;
+}
 
 
 Server::~Server()
@@ -56,8 +59,10 @@ void	Server::initServer()
 	{
 		std::cout << "Received " << bytesRead << " bytes from client :" << std::endl;
 		std::cout.write(buffer, bytesRead);
+		write(clientSocket, buffer, strlen(buffer));
 		bzero(buffer, sizeof(buffer));
 	}
+
 
 	if (bytesRead == -1)
 		std::cerr << "Error receiving data from client" << std::endl;
