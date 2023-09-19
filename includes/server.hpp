@@ -4,11 +4,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <fcntl.h>
+#include <cstdlib>
 
 using std::cout;
 using std::endl;
 using std::string;
 using std::cerr;
+
 
 class Server {
 
