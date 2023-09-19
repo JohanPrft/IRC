@@ -39,5 +39,28 @@ void	Server::initServer()
 	}
 	std::cout << "Listening..." << std::endl;
 
+	int clientSocket = accept(_serverSocket, NULL, NULL); //addr and addr_len unknown
+	cout << clientSocket << endl;
+	if (clientSocket == -1)
+	{
+		std::cerr << "Error accepting client socket" << std::endl;
+		return ;
+	}
+	std::cout << "Client connected" << std::endl;
+
+	char buffer[1024];
+	ssize_t bytesRead;
+	while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0)
+	{
+		std::cout << "Received " << bytesRead << " bytes from client :" << std::endl;
+		std::cout.write(buffer, bytesRead);
+		bzero(buffer, sizeof(buffer));
+	}
+
+	if (bytesRead == -1)
+		std::cerr << "Error receiving data from client" << std::endl;
+
+	close(clientSocket);
+	close(_serverSocket);
 
 }
