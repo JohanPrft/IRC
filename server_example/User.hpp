@@ -3,14 +3,17 @@
 
 #include <iostream>
 #include <string>
+#include <sys/socket.h>
 
 class User {
 
 private:
+    int         _clientSocket;
 	std::string _nickname;
 	std::string _username;
 	std::string _fullname;
     std::string _hostname;
+    int         _loginStatus;
 
 	class InvalidNickException : public std::exception {
 		virtual const char *what() const throw() {
@@ -31,7 +34,8 @@ class InvalideRealnameException : public std::exception {
 };
 
 public:
-	User(std::string infos);
+	User();
+	User(int clientSocket, std::string userInfo);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
@@ -40,8 +44,12 @@ public:
     std::string getUsername() const;
     std::string getFullname() const;
     std::string getHostname() const;
+    int         getLoginStatus() const;
+
+    static std::string receiveInfo(int clientSocket);
 
 };
 
+std::ostream& operator<<(std::ostream& os, const User& user);
 
 #endif
