@@ -24,6 +24,7 @@ class user {
 			string	_nickname;
 			int		_userSocket;
 			bool	_logged;
+			
 
 
 

@@ -14,11 +14,13 @@
 // · o: Give/take channel operator privilege
 // · l: Set/remove the user limit to channel
 
+class user;
 
 class channel{
 
 
 	public :
+		
 
 
 	private :
@@ -28,7 +30,7 @@ class channel{
 		int				_maxUser;
 		bool			_inviteOnly;
 
-		vector<User*>	_userList;
+		vector<user*>	_userList;
 		vector<string>	_banList;
 		vector<string> 	_operatorList;
 
