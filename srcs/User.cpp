@@ -1,26 +1,66 @@
-#include "../includes/User.hpp"
+#include "User.hpp"
+
+// Intercept and process the first 3 messages
+std::string User::receiveInfo(int clientSocket) {
+    std::string userInfo;
+    for (int i = 0; i < 3; ++i) {
+        char buffer[1024];
+        ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+
+        if (bytesRead == -1 || bytesRead == 0) {
+            std::cerr << "Error reading from client." << std::endl;
+            break;
+        } else if (bytesRead == 0) {
+            // Client disconnected prematurely
+            break;
+        } else {
+            // Process the message
+            userInfo += std::string(buffer, bytesRead);
+        }
+    }
+    return (userInfo);
+}
+
+User::User()
+{
+    _nickname = "Undefined";
+    _username = "Undefined";
+    _fullname = "Undefined";
+    _hostname = "Undefined";
+    _clientSocket = -1;
+    _isLogged = -1;
+}
 
 //register client
-User::User(string nick, string user): _logged(false)
+User::User(int clientSocket, std::string userInfo) {
 
-{
+    _clientSocket = clientSocket;
 
-	size_t pos = nick.find("NICK");
-	if (pos == string::npos)
-		throw InvalidNickException();
-	_nickname = nick.substr(pos + 5, nick.find(" ", pos + 5));
+    //define nickname
+    size_t pos = userInfo.find("NICK");
+    size_t endPos = userInfo.find("\n", pos + 5);
+    if (pos == std::string::npos || endPos == std::string::npos)
+        throw InvalidNickException();
+    _nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
 
-	pos = user.find("USER");
-	if (pos == string::npos)
-		throw InvalidUserException();
-	_username = user.substr(pos + 5, user.find(" ", pos + 5));
+    //define username
+    pos = userInfo.find("USER");
+    endPos = userInfo.find(" ", pos + 5);
+    if (pos == std::string::npos || endPos == std::string::npos)
+        throw InvalidUserException();
+    _username = userInfo.substr(pos + 5, endPos - (pos + 5));
 
-	pos = user.find(":");
-	if (pos == string::npos)
-		throw InvalideRealnameException();
-	_fullname = user.substr(pos + 1);
+    //define hostname
+    _hostname = userInfo.substr(endPos + 1, userInfo.find(" ", endPos + 1) - (endPos + 1));
 
-
+    //define fullname
+    pos = userInfo.find(":");
+    if (pos == std::string::npos)
+        throw InvalideRealnameException();
+    endPos = userInfo.find("\n", pos + 1);
+    if (pos == std::string::npos)
+        throw InvalidUserException();
+    _fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
 }
 //if nick isnt taken
     //send welcome message
@@ -28,12 +68,22 @@ User::User(string nick, string user): _logged(false)
     //send error message
 
 User::User(const User &src) {
-	*this = src;
+    _clientSocket = src._clientSocket;
+    _nickname = src._nickname;
+    _username = src._username;
+    _fullname = src._fullname;
+    _hostname = src._hostname;
+    _isLogged = src._isLogged;
 }
 
 User &User::operator=(const User &cpy) {
 	if (this != &cpy) {
-
+        _clientSocket = cpy._clientSocket;
+        _nickname = cpy._nickname;
+        _username = cpy._username;
+        _fullname = cpy._fullname;
+        _hostname = cpy._hostname;
+        _isLogged = cpy._isLogged;
 	}
 	return (*this);
 }
@@ -42,37 +92,38 @@ User::~User() {
 
 }
 
+std::ostream& operator<<(std::ostream& os, const User& user) {
+    os << "Nickname: " << user.getNickname() << std::endl;
+    os << "Username: " << user.getUsername() << std::endl;
+    os << "Fullname: " << user.getFullname() << std::endl;
+    os << "Hostname: " << user.getHostname() << std::endl;
+    return os;
+}
 
-//////////////////getters///////////////////
-string User::getNickname() const {
+std::string User::getNickname() const {
     return (_nickname);
 }
 
-string User::getUsername() const {
+std::string User::getUsername() const {
     return (_username);
 }
 
-string User::getFullname() const {
+std::string User::getFullname() const {
     return (_fullname);
 }
 
-string User::getHostname() const {
+std::string User::getHostname() const {
     return (_hostname);
 }
 
-int User::getSocket()
-{
-	return (_userSocket);
+int User::getIsLogged() const {
+    return (_isLogged);
 }
 
-bool User::getLogged()
-{
-	return (_logged);
+int User::getSocket() const {
+    return (_clientSocket);
 }
 
-//////////////////setters/////////////////////
-
-void	User::setLogged(bool logged)
-{
-	_logged = logged;
+void	User::setLogged(bool logged) {
+    _isLogged = logged;
 }
