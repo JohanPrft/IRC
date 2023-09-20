@@ -17,6 +17,10 @@
 
 class channel{
 
+
+	public :
+
+
 	private :
 		string			_name;
 		string			_topic;
@@ -27,8 +31,5 @@ class channel{
 		vector<User*>	_userList;
 		vector<string>	_banList;
 		vector<string> 	_operatorList;
-
-	public :
-
 
 };
