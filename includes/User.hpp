@@ -12,6 +12,10 @@ private:
 	string _fullname;
     string _hostname;
 
+	int		_userSocket;
+	bool	_logged;
+	int		_userSocket;
+
 	class InvalidNickException : public exception {
 		virtual const char *what() const throw() {
 			return ("No nickname");
@@ -36,11 +40,15 @@ public:
 	User &operator=(const User &cpy);
 	~User();
 
-    string getNickname() const;
-    string getUsername() const;
-    string getFullname() const;
-    string getHostname() const;
 
+    string	getNickname() const;
+    string	getUsername() const;
+    string	getFullname() const;
+    string	getHostname() const;
+	int		getSocket();
+	bool	getLogged();
+
+	void	setLogged(bool logged);
 };
 
 

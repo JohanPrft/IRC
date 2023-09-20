@@ -14,10 +14,13 @@
 #include <string>
 #include <stdlib.h>
 #include <string>
+#include <map>
 
 using std::cout;
 using std::endl;
 using std::string;
 using std::cerr;
 using std::exception;
+using std::vector;
+using std::map;
 

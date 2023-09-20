@@ -1,5 +1,5 @@
 #pragma once
-#include "server.hpp"
+#include "irc.hpp"
 
 //  Then, you have to implement the commands that are specific to channel
 // operators:
