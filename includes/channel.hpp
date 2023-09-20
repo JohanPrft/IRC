@@ -1,3 +1,4 @@
+#pragma once
 #include "server.hpp"
 
 //  Then, you have to implement the commands that are specific to channel
@@ -28,6 +29,6 @@ class channel{
 		vector<string> 	_operatorList;
 
 	public :
-		
+
 
 };
