@@ -16,6 +16,7 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::cerr;
+using std::vector;
 
 
 class Server {
@@ -28,10 +29,11 @@ class Server {
 
 		private :
 			
-			int			_port;
-			int			_serverSocket;
-			string		_password;
-			sockaddr_in	_serverAddress;
+			int				_port;
+			int				_serverSocket;
+			string			_password;
+			sockaddr_in		_serverAddress;
+			vector<pollfd>	_fds;
 
 
 
