@@ -4,7 +4,10 @@ Server::Server(int port, string password) :
 	_port(port),
 	_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
 	_password(password)
-	{}
+{
+	cout << "Server password is :" << _password << endl;
+	cout << "Server running on port :" << _port << endl;
+}
 
 
 Server::~Server()
@@ -84,14 +87,13 @@ void	Server::initServer()
 	pollfd serverFd;
 	serverFd.fd = _serverSocket;
 	serverFd.events = POLLIN;
+	_fds.push_back(serverFd);
 
-	std::vector<pollfd> clientFds;
 	std::vector<int> clients;
 	while (true)
 	{
 		// Add the server socket to the pollfd vector
-    	clientFds.clear();
-    	clientFds.push_back(serverFd);
+		// _fds.clear();
 
     	// Add the client sockets to the pollfd vector
     	for (size_t i = 0; i < clients.size(); ++i)
@@ -99,18 +101,18 @@ void	Server::initServer()
         	pollfd clientFd;
         	clientFd.fd = clients[i];
         	clientFd.events = POLLIN;
-        	clientFds.push_back(clientFd);
+        	_fds.push_back(clientFd);
     	}
 
     	// Use poll to wait for activity on any of the file descriptors
-    	int activity = poll(&clientFds[0], clientFds.size(), -1);
+    	int activity = poll(&_fds[0], _fds.size(), -1);
     	if (activity > 0)
 		{
-        	for (size_t i = 0; i < clientFds.size(); ++i)
+        	for (size_t i = 0; i < _fds.size(); ++i)
 			{
-            	if (clientFds[i].revents & POLLIN)
+            	if (_fds[i].revents & POLLIN)
 				{
-                	if (clientFds[i].fd == _serverSocket)
+                	if (_fds[i].fd == _serverSocket)
 					{
                     	// New client connection
                     	int clientSocket = accept(_serverSocket, NULL, NULL);
@@ -125,10 +127,10 @@ void	Server::initServer()
 					else
 					{
 						// Existing client has incoming data
-						if(handleClient(clientFds[i].fd, clients) == -1)
+						if(handleClient(_fds[i].fd, clients) == -1)
 						{
-							clients.erase(std::remove(clients.begin(), clients.end(), clientFds[i].fd), clients.end());
-							close(clientFds[i].fd);
+							clients.erase(std::remove(clients.begin(), clients.end(), _fds[i].fd), clients.end());
+							close(_fds[i].fd);
 						}
                     
                 	}

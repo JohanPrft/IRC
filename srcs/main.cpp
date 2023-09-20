@@ -3,11 +3,16 @@
 int	bad_argument(int argc, char **argv)
 {
 	if (argc != 3)
+	{
+		cout << "please type : ./irc <port> <password>" << endl;
 		return 1;
-	
+	}
 	int	port = atoi(argv[1]);
-	if (port == 0)
+	if (port <= 1024 || port >= 65536)
+	{
+		cout << "port must be between 1024 and 65536" << endl;
 		return 1;
+	}
 	return (0);
 }
 
