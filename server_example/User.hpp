@@ -5,6 +5,8 @@
 #include <string>
 #include <sys/socket.h>
 
+#include "replies.hpp"
+
 class User {
 
 private:
@@ -47,6 +49,7 @@ public:
     int         getLoginStatus() const;
 
     static std::string receiveInfo(int clientSocket);
+    std::string authConnexion();
 
 };
 

@@ -1,5 +1,16 @@
 #include "User.hpp"
 
+std::string authConnexion() {
+    if (_nickname <already use>)
+    ssize_t bytesSent = send(_clientSocket, RPL_WELCOME(this), strlen(RPL_WELCOME(this)), 0);
+    if (bytesSent == -1) {
+        std::cerr << "Error sending message to client." << std::endl;
+    } else {
+        std::cout << "Message sent to client: " << message << std::endl;
+    }
+}
+
+
 // Intercept and process the first 3 messages
 std::string User::receiveInfo(int clientSocket) {
     std::string userInfo;
