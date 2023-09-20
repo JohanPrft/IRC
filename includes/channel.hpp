@@ -28,6 +28,6 @@ class channel{
 		vector<string> 	_operatorList;
 
 	public :
-
+		
 
 };
