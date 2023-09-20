@@ -16,6 +16,7 @@ User::User(std::string nick, std::string user) {
 	if (pos == std::string::npos)
 		throw InvalideRealnameException();
 	_fullname = user.substr(pos + 1);
+
 }
 //if nick isnt taken
     //send welcome message
