@@ -12,7 +12,6 @@ private:
 	string _fullname;
     string _hostname;
 
-	int		_userSocket;
 	bool	_logged;
 	int		_userSocket;
 

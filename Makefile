@@ -9,7 +9,10 @@ NC = \033[0m
 
 # Headers
 HEADER_DIR = includes/
-HEADER_NAMES = server.hpp
+HEADER_NAMES = irc.hpp \
+				Channel.hpp \
+				Server.hpp \
+				User.hpp \
 
 				
 HEADERS = $(addprefix $(HEADER_DIR), $(HEADER_NAMES))
@@ -25,7 +28,8 @@ MAKE_FLAGS = --no-print-directory
 SRCS_DIR = srcs/
 
 SRCS_NAMES = main.cpp \
-		server.cpp
+		Server.cpp \
+		User.cpp
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_NAMES))
 		

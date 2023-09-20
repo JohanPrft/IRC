@@ -1,4 +1,5 @@
-#pragma once
+#ifndef IRC_HPP
+# define IRC_HPP
 
 #include <iostream>
 #include <cstring>
@@ -24,3 +25,9 @@ using std::exception;
 using std::vector;
 using std::map;
 
+#include "Server.hpp"
+#include "User.hpp"
+#include "Channel.hpp"
+
+
+#endif

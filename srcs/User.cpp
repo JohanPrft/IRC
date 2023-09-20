@@ -1,4 +1,4 @@
-#include "User.hpp"
+#include "../includes/User.hpp"
 
 //register client
 User::User(string nick, string user): _logged(false)

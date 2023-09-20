@@ -1,4 +1,4 @@
-#include "../includes/server.hpp"
+#include "../includes/irc.hpp"
 
 int	bad_argument(int argc, char **argv)
 {

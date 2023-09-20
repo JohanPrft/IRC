@@ -1,4 +1,4 @@
-#include "../includes/server.hpp"
+#include "../includes/Server.hpp"
 
 Server::Server(int port, string password) : 
 	_port(port),

@@ -16,7 +16,7 @@
 
 class user;
 
-class channel{
+class Channel{
 
 
 	public :
@@ -24,14 +24,14 @@ class channel{
 
 
 	private :
-		string			_name;
-		string			_topic;
-		string			_password;
-		int				_maxUser;
-		bool			_inviteOnly;
+		// string			_name;
+		// string			_topic;
+		// string			_password;
+		// int				_maxUser;
+		// bool			_inviteOnly;
 
-		vector<user*>	_userList;
-		vector<string>	_banList;
-		vector<string> 	_operatorList;
+		// vector<user*>	_userList;
+		// vector<string>	_banList;
+		// vector<string> 	_operatorList;
 
 };
