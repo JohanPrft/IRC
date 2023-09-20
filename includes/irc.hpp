@@ -29,5 +29,9 @@ using std::map;
 #include "User.hpp"
 #include "Channel.hpp"
 
+#define SERVERNAME "irc.pictochat.net"
+#define VERSION "0.1"
+#define USERMODE "to complete"
+#define CHANMODE "to complete"
 
 #endif
