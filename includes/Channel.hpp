@@ -28,7 +28,7 @@ class Channel{
 		// string			_topic;
 		// string			_password;
 		// int				_maxUser;
-		// bool			_inviteOnly;
+		// bool				_inviteOnly;
 
 		// vector<user*>	_userList;
 		// vector<string>	_banList;
