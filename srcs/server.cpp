@@ -4,7 +4,10 @@ Server::Server(int port, string password) :
 	_port(port),
 	_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
 	_password(password)
-	{}
+{
+	cout << "Server password is :" << _password << endl;
+	cout << "Server running on port :" << _port << endl;
+}
 
 
 Server::~Server()
