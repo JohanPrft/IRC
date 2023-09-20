@@ -22,13 +22,14 @@ DIR_OBJS		=	.bin/
 
 DIR_SRCS		=	#sources/
 
-DIR_HEADERS		=	includes/
+DIR_HEADERS		=	#includes/
 
 # ---- Files ---- #
 
-HEADERS_LIST	=
+HEADERS_LIST	=	User.hpp
 
-SRCS_LIST		=	server.cpp
+SRCS_LIST		=	server.cpp	\
+					User.cpp
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}

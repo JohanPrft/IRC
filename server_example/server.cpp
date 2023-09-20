@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include "User.hpp"
 
 /*
  *	Use for server:
@@ -53,6 +54,12 @@ int main(void)
 		return 1;
 	}
 	std::cout << "Client connected" << std::endl;
+
+    // Intercept and process the first 3 messages
+    std::string userInfo = User::receiveInfo(clientSocket);
+    std::cout << "User info: " << userInfo << std::endl;
+    User user(clientSocket, userInfo);
+    std::cout << user << std::endl;
 
 	char buffer[1024];
 	ssize_t bytesRead;
