@@ -24,7 +24,7 @@ class Server {
 			string					_password;
 			sockaddr_in				_serverAddress;
 			vector<pollfd>			_fds;
-			// map<int, User*> 		_users;
+			map<int, User*> 		_users;
 			// map<string, Channel*>	_channels;
 			
 
