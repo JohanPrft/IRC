@@ -6,6 +6,7 @@
 
 #include "User.hpp"
 
+
 /*
  *	Use for server:
  *		make
@@ -60,6 +61,7 @@ int main(void)
     std::cout << "User info: " << userInfo << std::endl;
     User user(clientSocket, userInfo);
     std::cout << user << std::endl;
+	User::sendWelcome(user);
 
 	char buffer[1024];
 	ssize_t bytesRead;

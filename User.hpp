@@ -5,7 +5,6 @@
 #include <string>
 #include <sys/socket.h>
 
-#include "replies.hpp"
 
 class User {
 
@@ -42,6 +41,7 @@ public:
 	User &operator=(const User &cpy);
 	~User();
 
+	int         getClientSocket() const;
     std::string getNickname() const;
     std::string getUsername() const;
     std::string getFullname() const;
@@ -49,7 +49,7 @@ public:
     int         getLoginStatus() const;
 
     static std::string receiveInfo(int clientSocket);
-    std::string authConnexion();
+	static void sendWelcome(User user);
 
 };
 

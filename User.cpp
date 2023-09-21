@@ -1,15 +1,40 @@
 #include "User.hpp"
 
-std::string authConnexion() {
-    if (_nickname <already use>)
-    ssize_t bytesSent = send(_clientSocket, RPL_WELCOME(this), strlen(RPL_WELCOME(this)), 0);
-    if (bytesSent == -1) {
-        std::cerr << "Error sending message to client." << std::endl;
-    } else {
-        std::cout << "Message sent to client: " << message << std::endl;
-    }
+// 001 - Server::sendWelcome
+# define RPL_WELCOME(nickName, user, host) ( ":" + SERVERNAME + " 001 " + nickName \
+		+ " :Welcome to the " + SERVERNAME + " Network, " + nickName + "!" + user + "@" + host + "\r\n")
+
+// 002 - Server::sendWelcome
+# define RPL_YOURHOST(nickName) ( ":" + SERVERNAME + " 002 " + nickName \
+		+ " :Your host is " + SERVERNAME + ", running version " + VERSION + "\r\n")
+
+// 003 - Server::sendWelcome
+# define RPL_CREATED(nickName, datetime) ( ":" + SERVERNAME + " 003 " + nickName \
+		+ " :This server was created " + datetime + "\r\n")
+
+// 004 - Server::sendWelcome
+# define RPL_MYINFO(nickName) ( ":" + SERVERNAME + " 004 " + nickName \
+		+ " " + SERVERNAME + " " + VERSION + " " + USERMODE + " " + CHANMODE + "\r\n")
+
+const std::string SERVERNAME = "irc.pictochat.net";
+const std::string VERSION = "0.1";
+const std::string USERMODE = "to complete";
+const std::string CHANMODE = "to complete";
+
+void sendString(int socket, std::string str)
+{
+	ssize_t bytesSent = send(socket, str.c_str(), str.length(), 0);
+	if (bytesSent == -1)
+		std::cerr << "Error sending data to client" << std::endl;
 }
 
+void User::sendWelcome(User user)
+{
+	sendString(user.getClientSocket(), RPL_WELCOME(user.getNickname(), user.getUsername(), user.getHostname()));
+	sendString(user.getClientSocket(), RPL_YOURHOST(user.getNickname()));
+	sendString(user.getClientSocket(), RPL_CREATED(user.getNickname(), "2021-03-01"));
+	sendString(user.getClientSocket(), RPL_MYINFO(user.getNickname()));
+}
 
 // Intercept and process the first 3 messages
 std::string User::receiveInfo(int clientSocket) {
@@ -129,4 +154,8 @@ std::string User::getHostname() const {
 
 int User::getLoginStatus() const {
     return (_loginStatus);
+}
+
+int User::getClientSocket() const {
+	return (_clientSocket);
 }
