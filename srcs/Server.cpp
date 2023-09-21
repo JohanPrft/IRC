@@ -9,9 +9,17 @@ Server::Server(int port, string password) :
 	cout << "Server running on port :" << _port << endl;
 }
 
+void print_map(std::map<int, User*> const &m)
+{
+	for (std::map<int, User*>::const_iterator it = m.begin(); it != m.end(); ++it)
+	{
+		std::cout << it->first << " " << it->second << "\n";
+	}
+}
 
 Server::~Server()
-{}
+{
+}
 
 int handleClient(int clientSocket, std::vector<int>& clients)
 {
@@ -123,13 +131,18 @@ void	Server::initServer()
                     	}
                     	std::cout << "Client " << clientSocket << " connected" << std::endl;
                     	clients.push_back(clientSocket);
-                	} 
+						std::string buffer = User::receiveInfo(clientSocket);
+
+						_users.insert(std::pair<int, User*>(clientSocket, new User(clientSocket, User::receiveInfo(clientSocket))));
+					}
 					else
 					{
 						// Existing client has incoming data
 						if(handleClient(_fds[i].fd, clients) == -1)
 						{
 							clients.erase(std::remove(clients.begin(), clients.end(), _fds[i].fd), clients.end());
+							//delete _users[_fds[i].fd];
+							//_users.erase(_fds[i].fd);
 							close(_fds[i].fd);
 						}
                     
