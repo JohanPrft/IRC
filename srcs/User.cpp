@@ -16,6 +16,7 @@ std::string User::receiveInfo(int clientSocket) {
         } else {
             // Process the message
             userInfo += std::string(buffer, bytesRead);
+			bzero(buffer, sizeof(buffer));
         }
     }
     return (userInfo);

@@ -132,18 +132,8 @@ void	Server::initServer()
                     	std::cout << "Client " << clientSocket << " connected" << std::endl;
                     	clients.push_back(clientSocket);
 
-						//std::string buffer = User::receiveInfo(clientSocket);
-						char buffer[1024];
-						ssize_t bytesRead;
-						while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0)
-						{
-							std::cout.write(buffer, bytesRead);
-							bzero(buffer, sizeof(buffer));
-						}
-						if (bytesRead == -1)
-							std::cerr << "Error receiving data from client" << std::endl;
-
-						_users.insert(std::pair<int, User*>(clientSocket, new User(clientSocket, User::receiveInfo(clientSocket))));
+						std::string buffer = User::receiveInfo(clientSocket);
+						_users.insert(std::pair<int, User*>(clientSocket, new User(clientSocket, buffer)));
 					}
 					else
 					{
