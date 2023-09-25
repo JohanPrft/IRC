@@ -87,13 +87,13 @@ void	Server::initServer()
 	pollfd serverFd;
 	serverFd.fd = _serverSocket;
 	serverFd.events = POLLIN;
+	// Add the server socket to the pollfd vector
 	_fds.push_back(serverFd);
 
 	std::vector<int> clients;
 	while (true)
 	{
-		// Add the server socket to the pollfd vector
-		// _fds.clear();
+		
 
     	// Add the client sockets to the pollfd vector
     	for (size_t i = 0; i < clients.size(); ++i)

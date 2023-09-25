@@ -20,18 +20,28 @@ class Channel{
 
 
 	public :
+
+			Channel(string name);
+			~Channel();
+
+
+			void	addUser(User *user);
+			void	removeUser(User *user);
+
+			void	addOperator(User *user);
+			void	removeOperator(User *user);
 		
 
 
 	private :
-		// string			_name;
+		string			_name;
 		// string			_topic;
-		// string			_password;
 		// int				_maxUser;
 		// bool				_inviteOnly;
 
-		// vector<user*>	_userList;
-		// vector<string>	_banList;
-		// vector<string> 	_operatorList;
+		vector<User*>	_userList;
+		vector<string>	_banList;
+		vector<string> 	_operatorList;
+		vector<string>	_invited;
 
 };
