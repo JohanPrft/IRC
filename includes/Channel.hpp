@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CHANNEL_HPP
+# define CHANNEL_HPP
 #include "irc.hpp"
 
 //  Then, you have to implement the commands that are specific to channel
@@ -35,3 +36,5 @@ class Channel{
 		// vector<string> 	_operatorList;
 
 };
+
+#endif
