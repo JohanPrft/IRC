@@ -7,6 +7,7 @@ std::string User::receiveInfo(int clientSocket) {
         char buffer[1024];
         ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
 
+        std::cout << "Received " << bytesRead << " bytes from client : " << clientSocket << std::endl;
         if (bytesRead == -1 || bytesRead == 0) {
             std::cerr << "Error reading from client." << std::endl;
             break;
@@ -19,6 +20,7 @@ std::string User::receiveInfo(int clientSocket) {
 			bzero(buffer, sizeof(buffer));
         }
     }
+    std::cout << "Done receiving info from client : " << clientSocket << std::endl;
     return (userInfo);
 }
 
