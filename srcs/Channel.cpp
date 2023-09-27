@@ -9,6 +9,31 @@ Channel::~Channel()
 {
 }
 
+//getters
+
+string	Channel::getName() const
+{
+	return (_name);
+}
+
+string	Channel::getTopic() const
+{
+	return (_topic);
+}
+
+//setters
+
+void	Channel::setKey(string key)
+{
+	_key = key;
+}
+
+void	Channel::setTopic(string topic)
+{
+	_topic = topic;
+}
+
+
 void Channel::addUser(User *user)
 {
 

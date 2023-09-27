@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CHANNEL_HPP
+# define CHANNEL_HPP
 #include "irc.hpp"
 
 //  Then, you have to implement the commands that are specific to channel
@@ -24,24 +25,43 @@ class Channel{
 			Channel(string name);
 			~Channel();
 
+			//getters
+			string	getName() const;
+			string	getTopic() const;
+
+
 
 			void	addUser(User *user);
 			void	removeUser(User *user);
 
 			void	addOperator(User *user);
 			void	removeOperator(User *user);
+
+			//commands
+			void	sendMsgAllUsr(User * user, string msg);
+
+			//setters
+			void	setKey(string key);
+			void	setTopic(string topic);
+
+
 		
 
 
 	private :
 		string			_name;
-		// string			_topic;
-		// int				_maxUser;
-		// bool				_inviteOnly;
+		string			_topic;
+		string			_key;
+		int				_maxUser;
+		bool			_inviteOnly;
 
 		vector<User*>	_userList;
 		vector<string>	_banList;
 		vector<string> 	_operatorList;
 		vector<string>	_invited;
 
+	
+
 };
+
+#endif
