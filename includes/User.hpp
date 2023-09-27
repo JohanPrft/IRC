@@ -1,6 +1,7 @@
 #ifndef IRC_USER_HPP
 # define IRC_USER_HPP
 
+#include "irc.hpp"
 #include <iostream>
 #include <string>
 #include <string.h>
