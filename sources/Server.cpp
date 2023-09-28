@@ -78,11 +78,11 @@ void	Server::initServer()
 		std::cerr << "Error listening on socket" << std::endl;
 		return; // gere ici exeception
 	}
-	// if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
-	// {
-	// 	std::cerr << "Error putting socket on non bloking mode" << std::endl;
-	// 	return; // gere ici exeception
-	// }
+	if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
+	{
+		std::cerr << "Error putting socket on non bloking mode" << std::endl;
+		return; // gere ici exeception
+	}
 	std::cout << "Listening..." << std::endl;
 
 	//accept a call
@@ -147,15 +147,25 @@ void	Server::initServer()
                     
                 	}
             	}
-        	}
-    	}
+				else if (_fds[i].revents & POLLHUP)
+				{
+					// Client disconnected
+					std::cout << "Client " << _fds[i].fd << " disconnected" << std::endl;
+					clients.erase(std::remove(clients.begin(), clients.end(), _fds[i].fd), clients.end());
+					delete _users[_fds[i].fd];
+					_users.erase(_fds[i].fd);
+					close(_fds[i].fd);
+
+				}
+			}
+		}
 		else if (activity == -1)
 		{
         	std::cerr << "Error polling" << std::endl;
 			//return;
     	}
-
 	}
+
 	for (size_t i = 0; i < clients.size(); ++i)
 	{
 		close(clients[i]);
