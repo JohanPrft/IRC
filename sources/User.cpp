@@ -1,24 +1,33 @@
 #include "User.hpp"
 
 // Intercept and process the first 3 messages
-std::string User::receiveInfo(int clientSocket) {
+std::string User::receiveInfo(int clientSocket)
+{
     std::string userInfo;
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i) 
+    {
         char buffer[1024];
-        ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+        time_t start = time(NULL); // Get the current time
+    
+        while (difftime(time(NULL), start) < 1.0) {
+        // Wait until 1 second has passed
+        }
 
+        ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), MSG_DONTWAIT | MSG_NOSIGNAL);
+
+        std::cout << "Received " << bytesRead << " bytes from client : " << clientSocket << std::endl;
+        std::cout << "Message : " << buffer << std::endl;
         if (bytesRead == -1 || bytesRead == 0) {
             std::cerr << "Error reading from client." << std::endl;
             break;
-        } else if (bytesRead == 0) {
-            // Client disconnected prematurely
-            break;
-        } else {
+        } 
+        else {
             // Process the message
             userInfo += std::string(buffer, bytesRead);
 			bzero(buffer, sizeof(buffer));
         }
     }
+    std::cout << "Done receiving info from client : " << clientSocket << std::endl;
     return (userInfo);
 }
 

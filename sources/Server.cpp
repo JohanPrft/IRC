@@ -5,16 +5,13 @@ Server::Server(int port, string password) :
 	_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
 	_password(password)
 {
+	if (_serverSocket == -1)
+	{
+    	std::cerr << "Error creating socket" << std::endl;
+    	return;
+	}
 	cout << "Server password is :" << _password << endl;
 	cout << "Server running on port :" << _port << endl;
-}
-
-void print_map(std::map<int, User*> const &m)
-{
-	for (std::map<int, User*>::const_iterator it = m.begin(); it != m.end(); ++it)
-	{
-		std::cout << it->first << " " << it->second << "\n";
-	}
 }
 
 Server::~Server()
@@ -53,7 +50,6 @@ int handleClient(int clientSocket, std::vector<int>& clients)
 	}
 	if (bytesRead == 0)
 	{
-		std::cout << "Client " << clientSocket << " disconnected" << std::endl;
 		return -1;
 	}
     bzero(buffer, sizeof(buffer));
@@ -82,11 +78,11 @@ void	Server::initServer()
 		std::cerr << "Error listening on socket" << std::endl;
 		return; // gere ici exeception
 	}
-	// if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
-	// {
-	// 	std::cerr << "Error putting socket on non bloking mode" << std::endl;
-	// 	return; // gere ici exeception
-	// }
+	if (fcntl(_serverSocket, F_SETFL, O_NONBLOCK) == -1)
+	{
+		std::cerr << "Error putting socket on non bloking mode" << std::endl;
+		return; // gere ici exeception
+	}
 	std::cout << "Listening..." << std::endl;
 
 	//accept a call
@@ -114,12 +110,14 @@ void	Server::initServer()
 
     	// Use poll to wait for activity on any of the file descriptors
     	int activity = poll(&_fds[0], _fds.size(), -1);
+		std::cout << "Activity : " << activity << std::endl;
     	if (activity > 0)
 		{
         	for (size_t i = 0; i < _fds.size(); ++i)
 			{
             	if (_fds[i].revents & POLLIN)
 				{
+					std::cout << "Activity : " << activity << " of " << _fds[i].fd << std::endl;
                 	if (_fds[i].fd == _serverSocket)
 					{
                     	// New client connection
@@ -140,6 +138,7 @@ void	Server::initServer()
 						// Existing client has incoming data
 						if(handleClient(_fds[i].fd, clients) == -1)
 						{
+							std::cout << "Client " << _fds[i].fd << " disconnected" << std::endl;
 							clients.erase(std::remove(clients.begin(), clients.end(), _fds[i].fd), clients.end());
 							//delete _users[_fds[i].fd];
 							//_users.erase(_fds[i].fd);
@@ -148,15 +147,25 @@ void	Server::initServer()
                     
                 	}
             	}
-        	}
-    	}
+				else if (_fds[i].revents & POLLHUP)
+				{
+					// Client disconnected
+					std::cout << "Client " << _fds[i].fd << " disconnected" << std::endl;
+					clients.erase(std::remove(clients.begin(), clients.end(), _fds[i].fd), clients.end());
+					delete _users[_fds[i].fd];
+					_users.erase(_fds[i].fd);
+					close(_fds[i].fd);
+
+				}
+			}
+		}
 		else if (activity == -1)
 		{
         	std::cerr << "Error polling" << std::endl;
-			return;
+			//return;
     	}
-
 	}
+
 	for (size_t i = 0; i < clients.size(); ++i)
 	{
 		close(clients[i]);
