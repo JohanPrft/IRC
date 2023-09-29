@@ -1,62 +1,64 @@
-NAME = IRC
+# ######## VARIABLES ######## #
 
-# Colors
-GREEN = \033[1;32m
-PURPLE = \033[1;35m
-CYAN = \033[1;36m
-YELLOW = \033[1;33m
-NC = \033[0m
+# ---- Final Executable --- #
 
-# Headers
-HEADER_DIR = includes/
-HEADER_NAMES = irc.hpp \
-				Channel.hpp \
-				Server.hpp \
-				User.hpp \
+NAME			=	ircserv
 
-				
-HEADERS = $(addprefix $(HEADER_DIR), $(HEADER_NAMES))
+# ---- Directories ---- #
 
-# Compiler and flags
-CC = c++
-CFLAGS = -Wall -Wextra -Werror -I$(HEADER_DIR) -std=c++98 -fsanitize=address
-RM = rm
-RM_FLAGS = -rf
-MAKE_FLAGS = --no-print-directory
+DIR_OBJS		=	.bin/
 
-# SRCS Files and objs
-SRCS_DIR = srcs/
+DIR_SRCS		=	sources/
 
-SRCS_NAMES = main.cpp \
-		Server.cpp \
-		User.cpp
+DIR_HEADERS		=	includes/
 
-SRCS = $(addprefix $(SRCS_DIR), $(SRCS_NAMES))
-		
+# ---- Files ---- #
 
-OBJS = $(SRCS:.cpp=.o)
+HEADERS_LIST	=	irc.hpp			\
+					Server.hpp		\
+					User.hpp		\
+					Channel.hpp		\
+					replies.hpp		\
+					errors.hpp		\
 
-# .cpp .o rule
-%.o: %.cpp Makefile $(HEADERS)
-	@printf "${YELLOW}-> Compiling: ${CYAN}$<${YELLOW}...${NC}"
-	@$(CC) $(CFLAGS) -c $< -o $@
-	@printf "${GREEN} OK!${NC}\n"
+SRCS_LIST		=	main.cpp		\
+					Server.cpp		\
+					User.cpp
 
-all:
-	@make $(NAME) $(MAKE_FLAGS)
 
-$(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
-	@printf "${GREEN}-> $(NAME) executable compiled successfully${NC}\n"
+HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
 
-clean:
-	@$(RM) $(RM_FLAGS) $(OBJS)
-	@printf "${PURPLE}-> All $(NAME) objs files removed successfully${NC}\n"
+OBJS			=	${SRCS_LIST:%.cpp=${DIR_OBJS}%.o}
 
-fclean :
-	@$(RM) $(RM_FLAGS) $(NAME) $(OBJS)
-	@printf "${PURPLE}-> $(NAME) executable and $(NAME) objs files removed successfully${NC}\n"
+# ---- Compilation ---- #
 
-re: fclean all
+CFLAGS			=	-Wall -Wextra -Werror -g
 
-.PHONY: all re fclean clean
+CPP				=	c++ -std=c++98
+
+# ######## RULES ######## #
+
+all				:	${NAME}
+
+${NAME}			:	${DIR_OBJS} ${OBJS} ${HEADERS}
+					${CPP} ${CFLAGS} -I ${DIR_HEADERS} ${OBJS} ${LIBRARY} -o ${NAME}
+
+run				:	${NAME}
+					./${NAME} 8080 passwd
+
+${OBJS}			:	${DIR_OBJS}%.o:	${DIR_SRCS}%.cpp ${HEADERS} Makefile
+					${CPP} ${CFLAGS} -I ${DIR_HEADERS} -c $< -o $@
+
+${DIR_OBJS}		:
+					mkdir -p ${DIR_OBJS}
+
+clean			:
+					${RM} ${OBJS}
+
+fclean			:	clean
+					${RM} -r ${NAME} ${DIR_OBJS}
+
+re				:	fclean all
+
+
+.PHONY:	all run clean fclean re

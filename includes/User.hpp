@@ -2,53 +2,59 @@
 # define IRC_USER_HPP
 
 #include "irc.hpp"
-
+#include <iostream>
+#include <string>
+#include <string.h>
+#include <sys/socket.h>
 
 class User {
 
 private:
-	string _nickname;
-	string _username;
-	string _fullname;
-    string _hostname;
+    int         _clientSocket;
+	std::string _nickname;
+	std::string _username;
+	std::string _fullname;
+    std::string _hostname;
+    bool        _isLogged;
 
-	bool	_logged;
-	int		_userSocket;
-
-	class InvalidNickException : public exception {
+	class InvalidNickException : public std::exception {
 		virtual const char *what() const throw() {
 			return ("No nickname");
 		}
 	};
 
-	class InvalidUserException : public exception {
+	class InvalidUserException : public std::exception {
 		virtual const char *what() const throw() {
 			return ("No username");
 		}
 	};
 
-class InvalideRealnameException : public exception {
+class InvalideRealnameException : public std::exception {
 	virtual const char *what() const throw() {
 		return ("No realname");
 	}
 };
 
 public:
-	User(string nick, string user);
+	User();
+	User(int clientSocket, std::string userInfo);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
 
+    int         getSocket() const;
+    std::string getNickname() const;
+    std::string getUsername() const;
+    std::string getFullname() const;
+    std::string getHostname() const;
+    int         getIsLogged() const;
 
-    string	getNickname() const;
-    string	getUsername() const;
-    string	getFullname() const;
-    string	getHostname() const;
-	int		getSocket();
-	bool	getLogged();
+    void	setLogged(bool logged);
 
-	void	setLogged(bool logged);
+    static std::string receiveInfo(int clientSocket);
+
 };
 
+std::ostream& operator<<(std::ostream& os, const User& user);
 
 #endif

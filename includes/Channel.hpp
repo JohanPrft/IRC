@@ -14,6 +14,9 @@
 // · k: Set/remove the channel key (password)
 // · o: Give/take channel operator privilege
 // · l: Set/remove the user limit to channel
+bool	isChannelNameValid(string name);
+
+
 
 class user;
 
