@@ -38,7 +38,7 @@ class Channel{
 			void	removeOperator(User *user);
 
 			//commands
-			void	sendMsgAllUsr(User * user, string msg);
+			void	sendMsgAllUser(User * user, string msg);
 
 			//setters
 			void	setKey(string key);

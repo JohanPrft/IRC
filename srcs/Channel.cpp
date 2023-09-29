@@ -34,6 +34,13 @@ void	Channel::setTopic(string topic)
 }
 
 
+//commands
+
+void	Channel::sendMsgAllUser(User * user, string msg)
+{
+
+}
+
 void Channel::addUser(User *user)
 {
 
