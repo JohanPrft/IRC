@@ -7,6 +7,8 @@
 #include <string.h>
 #include <sys/socket.h>
 
+void put_str_fd(std::string str, int fd);
+
 class User {
 
 private:
@@ -37,7 +39,7 @@ class InvalideRealnameException : public std::exception {
 
 public:
 	User();
-	User(int clientSocket, std::string userInfo);
+	User(int clientSocket);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
@@ -50,8 +52,6 @@ public:
     int         getIsLogged() const;
 
     void	setLogged(bool logged);
-
-    static std::string receiveInfo(int clientSocket);
 
 };
 

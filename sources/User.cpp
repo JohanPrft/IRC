@@ -1,35 +1,6 @@
 #include "User.hpp"
 
 // Intercept and process the first 3 messages
-std::string User::receiveInfo(int clientSocket)
-{
-    std::string userInfo;
-    for (int i = 0; i < 3; ++i) 
-    {
-        char buffer[1024];
-        time_t start = time(NULL); // Get the current time
-    
-        while (difftime(time(NULL), start) < 1.0) {
-        // Wait until 1 second has passed
-        }
-
-        ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), MSG_DONTWAIT | MSG_NOSIGNAL);
-
-        std::cout << "Received " << bytesRead << " bytes from client : " << clientSocket << std::endl;
-        std::cout << "Message : " << buffer << std::endl;
-        if (bytesRead == -1 || bytesRead == 0) {
-            std::cerr << "Error reading from client." << std::endl;
-            break;
-        } 
-        else {
-            // Process the message
-            userInfo += std::string(buffer, bytesRead);
-			bzero(buffer, sizeof(buffer));
-        }
-    }
-    std::cout << "Done receiving info from client : " << clientSocket << std::endl;
-    return (userInfo);
-}
 
 User::User()
 {
@@ -41,41 +12,45 @@ User::User()
     _isLogged = -1;
 }
 
-//register client
-User::User(int clientSocket, std::string userInfo) {
-
-    _clientSocket = clientSocket;
-
-    //define nickname
-    size_t pos = userInfo.find("NICK");
-    size_t endPos = userInfo.find("\n", pos + 5);
-    if (pos == std::string::npos || endPos == std::string::npos)
-        throw InvalidNickException();
-    _nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
-
-    //define username
-    pos = userInfo.find("USER");
-    endPos = userInfo.find(" ", pos + 5);
-    if (pos == std::string::npos || endPos == std::string::npos)
-        throw InvalidUserException();
-    _username = userInfo.substr(pos + 5, endPos - (pos + 5));
-
-    //define hostname
-    _hostname = userInfo.substr(endPos + 1, userInfo.find(" ", endPos + 1) - (endPos + 1));
-
-    //define fullname
-    pos = userInfo.find(":");
-    if (pos == std::string::npos)
-        throw InvalideRealnameException();
-    endPos = userInfo.find("\n", pos + 1);
-    if (pos == std::string::npos)
-        throw InvalidUserException();
-    _fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
+void put_str_fd(std::string str, int fd)
+{
+    write(fd, str.c_str(), str.length());
 }
-//if nick isnt taken
-    //send welcome message
-//else
-    //send error message
+
+//register client
+User::User(int clientSocket)
+{
+    _clientSocket = clientSocket;
+    _isLogged = 1;
+    char buffer[1024];
+
+    put_str_fd("Welcome to the IRC server!\n", _clientSocket);
+    put_str_fd("Please enter your nickname: ", _clientSocket);
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    recv(_clientSocket, buffer, sizeof(buffer), 0);
+    _nickname = buffer;
+    _nickname.erase(std::remove(_nickname.begin(), _nickname.end(), '\n'), _nickname.end());
+
+    put_str_fd("Please enter your username: ", _clientSocket);
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    recv(_clientSocket, buffer, sizeof(buffer), 0);
+    _username = buffer;
+    _username.erase(std::remove(_username.begin(), _username.end(), '\n'), _username.end());
+
+    put_str_fd("Please enter your fullname: ", _clientSocket);
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    recv(_clientSocket, buffer, sizeof(buffer), 0);
+    _fullname = buffer;
+    _fullname.erase(std::remove(_fullname.begin(), _fullname.end(), '\n'), _fullname.end());
+
+    put_str_fd("Please enter your hostname: ", _clientSocket);
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    recv(_clientSocket, buffer, sizeof(buffer), 0);
+    _hostname = buffer;
+    _hostname.erase(std::remove(_hostname.begin(), _hostname.end(), '\n'), _hostname.end());
+
+    put_str_fd("You are now registered, welcome!\n", _clientSocket);
+}
 
 User::User(const User &src) {
     _clientSocket = src._clientSocket;
