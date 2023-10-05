@@ -108,27 +108,62 @@ void	Channel::modifyLimitUser(bool ok)
 void	Channel::sendMsgAllUser(User *user, string msg)
 {
 	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++)
-		if (it->first->getNickname())
-			
+		if (user->getNickname() != (*it)->getNickname())
+			cout<<"utiliesr la fonction send message de la class server"<< endl;
+	//en attente de la class serveur
+
 }
 
-// void Channel::addUser(User *user)
-// {
+void Channel::addUser(User *user)
+{
+	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
+	if (it != _userList.end())
+		cout << "this user is already in the channel" << endl;
+	else
+		_userList.push_back(user);
+}
 
-// }
+void	Channel::removeUser(User *user)
+{
+	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
-// void	Channel::removeUser(User *user)
-// {
+	if (it == _userList.end())
+		cout << "this user is not in the channel" << endl;
+	else
+		_userList.erase(it);
+}
 
-// }
+void	Channel::addOperator(User *user)
+{
+	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
-// void	Channel::addOperator(User *user)
-// {
+	if (it == _userList.end())
+		cout << "this user is not in the channel" << endl;
+	else
+	{
+		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
 
-// }
+		if (it != _operatorList.end())
+			cout << "this user is already an operator" << endl;
+		else
+			_operatorList.push_back(user);
+	}
+}
 
-// void	Channel::removeOperator(User *user)
-// {
+void	Channel::removeOperator(User *user)
+{
+	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
-// }
+	if (it == _userList.end())
+		cout << "this user is not in the channel" << endl;
+	else
+	{
+		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
+
+		if (it == _operatorList.end())
+			cout << "this user is not an operator" << endl;
+		else
+			_operatorList.erase(it);
+	}
+}
