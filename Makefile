@@ -1,31 +1,35 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jprofit <jprofit@student.42lyon.fr>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#   Created: 2023/07/19 11:41:18 by jprofit           #+#    #+#               #
+#   Updated: 2023/07/19 11:41:18 by jprofit          ###   ########.fr         #
+#                                                                              #
+# **************************************************************************** #
+
 # ######## VARIABLES ######## #
 
 # ---- Final Executable --- #
 
-NAME			=	ircserv
+NAME			=	server
 
 # ---- Directories ---- #
 
 DIR_OBJS		=	.bin/
 
-DIR_SRCS		=	sources/
+DIR_SRCS		=	#sources/
 
-DIR_HEADERS		=	includes/
+DIR_HEADERS		=	#includes/
 
 # ---- Files ---- #
 
-HEADERS_LIST	=	irc.hpp			\
-					Server.hpp		\
-					User.hpp		\
-					Channel.hpp		\
-					replies.hpp		\
-					errors.hpp		\
+HEADERS_LIST	=	User.hpp
 
-SRCS_LIST		=	main.cpp		\
-					Server.cpp		\
-					User.cpp		\
-					Channel.cpp		\
-					utils.cpp
+SRCS_LIST		=	server.cpp	\
+					User.cpp
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
@@ -46,7 +50,7 @@ ${NAME}			:	${DIR_OBJS} ${OBJS} ${HEADERS}
 					${CPP} ${CFLAGS} -I ${DIR_HEADERS} ${OBJS} ${LIBRARY} -o ${NAME}
 
 run				:	${NAME}
-					./${NAME} 8080 passwd
+					./${NAME} 163 895 804 202 131 294 632 708 942 959
 
 ${OBJS}			:	${DIR_OBJS}%.o:	${DIR_SRCS}%.cpp ${HEADERS} Makefile
 					${CPP} ${CFLAGS} -I ${DIR_HEADERS} -c $< -o $@
