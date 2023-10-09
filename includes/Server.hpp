@@ -12,8 +12,17 @@ class Server {
 			Server(int port, string password);
 			~Server();
 
-			void initServer();
+			void	initServer();
+			void	initializeServerSocket();
+			void	addServerSocketToEvents();
 
+			void 	handleEvents(std::vector<int> &clients);
+			void	handleNewConnection(std::vector<int> &clients);
+			void 	handleClientDisconnect(std::vector<int> &clients, size_t index);
+			void	handleExistingClient(std::vector<int> &clients, size_t index);
+
+			void	sendMessage(User *currentClient, std::vector<int> &clients);
+			
 		private :
 			
 			int					_port;
