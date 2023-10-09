@@ -27,10 +27,17 @@ class Server {
 			map<int, User*> 		_users;
 			// map<string, Channel*>	_channels;
 
+			// bool
+
+			bool userExist(string username);
+			bool channelExist(string name);
+			bool userInChannel(string username, string channel);
+
 			//commands
 
-			void join(User *user, vector<string> args);
-			void mode(User *user, vector<string> args);
+			// void join(User *user, vector<string> args);
+			// void mode(User *user, vector<string> args);
+			// void kick(User *user, User *toKick, Channel *channel);
 
 };
 
