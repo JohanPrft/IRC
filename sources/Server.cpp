@@ -62,7 +62,7 @@ void Server::handleNewConnection(std::vector<int> &clients)
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
 
-    _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket)));
+    _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
     map<int, User *>::iterator it = _users.find(clientSocket);
     std::cout << "New connection from : " << it->second->getFullname() << std::endl;
 }
