@@ -21,7 +21,8 @@ class Server {
 			void 	handleClientDisconnect(std::vector<int> &clients, size_t index);
 			void	handleExistingClient(std::vector<int> &clients, size_t index);
 
-			void	sendMessage(User *currentClient, std::vector<int> &clients);
+			void	sendMessageToGroup(User *currentClient, std::vector<int> &clientsFds);
+			void	sendMessageToUser(User *currentClient, User *targetClient);
 			
 		private :
 			
