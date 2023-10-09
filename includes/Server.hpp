@@ -26,11 +26,11 @@ class Server {
 			vector<pollfd>			_fds;
 			map<int, User*> 		_users;
 			// map<string, Channel*>	_channels;
-			
 
+			//commands
 
-
-
+			void join(User *user, vector<string> args);
+			void mode(User *user, vector<string> args);
 
 };
 
