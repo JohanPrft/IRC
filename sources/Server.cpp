@@ -28,7 +28,7 @@ Server::~Server()
 }
 
 
-void Server::sendMessage(User *currentClient, std::vector<int> &clients)
+void Server::sendMessageToGroup(User *currentClient, std::vector<int> &clientsFds)
 {
     char buffer[1024];
     ssize_t bytesRead;
@@ -39,15 +39,37 @@ void Server::sendMessage(User *currentClient, std::vector<int> &clients)
     {
         std::cout << currentClient->getNickname() << " says: ";
         std::cout.write(buffer, bytesRead);
-        for (size_t i = 0; i < clients.size(); i++)
+        for (size_t i = 0; i < clientsFds.size(); i++)
         {
-            if (clients[i] != currentClient->getSocket()) // don't send the message back to the client that sent it
+            if (clientsFds[i] != currentClient->getSocket()) // don't send the message back to the client that sent it
             {
-                put_str_fd(currentClient->getNickname(), clients[i]);
-                put_str_fd(" says: ", clients[i]);
-                write(clients[i], buffer, bytesRead);
+                put_str_fd(currentClient->getNickname(), clientsFds[i]);
+                put_str_fd(" says: ", clientsFds[i]);
+                write(clientsFds[i], buffer, bytesRead);
             }
         }
+    }
+    else
+    {
+        throw std::runtime_error("Error reading from client socket");
+    }
+    return ;
+}
+
+void Server::sendMessageToUser(User *currentClient, User *targetClient)
+{
+    char buffer[1024];
+    ssize_t bytesRead;
+
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
+    if (bytesRead > 0)
+    {
+        std::cout << currentClient->getNickname() << " says: ";
+        std::cout.write(buffer, bytesRead);
+        put_str_fd(currentClient->getNickname(), targetClient->getSocket());
+        put_str_fd(" says: ", targetClient->getSocket());
+        write(targetClient->getSocket(), buffer, bytesRead);
     }
     else
     {
@@ -98,7 +120,7 @@ void Server::handleExistingClient(std::vector<int> &clients, size_t index)
     }
     try
     {
-        sendMessage(currentClient, clients);
+        sendMessageToGroup(currentClient, clients);
     }
     catch (const std::runtime_error &e)
     {
