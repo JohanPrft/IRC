@@ -3,7 +3,7 @@
 
 // 001 - Server::sendWelcome
 # define RPL_WELCOME(nickName, user, host) ( ":" + SERVERNAME + " 001 " + nickName \
-		+ " :Welcome to the " + SERVERNAME + " Network, " + nickName + "!" + user + "@" + host + "\r\n")
+		+ " :Welcome to the Internet Relay Network, " + nickName + "!" + user + "@" + host + "\r\n")
 
 // 002 - Server::sendWelcome
 # define RPL_YOURHOST(nickName) ( ":" + SERVERNAME + " 002 " + nickName \
