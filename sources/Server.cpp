@@ -95,8 +95,6 @@ void Server::initServer()
 	std::vector<int> clients;
 	while (true)
 	{
-    	// Add the client sockets to the pollfd vector
-    	for (size_t i = 0; i < clients.size(); ++i)
 		// Use poll to wait for activity on any of the file descriptors
 		int activity = poll(&_fds[0], _fds.size(), -1);
 		if (activity >= 0)
