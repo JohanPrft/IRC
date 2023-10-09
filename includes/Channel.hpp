@@ -31,60 +31,60 @@ class user;
 class Channel{
 
 
-	public :
+	// public :
 
-			Channel(string name, string modes, User *owner);
-			Channel(string name, string modes, User *owner, string key);
-			~Channel();
+	// 		Channel(string name, string modes, User *owner);
+	// 		Channel(string name, string modes, User *owner, string key);
+	// 		~Channel();
 
-			void	init(string modes, User *owner);
+	// 		void	init(string modes, User *owner);
 
-			//getters
-			string	getName() const;
-			string	getTopic() const;
-			bool	getNeedKey() const;
-			bool	getInviteOnly() const;
-			bool	getLimitUSer() const;
-
-
+	// 		//getters
+	// 		string	getName() const;
+	// 		string	getTopic() const;
+	// 		bool	getNeedKey() const;
+	// 		bool	getInviteOnly() const;
+	// 		bool	getLimitUSer() const;
 
 
-			//setters
-			void	setKey(string key);
-			void	setTopic(string topic);
-			void	modifyInvite(bool ok);
-			void	modifyNeedKey(bool ok);
-			void	modifyLimitUser(bool ok);
 
-			//commands
-			void	sendMsgAllUser(User *user, string msg);
-			void	addUser(User *user);
-			void	removeUser(User *user);
 
-			void	addOperator(User *user);
-			void	removeOperator(User *user);
+	// 		//setters
+	// 		void	setKey(string key);
+	// 		void	setTopic(string topic);
+	// 		void	modifyInvite(bool ok);
+	// 		void	modifyNeedKey(bool ok);
+	// 		void	modifyLimitUser(bool ok);
 
-			void	setMode(string modes);
+	// 		//commands
+	// 		void	sendMsgAllUser(User *user, string msg);
+	// 		void	addUser(User *user);
+	// 		void	removeUser(User *user);
+
+	// 		void	addOperator(User *user);
+	// 		void	removeOperator(User *user);
+
+	// 		void	setMode(string modes);
 
 
 
 		
 
 
-	private :
-		string			_name;
-		string			_topic;
-		string			_key;
-		int				_maxUser;
+	// private :
+	// 	string			_name;
+	// 	string			_topic;
+	// 	string			_key;
+	// 	int				_maxUser;
 
-		bool			_inviteOnly;
-		bool			_needKey;
-		bool			_limitUser;
+	// 	bool			_inviteOnly;
+	// 	bool			_needKey;
+	// 	bool			_limitUser;
 
-		vector<User*>	_userList;
-		vector<User*>	_banList;
-		vector<User*> 	_operatorList;
-		vector<User*>	_invited;
+	// 	vector<User*>	_userList;
+	// 	vector<User*>	_banList;
+	// 	vector<User*> 	_operatorList;
+	// 	vector<User*>	_invited;
 
 	
 

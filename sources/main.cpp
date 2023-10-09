@@ -18,11 +18,10 @@ int	bad_argument(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-	// if (bad_argument(argc, argv))
-	// 	return 1;
-	(void) argc;
-	cout << isChannelNameValid(argv[1]) << endl;
-	// Server server(atoi(argv[1]), argv[2]);
-	// server.initServer();
+	if (bad_argument(argc, argv))
+		return 1;
+	
+	Server server(atoi(argv[1]), argv[2]);
+	server.initServer();
 
 }
