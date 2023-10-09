@@ -23,7 +23,8 @@ HEADERS_LIST	=	irc.hpp			\
 
 SRCS_LIST		=	main.cpp		\
 					Server.cpp		\
-					User.cpp
+					User.cpp		\
+					Channel.cpp
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}

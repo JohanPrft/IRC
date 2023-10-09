@@ -15,25 +15,78 @@
 // · o: Give/take channel operator privilege
 // · l: Set/remove the user limit to channel
 
+template <typename Tc, typename Tk>
+bool		containsKey(Tc container, Tk value)
+{
+	return container.find(value) != container.end();
+}
+
+
+bool	isChannelNameValid(string name);
+
+
+
 class user;
 
 class Channel{
 
 
-	public :
+	// public :
+
+	// 		Channel(string name, string modes, User *owner);
+	// 		Channel(string name, string modes, User *owner, string key);
+	// 		~Channel();
+
+	// 		void	init(string modes, User *owner);
+
+	// 		//getters
+	// 		string	getName() const;
+	// 		string	getTopic() const;
+	// 		bool	getNeedKey() const;
+	// 		bool	getInviteOnly() const;
+	// 		bool	getLimitUSer() const;
+
+
+
+
+	// 		//setters
+	// 		void	setKey(string key);
+	// 		void	setTopic(string topic);
+	// 		void	modifyInvite(bool ok);
+	// 		void	modifyNeedKey(bool ok);
+	// 		void	modifyLimitUser(bool ok);
+
+	// 		//commands
+	// 		void	sendMsgAllUser(User *user, string msg);
+	// 		void	addUser(User *user);
+	// 		void	removeUser(User *user);
+
+	// 		void	addOperator(User *user);
+	// 		void	removeOperator(User *user);
+
+	// 		void	setMode(string modes);
+
+
+
 		
 
 
-	private :
-		// string			_name;
-		// string			_topic;
-		// string			_password;
-		// int				_maxUser;
-		// bool				_inviteOnly;
+	// private :
+	// 	string			_name;
+	// 	string			_topic;
+	// 	string			_key;
+	// 	int				_maxUser;
 
-		// vector<user*>	_userList;
-		// vector<string>	_banList;
-		// vector<string> 	_operatorList;
+	// 	bool			_inviteOnly;
+	// 	bool			_needKey;
+	// 	bool			_limitUser;
+
+	// 	vector<User*>	_userList;
+	// 	vector<User*>	_banList;
+	// 	vector<User*> 	_operatorList;
+	// 	vector<User*>	_invited;
+
+	
 
 };
 
