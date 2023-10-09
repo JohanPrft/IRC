@@ -10,8 +10,8 @@ Server::Server(int port, string password) : _port(port),
 		std::cerr << "Error creating socket" << std::endl;
 		return;
 	}
-	cout << "Server password is :" << _password << endl;
-	cout << "Server running on port :" << _port << endl;
+	cout << "Server password is : " << _password << endl;
+	cout << "Server running on port : " << _port << endl;
 }
 
 Server::~Server()
@@ -116,7 +116,7 @@ void Server::initServer()
 						}
 
 						clients.push_back(clientSocket);
-						_users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket)));
+						_users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
 						map<int, User *>::iterator it = _users.find(clientSocket);
 						std::cout << "New connection from : " << it->second->getFullname() << std::endl;
 					}

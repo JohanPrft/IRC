@@ -9,7 +9,7 @@ User::User()
     _fullname = "Undefined";
     _hostname = "Undefined";
     _clientSocket = -1;
-    _isLogged = -1;
+    _isLogged = false;
 }
 
 void put_str_fd(std::string str, int fd)
@@ -18,38 +18,21 @@ void put_str_fd(std::string str, int fd)
 }
 
 //register client
-User::User(int clientSocket)
+User::User(int clientSocket, std::string password)
 {
     _clientSocket = clientSocket;
-    _isLogged = 1;
-    char buffer[1024];
-
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
-    put_str_fd("Please enter your nickname: ", _clientSocket);
-    memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    recv(_clientSocket, buffer, sizeof(buffer), 0);
-    _nickname = buffer;
-    _nickname.erase(std::remove(_nickname.begin(), _nickname.end(), '\n'), _nickname.end());
 
-    put_str_fd("Please enter your username: ", _clientSocket);
-    memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    recv(_clientSocket, buffer, sizeof(buffer), 0);
-    _username = buffer;
-    _username.erase(std::remove(_username.begin(), _username.end(), '\n'), _username.end());
+	std::string userInfo = getUserInfo(_clientSocket);
+	fillUserInfo(userInfo, password);
 
-    put_str_fd("Please enter your fullname: ", _clientSocket);
-    memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    recv(_clientSocket, buffer, sizeof(buffer), 0);
-    _fullname = buffer;
-    _fullname.erase(std::remove(_fullname.begin(), _fullname.end(), '\n'), _fullname.end());
-
-    put_str_fd("Please enter your hostname: ", _clientSocket);
-    memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    recv(_clientSocket, buffer, sizeof(buffer), 0);
-    _hostname = buffer;
-    _hostname.erase(std::remove(_hostname.begin(), _hostname.end(), '\n'), _hostname.end());
-
+    if (_isLogged == false)
+    {
+        put_str_fd("You aren't logged in, please connect with password\n", _clientSocket);
+        while (1);
+    }
     put_str_fd("You are now registered, welcome!\n", _clientSocket);
+    std::cout << *this << std::endl;
 }
 
 User::User(const User &src) {
@@ -82,6 +65,8 @@ std::ostream& operator<<(std::ostream& os, const User& user) {
     os << "Username: " << user.getUsername() << std::endl;
     os << "Fullname: " << user.getFullname() << std::endl;
     os << "Hostname: " << user.getHostname() << std::endl;
+    os << "Socket: " << user.getSocket() << std::endl;
+    os << "Logged: " << user.getIsLogged() << std::endl;
     return os;
 }
 
@@ -111,4 +96,74 @@ int User::getSocket() const {
 
 void	User::setLogged(bool logged) {
     _isLogged = logged;
+}
+
+static bool checkUserInfo(const std::string userInfo)
+{
+	if (userInfo.find("NICK") == std::string::npos)
+		return (false);
+	else if (userInfo.find("USER") == std::string::npos)
+		return (false);
+//	else if (userInfo.find("PASS") == std::string::npos && userInfo.find("pass") == std::string::npos) //can be written by user
+//		return (false);
+	return (true);
+}
+
+std::string User::getUserInfo(int clientSocket) const {
+	std::string userInfo;
+	char buffer[1024];
+	while (checkUserInfo(userInfo) == false)
+	{
+		ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
+		if (bytesRead == -1 || bytesRead == 0) {
+			std::cerr << "Error reading from client." << std::endl;
+			break;
+		} else if (bytesRead == 0) {
+			// Client disconnected prematurely
+			break;
+		}
+		// Process the message
+		userInfo += std::string(buffer, bytesRead);
+		bzero(buffer, sizeof(buffer));
+	}
+	return (userInfo);
+}
+
+void User::fillUserInfo(std::string userInfo, std::string password) {
+	size_t pos = userInfo.find("NICK");
+	size_t endPos = userInfo.find("\n", pos + 5);
+	if (pos == std::string::npos || endPos == std::string::npos)
+		throw InvalidNickException();
+	_nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
+
+	//define username
+	pos = userInfo.find("USER");
+	endPos = userInfo.find(" ", pos + 5);
+	if (pos == std::string::npos || endPos == std::string::npos)
+		throw InvalidUserException();
+	_username = userInfo.substr(pos + 5, endPos - (pos + 5));
+
+	//define hostname
+	_hostname = userInfo.substr(endPos + 1, userInfo.find(" ", endPos + 1) - (endPos + 1));
+
+	//define fullname
+	pos = userInfo.find(":");
+	if (pos == std::string::npos)
+		throw InvalideRealnameException();
+	endPos = userInfo.find("\n", pos + 1);
+	if (pos == std::string::npos)
+		throw InvalidUserException();
+	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
+
+    //check password
+    std::string user_password;
+    pos = userInfo.find("PASS");
+    if (pos != std::string::npos) {
+        endPos = userInfo.find("\r", pos + 5);  // \r\n at the end of the pass
+        user_password = userInfo.substr(pos + 5, endPos - (pos + 5));
+    }
+    if (user_password == password)
+        _isLogged = true;
+    else
+        _isLogged = false;
 }

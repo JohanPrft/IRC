@@ -39,7 +39,7 @@ class InvalideRealnameException : public std::exception {
 
 public:
 	User();
-	User(int clientSocket);
+	User(int clientSocket, std::string password);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
@@ -52,6 +52,10 @@ public:
     int         getIsLogged() const;
 
     void	setLogged(bool logged);
+
+	std::string getUserInfo(int clientSocket) const;
+	void fillUserInfo(std::string userInfo, std::string password);
+    void getPassword(std::string password);
 
 };
 
