@@ -20,8 +20,14 @@ int main(int argc, char **argv)
 {
 	if (bad_argument(argc, argv))
 		return 1;
-	
-	Server server(atoi(argv[1]), argv[2]);
+
+    time_t rawtime;
+    struct tm * timeinfo;
+
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    Server server(atoi(argv[1]), argv[2], timeinfo);
 	server.initServer();
 
 }

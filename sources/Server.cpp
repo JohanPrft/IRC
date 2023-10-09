@@ -1,11 +1,20 @@
 #include "../includes/Server.hpp"
 #include "../includes/User.hpp"
 
-Server::Server(int port, string password) : _port(port),
-                                            _serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
-                                            _password(password)
+void sendStringSocket(int socket, std::string str);
+
+Server::Server(int port, string password, struct tm * timeinfo) :
+		_port(port),
+		_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
+		_password(password)
 {
-    if (_serverSocket == -1)
+	char buffer[80];
+
+	strftime(buffer,sizeof(buffer),"%d-%m-%Y %H:%M:%S",timeinfo);
+	std::string str(buffer);
+
+	_datetime = str;
+	if (_serverSocket == -1)
     {
         std::cerr << "Error creating socket" << std::endl;
         return;
@@ -63,6 +72,7 @@ void Server::handleNewConnection(std::vector<int> &clients)
     _fds.push_back(clientFd);
 
     _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
+    confirmClientConnection(_users[clientSocket]);
     map<int, User *>::iterator it = _users.find(clientSocket);
     std::cout << "New connection from : " << it->second->getFullname() << std::endl;
 }
@@ -169,4 +179,16 @@ void Server::initServer()
 
     std::vector<int> clients;
     handleEvents(clients);
+}
+
+void    Server::confirmClientConnection(User *currentClient)
+{
+    std::string buffer;
+
+    buffer = RPL_WELCOME(currentClient->getNickname(), currentClient->getUsername(), currentClient->getHostname());
+    buffer += RPL_YOURHOST(currentClient->getNickname());
+    buffer += RPL_CREATED(currentClient->getNickname(), _datetime);
+    buffer += RPL_MYINFO(currentClient->getNickname());
+    //buffer += RPL_MOTDSTART(currentClient->getNickname()); //optionnal
+	sendStringSocket(currentClient->getSocket(), buffer);
 }
