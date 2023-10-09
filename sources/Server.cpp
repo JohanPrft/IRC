@@ -18,6 +18,15 @@ Server::~Server()
 {
 }
 
+void print_pollfd(vector<pollfd> _fds)
+{
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		std::cout << _fds[i].fd << " ";
+	}
+	std::cout << std::endl;
+}
+
 int handleClient(User *currentClient, std::vector<int> &clients)
 {
 	char buffer[1024];
@@ -85,18 +94,6 @@ void Server::initServer()
 	std::vector<int> clients;
 	while (true)
 	{
-		// Add the server socket to the pollfd vector
-		// _fds.clear();
-
-		// Add the client sockets to the pollfd vector
-		for (size_t i = 0; i < clients.size(); ++i)
-		{
-			pollfd clientFd;
-			clientFd.fd = clients[i];
-			clientFd.events = POLLIN;
-			_fds.push_back(clientFd);
-		}
-
 		// Use poll to wait for activity on any of the file descriptors
 		int activity = poll(&_fds[0], _fds.size(), -1);
 		if (activity >= 0)
@@ -114,8 +111,14 @@ void Server::initServer()
 							std::cerr << "Error accepting client socket" << std::endl;
 							return;
 						}
-
 						clients.push_back(clientSocket);
+
+						// Add the client sockets to the pollfd vector
+						pollfd clientFd;
+						clientFd.fd = clientSocket;
+						clientFd.events = POLLIN;
+						_fds.push_back(clientFd);
+
 						_users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket)));
 						map<int, User *>::iterator it = _users.find(clientSocket);
 						std::cout << "New connection from : " << it->second->getFullname() << std::endl;
@@ -123,7 +126,13 @@ void Server::initServer()
 					else
 					{
 						// Existing client has incoming data
+						
 						User *currentClient = _users[_fds[i].fd];
+						if (currentClient == NULL)
+						{
+							std::cerr << "Error finding client" << std::endl;
+							return;
+						}
 						if (handleClient(currentClient, clients) == -1)
 						{
 							put_str_fd("Server is disconnecting you now.\n", _fds[i].fd);
