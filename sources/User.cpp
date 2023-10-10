@@ -150,13 +150,8 @@ void User::fillUserInfo(string userInfo, string password) {
 	pos = userInfo.find(":");
 	if (pos == string::npos)
 		throw InvalideRealnameException();
-<<<<<<< HEAD
 	endPos = userInfo.find("\n", pos + 1);
 	if (pos == string::npos)
-=======
-	endPos = userInfo.find("\r", pos + 1);
-	if (pos == std::string::npos)
->>>>>>> 2777c557dbcf3479632e866f109c505dc185aa28
 		throw InvalidUserException();
 	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
 
