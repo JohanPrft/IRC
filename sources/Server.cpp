@@ -173,16 +173,3 @@ void	Server::initServer()
 	close(_serverSocket);
 }
 
-
-// commands
-
-void	Server::join(User *user, vector<string> args)
-{
-
-}
-
-void	Server::mode(User *user, vector<string> args)
-{
-	
-}
-
