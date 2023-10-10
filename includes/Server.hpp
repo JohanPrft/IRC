@@ -17,6 +17,9 @@ class Server {
 			void	initializeServerSocket();
 			void	addServerSocketToEvents();
 
+			static void	cout_server(const string & msg);
+			static void	cerr_server(const string & msg);
+  
 			void 	handleEvents(vector<int> &clients);
 			void	handleNewConnection(vector<int> &clients);
 			void 	handleClientDisconnect(vector<int> &clients, size_t index);
@@ -33,6 +36,7 @@ class Server {
 			int					_serverSocket;
 			// unsigned			_nbrUserMax;
 			// unsigned			_nbrUser;
+			string			_buffer;
 			string			_datetime;
 
 			string					_password;

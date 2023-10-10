@@ -18,6 +18,7 @@ private:
 	string	_fullname;
     string	_hostname;
     bool    _isLogged;
+  	string _buffer;
 
 	class InvalidNickException : public exception {
 		virtual const char *what() const throw() {
@@ -56,6 +57,9 @@ public:
 	string getUserInfo(int clientSocket) const;
 	void fillUserInfo(string userInfo, string password);
     void getPassword(string password);
+
+	static void cout_user(const std::string &msg);
+	static void cerr_user(const std::string &msg);
 
 };
 

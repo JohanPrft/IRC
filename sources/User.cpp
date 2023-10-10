@@ -32,7 +32,6 @@ User::User(int clientSocket, string password)
         while (1);
     }
     put_str_fd("You are now registered, welcome!\n", _clientSocket);
-    cout << *this << endl;
 }
 
 User::User(const User &src) {
@@ -111,7 +110,7 @@ static bool checkUserInfo(const string userInfo)
 
 string User::getUserInfo(int clientSocket) const {
 	string userInfo;
-	char buffer[1024];
+	char buffer[BUFFER_SIZE];
 	while (checkUserInfo(userInfo) == false)
 	{
 		ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
@@ -131,8 +130,8 @@ string User::getUserInfo(int clientSocket) const {
 
 void User::fillUserInfo(string userInfo, string password) {
 	size_t pos = userInfo.find("NICK");
-	size_t endPos = userInfo.find("\n", pos + 5);
-	if (pos == string::npos || endPos == string::npos)
+	size_t endPos = userInfo.find("\r", pos + 5);
+	if (pos == std::string::npos || endPos == std::string::npos)
 		throw InvalidNickException();
 	_nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
 
@@ -150,8 +149,8 @@ void User::fillUserInfo(string userInfo, string password) {
 	pos = userInfo.find(":");
 	if (pos == string::npos)
 		throw InvalideRealnameException();
-	endPos = userInfo.find("\n", pos + 1);
-	if (pos == string::npos)
+	endPos = userInfo.find("\r", pos + 1);
+	if (pos == std::string::npos)
 		throw InvalidUserException();
 	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
 
@@ -166,4 +165,12 @@ void User::fillUserInfo(string userInfo, string password) {
         _isLogged = false;
     else
         _isLogged = true;
+}
+
+void User::cout_user(const string & msg) {
+	cout << CYAN << "[Client]: " << msg << RESET << endl;
+}
+
+void User::cerr_user(const string & msg) {
+	cerr << RED << "[Client]: " << msg << RESET << endl;
 }
