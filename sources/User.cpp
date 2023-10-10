@@ -131,7 +131,7 @@ std::string User::getUserInfo(int clientSocket) const {
 
 void User::fillUserInfo(std::string userInfo, std::string password) {
 	size_t pos = userInfo.find("NICK");
-	size_t endPos = userInfo.find("\n", pos + 5);
+	size_t endPos = userInfo.find("\r", pos + 5);
 	if (pos == std::string::npos || endPos == std::string::npos)
 		throw InvalidNickException();
 	_nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
@@ -150,7 +150,7 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
 	pos = userInfo.find(":");
 	if (pos == std::string::npos)
 		throw InvalideRealnameException();
-	endPos = userInfo.find("\n", pos + 1);
+	endPos = userInfo.find("\r", pos + 1);
 	if (pos == std::string::npos)
 		throw InvalidUserException();
 	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
@@ -162,8 +162,8 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
         endPos = userInfo.find("\r", pos + 5);  // \r\n at the end of the pass
         user_password = userInfo.substr(pos + 5, endPos - (pos + 5));
     }
-    if (user_password == password)
-        _isLogged = true;
-    else
+    if (user_password != password)
         _isLogged = false;
+    else
+        _isLogged = true;
 }
