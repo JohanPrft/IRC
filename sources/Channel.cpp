@@ -1,4 +1,4 @@
-#include "../includes/Channel.hpp"
+#include "../includes/irc.hpp"
 
 
 bool	isChannelNameValid(string name)

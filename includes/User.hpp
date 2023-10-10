@@ -7,32 +7,32 @@
 #include <string.h>
 #include <sys/socket.h>
 
-void put_str_fd(std::string str, int fd);
+void put_str_fd(string str, int fd);
 
 class User {
 
 private:
-    int         _clientSocket;
-	std::string _nickname;
-	std::string _username;
-	std::string _fullname;
-    std::string _hostname;
-    bool        _isLogged;
-	std::string _buffer;
+    int		_clientSocket;
+	string	_nickname;
+	string	_username;
+	string	_fullname;
+    string	_hostname;
+    bool    _isLogged;
+  	string _buffer;
 
-	class InvalidNickException : public std::exception {
+	class InvalidNickException : public exception {
 		virtual const char *what() const throw() {
 			return ("No nickname");
 		}
 	};
 
-	class InvalidUserException : public std::exception {
+	class InvalidUserException : public exception {
 		virtual const char *what() const throw() {
 			return ("No username");
 		}
 	};
 
-class InvalideRealnameException : public std::exception {
+class InvalideRealnameException : public exception {
 	virtual const char *what() const throw() {
 		return ("No realname");
 	}
@@ -40,29 +40,29 @@ class InvalideRealnameException : public std::exception {
 
 public:
 	User();
-	User(int clientSocket, std::string password);
+	User(int clientSocket, string password);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
 
     int         getSocket() const;
-    std::string getNickname() const;
-    std::string getUsername() const;
-    std::string getFullname() const;
-    std::string getHostname() const;
+    string getNickname() const;
+    string getUsername() const;
+    string getFullname() const;
+    string getHostname() const;
     int         getIsLogged() const;
 
     void	setLogged(bool logged);
 
-	std::string getUserInfo(int clientSocket) const;
-	void fillUserInfo(std::string userInfo, std::string password);
-    void getPassword(std::string password);
+	string getUserInfo(int clientSocket) const;
+	void fillUserInfo(string userInfo, string password);
+    void getPassword(string password);
 
 	static void cout_user(const std::string &msg);
 	static void cerr_user(const std::string &msg);
 
 };
 
-std::ostream& operator<<(std::ostream& os, const User& user);
+ostream& operator<<(ostream& os, const User& user);
 
 #endif

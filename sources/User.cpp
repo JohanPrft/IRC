@@ -1,4 +1,4 @@
-#include "User.hpp"
+#include "../includes/irc.hpp"
 
 // Intercept and process the first 3 messages
 
@@ -12,18 +12,18 @@ User::User()
     _isLogged = false;
 }
 
-void put_str_fd(std::string str, int fd)
+void put_str_fd(string str, int fd)
 {
     write(fd, str.c_str(), str.length());
 }
 
 //register client
-User::User(int clientSocket, std::string password)
+User::User(int clientSocket, string password)
 {
     _clientSocket = clientSocket;
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
 
-	std::string userInfo = getUserInfo(_clientSocket);
+	string userInfo = getUserInfo(_clientSocket);
 	fillUserInfo(userInfo, password);
 
     if (_isLogged == false)
@@ -59,29 +59,29 @@ User::~User() {
 
 }
 
-std::ostream& operator<<(std::ostream& os, const User& user) {
-    os << "Nickname: " << user.getNickname() << std::endl;
-    os << "Username: " << user.getUsername() << std::endl;
-    os << "Fullname: " << user.getFullname() << std::endl;
-    os << "Hostname: " << user.getHostname() << std::endl;
-    os << "Socket: " << user.getSocket() << std::endl;
-    os << "Logged: " << user.getIsLogged() << std::endl;
+ostream& operator<<(ostream& os, const User& user) {
+    os << "Nickname: " << user.getNickname() << endl;
+    os << "Username: " << user.getUsername() << endl;
+    os << "Fullname: " << user.getFullname() << endl;
+    os << "Hostname: " << user.getHostname() << endl;
+    os << "Socket: " << user.getSocket() << endl;
+    os << "Logged: " << user.getIsLogged() << endl;
     return os;
 }
 
-std::string User::getNickname() const {
+string User::getNickname() const {
     return (_nickname);
 }
 
-std::string User::getUsername() const {
+string User::getUsername() const {
     return (_username);
 }
 
-std::string User::getFullname() const {
+string User::getFullname() const {
     return (_fullname);
 }
 
-std::string User::getHostname() const {
+string User::getHostname() const {
     return (_hostname);
 }
 
@@ -97,38 +97,38 @@ void	User::setLogged(bool logged) {
     _isLogged = logged;
 }
 
-static bool checkUserInfo(const std::string userInfo)
+static bool checkUserInfo(const string userInfo)
 {
-	if (userInfo.find("NICK") == std::string::npos)
+	if (userInfo.find("NICK") == string::npos)
 		return (false);
-	else if (userInfo.find("USER") == std::string::npos)
+	else if (userInfo.find("USER") == string::npos)
 		return (false);
-//	else if (userInfo.find("PASS") == std::string::npos && userInfo.find("pass") == std::string::npos) //can be written by user
+//	else if (userInfo.find("PASS") == string::npos && userInfo.find("pass") == string::npos) //can be written by user
 //		return (false);
 	return (true);
 }
 
-std::string User::getUserInfo(int clientSocket) const {
-	std::string userInfo;
+string User::getUserInfo(int clientSocket) const {
+	string userInfo;
 	char buffer[BUFFER_SIZE];
 	while (checkUserInfo(userInfo) == false)
 	{
 		ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
 		if (bytesRead == -1 || bytesRead == 0) {
-			std::cerr << "Error reading from client." << std::endl;
+			cerr << "Error reading from client." << endl;
 			break;
 		} else if (bytesRead == 0) {
 			// Client disconnected prematurely
 			break;
 		}
 		// Process the message
-		userInfo += std::string(buffer, bytesRead);
+		userInfo += string(buffer, bytesRead);
 		bzero(buffer, sizeof(buffer));
 	}
 	return (userInfo);
 }
 
-void User::fillUserInfo(std::string userInfo, std::string password) {
+void User::fillUserInfo(string userInfo, string password) {
 	size_t pos = userInfo.find("NICK");
 	size_t endPos = userInfo.find("\r", pos + 5);
 	if (pos == std::string::npos || endPos == std::string::npos)
@@ -138,7 +138,7 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
 	//define username
 	pos = userInfo.find("USER");
 	endPos = userInfo.find(" ", pos + 5);
-	if (pos == std::string::npos || endPos == std::string::npos)
+	if (pos == string::npos || endPos == string::npos)
 		throw InvalidUserException();
 	_username = userInfo.substr(pos + 5, endPos - (pos + 5));
 
@@ -147,7 +147,7 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
 
 	//define fullname
 	pos = userInfo.find(":");
-	if (pos == std::string::npos)
+	if (pos == string::npos)
 		throw InvalideRealnameException();
 	endPos = userInfo.find("\r", pos + 1);
 	if (pos == std::string::npos)
@@ -155,9 +155,9 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
 	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
 
     //check password
-    std::string user_password;
+    string user_password;
     pos = userInfo.find("PASS");
-    if (pos != std::string::npos) {
+    if (pos != string::npos) {
         endPos = userInfo.find("\r", pos + 5);  // \r\n at the end of the pass
         user_password = userInfo.substr(pos + 5, endPos - (pos + 5));
     }

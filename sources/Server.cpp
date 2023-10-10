@@ -1,6 +1,6 @@
 #include "../includes/irc.hpp"
 
-void sendStringSocket(int socket, std::string str);
+void sendStringSocket(int socket, string str);
 
 Server::Server(int port, string password, struct tm * timeinfo) :
 		_port(port),
@@ -10,11 +10,12 @@ Server::Server(int port, string password, struct tm * timeinfo) :
 	char buffer[80];
 
 	strftime(buffer,sizeof(buffer),"%d-%m-%Y %H:%M:%S",timeinfo);
-	std::string str(buffer);
+	string str(buffer);
 
 	_datetime = str;
 	if (_serverSocket == -1)
     {
+
 		cerr_server("Error creating socket");
         return;
     }
@@ -28,7 +29,7 @@ Server::~Server()
 }
 
 
-void Server::sendMessageToGroup(User *currentClient, std::vector<int> &clientsFds)
+void Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds)
 {
     char buffer[BUFFER_SIZE];
     ssize_t bytesRead;
@@ -76,7 +77,7 @@ void Server::sendMessageToUser(User *currentClient, User *targetClient)
     return ;
 }
 
-void Server::handleNewConnection(std::vector<int> &clients)
+void Server::handleNewConnection(vector<int> &clients)
 {
     int clientSocket = accept(_serverSocket, NULL, NULL);
     if (clientSocket == -1)
@@ -90,6 +91,7 @@ void Server::handleNewConnection(std::vector<int> &clients)
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
+	cout << "test" << endl;
 
     _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
     confirmClientConnection(_users[clientSocket]);
@@ -97,18 +99,18 @@ void Server::handleNewConnection(std::vector<int> &clients)
 	cout_server("New connection from : " + it->second->getFullname());
 }
 
-void Server::handleClientDisconnect(std::vector<int> &clients, size_t index)
+void Server::handleClientDisconnect(vector<int> &clients, size_t index)
 {
     put_str_fd("Server is disconnecting you now.\n", _fds[index].fd);
 	cout_server(_users[_fds[index].fd]->getNickname() + " disconnected");
     close(_fds[index].fd);
-    clients.erase(std::remove(clients.begin(), clients.end(), _fds[index].fd), clients.end());
+    clients.erase(remove(clients.begin(), clients.end(), _fds[index].fd), clients.end());
     delete _users[_fds[index].fd];
     _users.erase(_fds[index].fd);
     _fds.erase(_fds.begin() + index);
 }
 
-void Server::handleExistingClient(std::vector<int> &clients, size_t index)
+void Server::handleExistingClient(vector<int> &clients, size_t index)
 {
     User *currentClient = _users[_fds[index].fd];
     if (currentClient == NULL)
@@ -158,7 +160,7 @@ void Server::addServerSocketToEvents()
     _fds.push_back(serverFd);
 }
 
-void Server::handleEvents(std::vector<int> &clients)
+void Server::handleEvents(vector<int> &clients)
 {
     while (true)
     {
@@ -197,13 +199,13 @@ void Server::initServer()
     initializeServerSocket();
     addServerSocketToEvents();
 
-    std::vector<int> clients;
+    vector<int> clients;
     handleEvents(clients);
 }
 
 void    Server::confirmClientConnection(User *currentClient)
 {
-    std::string buffer;
+    string buffer;
 
     buffer = RPL_WELCOME(currentClient->getNickname(), currentClient->getUsername(), currentClient->getHostname());
     buffer += RPL_YOURHOST(currentClient->getNickname());
