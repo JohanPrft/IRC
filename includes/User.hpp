@@ -18,6 +18,7 @@ private:
 	std::string _fullname;
     std::string _hostname;
     bool        _isLogged;
+	std::string _buffer;
 
 	class InvalidNickException : public std::exception {
 		virtual const char *what() const throw() {

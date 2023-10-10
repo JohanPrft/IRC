@@ -34,6 +34,7 @@ class Server {
 			// unsigned			_nbrUserMax;
 			// unsigned			_nbrUser;
 			std::string			_datetime;
+			std::string			_buffer;
 
 	string					_password;
 			sockaddr_in				_serverAddress;
