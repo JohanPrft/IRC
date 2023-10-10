@@ -12,4 +12,6 @@ https://datatracker.ietf.org/doc/html/rfc2811
 
 doc pour gerer client :
 https://datatracker.ietf.org/doc/html/rfc2812
-	
+
+ex d'IRC bien verbal:
+https://github.com/marineks/Ft_irc

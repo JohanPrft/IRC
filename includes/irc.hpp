@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string>
 #include <map>
+#include <time.h>
 
 using std::cout;
 using std::endl;
@@ -24,14 +25,17 @@ using std::cerr;
 using std::exception;
 using std::vector;
 using std::map;
+using std::ostream;
 
 #include "Server.hpp"
 #include "User.hpp"
 #include "Channel.hpp"
+#include "errors.hpp"
+#include "replies.hpp"
 
-#define SERVERNAME "irc.pictochat.net"
-#define VERSION "0.1"
-#define USERMODE "to complete"
-#define CHANMODE "to complete"
+const string SERVERNAME = "irc.pictochat.net";
+const string VERSION = "0.1";
+const string USERMODE = "to complete";
+const string CHANMODE = "to complete";
 
 #endif
