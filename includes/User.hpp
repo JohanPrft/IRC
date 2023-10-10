@@ -58,6 +58,9 @@ public:
 	void fillUserInfo(std::string userInfo, std::string password);
     void getPassword(std::string password);
 
+	static void cout_user(const std::string &msg);
+	static void cerr_user(const std::string &msg);
+
 };
 
 std::ostream& operator<<(std::ostream& os, const User& user);

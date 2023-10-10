@@ -32,7 +32,6 @@ User::User(int clientSocket, std::string password)
         while (1);
     }
     put_str_fd("You are now registered, welcome!\n", _clientSocket);
-    std::cout << *this << std::endl;
 }
 
 User::User(const User &src) {
@@ -111,7 +110,7 @@ static bool checkUserInfo(const std::string userInfo)
 
 std::string User::getUserInfo(int clientSocket) const {
 	std::string userInfo;
-	char buffer[1024];
+	char buffer[BUFFER_SIZE];
 	while (checkUserInfo(userInfo) == false)
 	{
 		ssize_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
@@ -166,4 +165,12 @@ void User::fillUserInfo(std::string userInfo, std::string password) {
         _isLogged = false;
     else
         _isLogged = true;
+}
+
+void User::cout_user(const string & msg) {
+	cout << CYAN << "[Client]: " << msg << RESET << endl;
+}
+
+void User::cerr_user(const string & msg) {
+	cerr << RED << "[Client]: " << msg << RESET << endl;
 }

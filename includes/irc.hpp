@@ -29,10 +29,13 @@ using std::map;
 #include "Server.hpp"
 #include "User.hpp"
 #include "Channel.hpp"
+#include "color.hpp"
 
 const std::string SERVERNAME = "irc.pictochat.net";
 const std::string VERSION = "0.1";
 const std::string USERMODE = "to complete";
 const std::string CHANMODE = "to complete";
+
+#define BUFFER_SIZE 512
 
 #endif
