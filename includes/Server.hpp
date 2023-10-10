@@ -26,6 +26,8 @@ class Server {
 			void	sendMessage(User *currentClient, vector<int> &clients);
 			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds);
 			void	sendMessageToUser(User *currentClient, User *targetClient);
+
+			void	receiveCommand(User *currentClient);
 			
 		private :
 			

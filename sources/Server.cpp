@@ -26,8 +26,30 @@ Server::~Server()
 {
 }
 
+void	Server::receiveCommand(User *currentClient)
+{
+	char buffer[1024];
+    ssize_t bytesRead;
 
-void Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds)
+    memset(buffer, 0, sizeof(buffer)); // clear the buffer
+    bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
+	if (bytesRead > 0)
+    {
+        cout << currentClient->getNickname() << " says: ";
+        cout.write(buffer, bytesRead);
+		string str(buffer);
+		send(currentClient->getSocket(), "toto", bytesRead, 0);
+		if (str.find("PING") == 0)
+		{
+			cout << "=================" << endl;
+			send(currentClient->getSocket(), "PONG", bytesRead, 0);
+
+		}
+	}		
+    return ;
+}
+
+void	Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds)
 {
     char buffer[1024];
     ssize_t bytesRead;
@@ -120,7 +142,7 @@ void Server::handleExistingClient(vector<int> &clients, size_t index)
     }
     try
     {
-        sendMessageToGroup(currentClient, clients);
+        receiveCommand(currentClient);
     }
     catch (const std::runtime_error &e)
     {
