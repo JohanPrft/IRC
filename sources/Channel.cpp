@@ -14,7 +14,7 @@ bool	isChannelNameValid(string name)
 }
 
 
-// ///////// PUBLIC FONCTION OF CLASS CHANNEL ///////////////////
+// ///////// PUBLIC FUNCTION OF CLASS CHANNEL ///////////////////
 
 // Channel::Channel(string name, string modes, User *owner) :
 // 	_name(name),
