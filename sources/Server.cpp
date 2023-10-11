@@ -1,7 +1,5 @@
 #include "../includes/irc.hpp"
 
-void sendStringSocket(int socket, string str);
-
 Server::Server(int port, string password, struct tm * timeinfo) :
 		_port(port),
 		_serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
@@ -149,7 +147,7 @@ void Server::initializeServerSocket()
         return;
     }
 
-	cout_server("Listening...");
+	cout_server("listening...");
 }
 
 void Server::addServerSocketToEvents()
