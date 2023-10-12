@@ -1,4 +1,4 @@
-#include "../includes/irc.hpp"
+#include "../includes/Server.hpp"
 
 Server::Server(int port, string password, struct tm * timeinfo) :
 		_port(port),
@@ -36,7 +36,7 @@ void	Server::parseCommand(string command, int clientSocket)
 			commandName = tokens[0];
 			commandArgs.assign(tokens.begin() + 1, tokens.end());
 		}
-		
+		User::cout_user(command);
 		sendCommand(clientSocket, commandName, commandArgs);
 }	
 
@@ -47,7 +47,7 @@ void	Server::sendCommand(int clientSocket, string command, vector<string> args)
 	if (command == "PING")
 	{
 		string pong = "PONG :" + args[0];
-		cout << pong <<endl;
+		cout_server(pong);
 		put_str_fd(pong, clientSocket);
 		send(clientSocket, pong.c_str(), pong.length(), 0);
 	}
@@ -64,8 +64,7 @@ void	Server::receiveCommand(User *currentClient)
     bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
 	if (bytesRead > 0)
     {
-        cout << currentClient->getNickname() << " says: ";
-        cout.write(buffer, bytesRead);
+        User::cout_user(currentClient->getNickname() + " says: " + buffer);
 		string str(buffer);
 		// send(currentClient->getSocket(), "toto", bytesRead, 0);
 		parseCommand(buffer, currentClient->getSocket());
@@ -135,7 +134,6 @@ void Server::handleNewConnection(vector<int> &clients)
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
-	cout << "test" << endl;
 
     _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
     confirmClientConnection(_users[clientSocket]);
