@@ -57,9 +57,9 @@ class Server {
 			bool channelExist(string name);
 			bool userInChannel(string username, string channel);
 
-			//commands
+			// commands
 
-			// void join(User *user, vector<string> args);
+			void join(int clientsocket, vector<string> args);
 			// void mode(User *user, vector<string> args);
 			// void kick(User *user, User *toKick, Channel *channel);
 

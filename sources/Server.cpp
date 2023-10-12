@@ -28,7 +28,6 @@ Server::~Server()
 
 void	Server::parseCommand(string command, int clientSocket)
 {
-		cout << "la commande est : "<<command << endl;
 		vector<string> tokens;
 		string commandName;
 		vector<string> commandArgs;
@@ -37,17 +36,19 @@ void	Server::parseCommand(string command, int clientSocket)
 			commandName = tokens[0];
 			commandArgs.assign(tokens.begin() + 1, tokens.end());
 		}
-		cout << commandName << endl;
+		
 		sendCommand(clientSocket, commandName, commandArgs);
 }	
 
+
 void	Server::sendCommand(int clientSocket, string command, vector<string> args)
 {
-	cout << "==============" <<endl;;
+	
 	if (command == "PING")
 	{
-		cout << "==============" <<endl;;
-		send(clientSocket, "PONG", 5, 0);
+		string pong = "PONG :" + args[0];
+		cout << pong <<endl;;
+		send(clientSocket, pong.c_str(), pong.length(), 0);
 	}
 	(void) args;
 }
