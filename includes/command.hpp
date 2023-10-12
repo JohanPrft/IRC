@@ -3,7 +3,8 @@
 
 #include "irc.hpp"
 
-void nick(User *user, const string& cmd);
-void username(User *user, const string & cmd);
+void 	nick(User *user, vector<string> splitedCommand);
+void 	username(User *user, vector<string> splitedCommand);
+void	ping(int clientSocket, vector<string> splitedCommand);
 
 #endif

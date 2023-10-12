@@ -32,9 +32,10 @@ class Server {
 
 
 			//commands
-			void	parseCommand(string command, int clientSocket);
+			vector<string> parseCommand(string& command);
 			void	receiveCommand(User *currentClient);
 			void	sendCommand(int clientSocket, string command, vector<string> args);
+			void execCommand(User *user, vector<string> splitedCommand);
 			
 		private :
 			
