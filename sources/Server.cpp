@@ -26,6 +26,32 @@ Server::~Server()
 {
 }
 
+void	Server::parseCommand(string command, int clientSocket)
+{
+		cout << "la commande est : "<<command << endl;
+		vector<string> tokens;
+		string commandName;
+		vector<string> commandArgs;
+		split(command, ' ' , tokens);
+		if (!tokens.empty()) {
+			commandName = tokens[0];
+			commandArgs.assign(tokens.begin() + 1, tokens.end());
+		}
+		cout << commandName << endl;
+		sendCommand(clientSocket, commandName, commandArgs);
+}	
+
+void	Server::sendCommand(int clientSocket, string command, vector<string> args)
+{
+	if (command == " PING")
+	{
+		cout << "==============" <<endl;;
+		send(clientSocket, "PONG", 5, 0);
+	}
+	(void) args;
+}
+
+
 void	Server::receiveCommand(User *currentClient)
 {
 	char buffer[1024];
@@ -38,13 +64,8 @@ void	Server::receiveCommand(User *currentClient)
         cout << currentClient->getNickname() << " says: ";
         cout.write(buffer, bytesRead);
 		string str(buffer);
-		send(currentClient->getSocket(), "toto", bytesRead, 0);
-		if (str.find("PING") == 0)
-		{
-			cout << "=================" << endl;
-			send(currentClient->getSocket(), "PONG", bytesRead, 0);
-
-		}
+		// send(currentClient->getSocket(), "toto", bytesRead, 0);
+		parseCommand(buffer, currentClient->getSocket());
 	}		
     return ;
 }

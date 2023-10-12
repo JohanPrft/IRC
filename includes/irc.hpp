@@ -17,6 +17,7 @@
 #include <string>
 #include <map>
 #include <time.h>
+#include <sstream>
 
 using std::cout;
 using std::endl;
@@ -33,9 +34,15 @@ using std::ostream;
 #include "errors.hpp"
 #include "replies.hpp"
 
+
 const string SERVERNAME = "irc.pictochat.net";
 const string VERSION = "0.1";
 const string USERMODE = "to complete";
 const string CHANMODE = "to complete";
+
+
+// utils
+
+void split(string input, char del, vector<string> &tokens);
 
 #endif

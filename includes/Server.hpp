@@ -27,7 +27,11 @@ class Server {
 			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds);
 			void	sendMessageToUser(User *currentClient, User *targetClient);
 
+
+			//commands
+			void	parseCommand(string command, int clientSocket);
 			void	receiveCommand(User *currentClient);
+			void	sendCommand(int clientSocket, string command, vector<string> args);
 			
 		private :
 			
