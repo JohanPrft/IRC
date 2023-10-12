@@ -47,8 +47,9 @@ void	Server::sendCommand(int clientSocket, string command, vector<string> args)
 	if (command == "PING")
 	{
 		string pong = "PONG :" + args[0];
-		cout << pong <<endl;;
-		send(clientSocket, pong.c_str(), pong.length(), 0);
+		cout << pong <<endl;
+		put_str_fd(pong, clientSocket);
+		// send(clientSocket, pong.c_str(), pong.length(), 0);
 	}
 	(void) args;
 }
