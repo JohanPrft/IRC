@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sys/socket.h>
 
-void put_str_fd(string str, int fd);
+void put_str_fd(const string& str, int fd);
 
 class User {
 
@@ -18,6 +18,7 @@ private:
 	string	_fullname;
     string	_hostname;
     bool    _isLogged;
+  	string _buffer;
 
 	class InvalidNickException : public exception {
 		virtual const char *what() const throw() {
@@ -39,23 +40,28 @@ class InvalideRealnameException : public exception {
 
 public:
 	User();
-	User(int clientSocket, string password);
+	User(int clientSocket, const string& password);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
 
-    int         getSocket() const;
-    string getNickname() const;
-    string getUsername() const;
-    string getFullname() const;
-    string getHostname() const;
-    int         getIsLogged() const;
+    int		getSocket() const;
+    string	getNickname() const;
+    string	getUsername() const;
+    string	getFullname() const;
+    string	getHostname() const;
+    int		getIsLogged() const;
 
     void	setLogged(bool logged);
+	void	setNickname(const string & nick);
+	void	setUsername(const string & username);
 
 	string getUserInfo(int clientSocket) const;
-	void fillUserInfo(string userInfo, string password);
+	void fillUserInfo(const string& userInfo, const string& password);
     void getPassword(string password);
+
+	static void cout_user(const std::string &msg);
+	static void cerr_user(const std::string &msg);
 
 };
 

@@ -16,18 +16,21 @@ int	bad_argument(int argc, char **argv)
 	return (0);
 }
 
+struct tm * initTime() {
+	time_t rawtime;
+	struct tm * timeinfo;
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+	return timeinfo;
+}
+
 int main(int argc, char **argv)
 {
 	if (bad_argument(argc, argv))
 		return 1;
-
-    time_t rawtime;
-    struct tm * timeinfo;
-
-    time (&rawtime);
-    timeinfo = localtime(&rawtime);
+	struct tm * timeinfo = initTime();
 
     Server server(atoi(argv[1]), argv[2], timeinfo);
 	server.initServer();
-
 }
