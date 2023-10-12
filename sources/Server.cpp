@@ -43,7 +43,8 @@ void	Server::parseCommand(string command, int clientSocket)
 
 void	Server::sendCommand(int clientSocket, string command, vector<string> args)
 {
-	if (command == " PING")
+	cout << "==============" <<endl;;
+	if (command == "PING")
 	{
 		cout << "==============" <<endl;;
 		send(clientSocket, "PONG", 5, 0);
