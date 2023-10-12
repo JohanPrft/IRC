@@ -17,6 +17,8 @@ void split(string input, char del, vector<string> &tokens)
     }
 
     return;
+
+}
 string extractBetween(const string & cmd, const string & str1, const string & str2)
 {
 	const size_t len = str1.length();
