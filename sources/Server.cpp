@@ -270,4 +270,7 @@ void Server::cerr_server(const string & msg) {
 
 //channel
 
-bool channelExist(string channelName)
+//bool channelExist(string channelName)
+//{
+//
+//}
