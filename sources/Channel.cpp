@@ -3,7 +3,6 @@
 
 bool	isChannelNameValid(string name)
 {
-	cout <<"toto" << endl;
 	if (name.size() > 50 || name.size() < 2)
 		return (false);
 	if (name[0] != '&' && name[0] != '#' && name[0] != '+' && name[0] != '!')

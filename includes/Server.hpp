@@ -30,6 +30,9 @@ class Server {
 			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds);
 			void	sendMessageToUser(User *currentClient, User *targetClient);
 
+			//
+			bool channelExist(string channelName);
+
 
 			//commands
 			void	parseCommand(string command, int clientSocket);

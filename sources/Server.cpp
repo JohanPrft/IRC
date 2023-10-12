@@ -266,3 +266,8 @@ void Server::cout_server(const string & msg) {
 void Server::cerr_server(const string & msg) {
 	cerr << RED << "[Server]: " << msg << RESET << endl;
 }
+
+
+//channel
+
+bool channelExist(string channelName)
