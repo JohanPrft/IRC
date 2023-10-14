@@ -60,7 +60,7 @@ public:
 	void fillUserInfo(const string& userInfo, const string& password);
     void getPassword(string password);
 
-	static void cout_user(const std::string &msg);
+	void cout_user(const std::string &msg);
 	static void cerr_user(const std::string &msg);
 
 };

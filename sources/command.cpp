@@ -1,5 +1,31 @@
 #include "../includes/command.hpp"
 
+void Server::privmsg(User *currentUser, vector<string> args)
+{
+    //Check errors
+    if (args.size() != 3)
+    {
+        Server::cerr_server("privmsg : not enough parameters !");
+        return ;
+    }
+    // Find user
+    string usernameToFind = args[1];
+    User *targetUser = NULL;
+    std::map<int, User *>::iterator itClient = _users.begin();
+    while (itClient != _users.end())
+    {
+        if(itClient->second->getUsername() == usernameToFind)
+            targetUser = itClient->second;
+        itClient++;
+    }
+    if (targetUser == NULL)
+        Server::cerr_server(usernameToFind + " is not connected on the server.");
+    
+    //If user found, send message
+    else
+        sendMessageToUser(currentUser, targetUser, args[2]);
+}
+
 void	ping(int clientSocket, vector<string> splitedCommand)
 {
 	string pong = "PONG :" + splitedCommand[1];

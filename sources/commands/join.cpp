@@ -1,4 +1,4 @@
-#include "../includes/irc.hpp"
+#include "../../includes/irc.hpp"
 
 
 void	Server::join(int clientsocket, vector<string> args)

@@ -176,7 +176,7 @@ void User::fillUserInfo(const string& userInfo, const string& password) {
 }
 
 void User::cout_user(const string & msg) {
-	cout << CYAN << "[Client]: " << msg << RESET << endl;
+	cout << CYAN << "[" << this->_username << "]: "<< msg << RESET << endl;
 }
 
 void User::cerr_user(const string & msg) {
