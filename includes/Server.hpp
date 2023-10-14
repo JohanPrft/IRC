@@ -26,16 +26,16 @@ class Server {
 			void	handleExistingClient(vector<int> &clients, size_t index);
       
       		void    confirmClientConnection(User *currentClient);
-			void	sendMessage(User *currentClient, vector<int> &clients);
-			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds);
-			void	sendMessageToUser(User *currentClient, User *targetClient);
+			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds, string msg);
+			void	sendMessageToUser(User *currentClient, User *targetClient, string msg);
 
 
-			//commands
+			//	commands
 			vector<string> parseCommand(string& command);
 			void	receiveCommand(User *currentClient);
 			void	sendCommand(int clientSocket, string command, vector<string> args);
-			void execCommand(User *user, vector<string> splitedCommand);
+			void 	execCommand(User *user, vector<string> splitedCommand);
+
 			
 		private :
 			
@@ -61,8 +61,9 @@ class Server {
 			// commands
 
 			void join(int clientsocket, vector<string> args);
-			// void mode(User *user, vector<string> args);
-			// void kick(User *user, User *toKick, Channel *channel);
+			void mode(User *user, vector<string> args);
+			void kick(User *user, User *toKick, Channel *channel);
+			void privmsg(User *currentUser, vector<string> args);
 
 };
 
