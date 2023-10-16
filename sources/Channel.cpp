@@ -1,6 +1,5 @@
 #include "../includes/irc.hpp"
 
-
 bool	isChannelNameValid(string name)
 {
 	if (name.size() > 50 || name.size() < 2)

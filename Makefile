@@ -21,14 +21,16 @@ HEADERS_LIST	=	irc.hpp			\
 					replies.hpp		\
 					errors.hpp		\
 					utils.hpp		\
-					command.hpp
+					command.hpp		\
+					mode.hpp
 
 SRCS_LIST		=	main.cpp		\
 					Server.cpp		\
 					User.cpp		\
 					Channel.cpp		\
 					utils.cpp		\
-					command.cpp
+					command.cpp		\
+					mode.cpp
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}

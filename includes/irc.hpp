@@ -35,6 +35,7 @@ using std::ostream;
 #include "errors.hpp"
 #include "replies.hpp"
 #include "utils.hpp"
+#include "mode.hpp"
 
 
 const string SERVERNAME = "irc.pictochat.net";

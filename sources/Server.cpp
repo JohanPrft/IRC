@@ -47,6 +47,11 @@ void Server::execCommand(User *user, vector<string> splitedCommand) {
 		nick(user, splitedCommand);
 	else if (command == "USER")
 		username(user, splitedCommand);
+	else if (command == "MODE")
+		mode(user, splitedCommand);
+	else
+		unknown(user, splitedCommand);
+
 }
 
 void	Server::receiveCommand(User *currentClient)
