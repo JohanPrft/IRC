@@ -40,9 +40,9 @@ Channel::Channel(string name, string modes, User* owner) :
 // {	
 // }
 
-// Channel::~Channel()
-// {
-// }
+Channel::~Channel()
+{
+}
 
 // void	Channel::init(string modes, User *owner)
 // {
@@ -51,10 +51,10 @@ Channel::Channel(string name, string modes, User* owner) :
 
 // //getters
 
-// string	Channel::getName() const
-// {
-// 	return (_name);
-// }
+string	Channel::getName() const
+{
+	return (_name);
+}
 
 // string	Channel::getTopic() const
 // {
@@ -105,16 +105,18 @@ Channel::Channel(string name, string modes, User* owner) :
 
 
 
-// //commands
+//commands
 
-// void	Channel::sendMsgAllUser(User *user, string msg)
-// {
-// 	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++)
-// 		if (user->getNickname() != (*it)->getNickname())
-// 			cout<<"utiliesr la fonction send message de la class server"<< endl;
-// 	//en attente de la class serveur
+void	Channel::sendMsgAllUser(User *user, string msg)
+{
+	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++)
+		if (user->getNickname() != (*it)->getNickname())
+		{
+			cout<<"utiliesr la fonction send message de la class server"<< endl;
+		}
+	(void) msg;
 
-// }
+}
 
 void Channel::addUser(User *user)
 {

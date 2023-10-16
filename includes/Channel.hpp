@@ -40,7 +40,7 @@ class Channel{
 	// 		void	init(string modes, User *owner);
 
 	// 		//getters
-	// 		string	getName() const;
+			string	getName() const;
 	// 		string	getTopic() const;
 	// 		bool	getNeedKey() const;
 	// 		bool	getInviteOnly() const;
@@ -57,7 +57,7 @@ class Channel{
 	// 		void	modifyLimitUser(bool ok);
 
 	// 		//commands
-	// 		void	sendMsgAllUser(User *user, string msg);
+			void	sendMsgAllUser(User *user, string msg);
 			void	addUser(User *user);
 	// 		void	removeUser(User *user);
 
