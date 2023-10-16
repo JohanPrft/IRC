@@ -26,7 +26,7 @@ class Server {
 			void	handleExistingClient(vector<int> &clients, size_t index);
       
       		void    confirmClientConnection(User *currentClient);
-			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds, string msg);
+			void	sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg);
 			void	sendMessageToUser(User *currentClient, User *targetClient, string msg);
 
 
@@ -63,7 +63,10 @@ class Server {
 			void join(User *user, vector<string> args);
 			void mode(User *user, vector<string> args);
 			void kick(User *user, User *toKick, Channel *channel);
+
 			void privmsg(User *currentUser, vector<string> args);
+			void privmsgChannel(User *currentUser, vector<string> args);
+			void privmsgUser(User *currentUser, vector<string> args);
 
 };
 

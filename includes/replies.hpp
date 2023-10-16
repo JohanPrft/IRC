@@ -160,6 +160,6 @@
 	+ text + "\r\n")
 
 // PRIVMSG
-# define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
+# define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!~" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
 
 #endif //IRC_REPLIES_HPP
