@@ -42,9 +42,15 @@ class Channel{
 	// 		//getters
 			string	getName() const;
 	// 		string	getTopic() const;
-	// 		bool	getNeedKey() const;
-	// 		bool	getInviteOnly() const;
-	// 		bool	getLimitUSer() const;
+			bool	getNeedKey() const;
+			bool	getInviteOnly() const;
+			bool	getLimitUser() const;
+			bool 	isInvite(User *user);
+			bool 	isOperator(User *user);
+			string	getKey();
+
+			int		getLimit();
+			int		getNbrUser();
 
 
 
@@ -61,7 +67,7 @@ class Channel{
 			void	addUser(User *user);
 	// 		void	removeUser(User *user);
 
-	// 		void	addOperator(User *user);
+			// void	addOperator(User *user);
 	// 		void	removeOperator(User *user);
 
 	// 		void	setMode(string modes);
@@ -74,17 +80,17 @@ class Channel{
 	private :
 		string			_name;
 	// 	string			_topic;
-	// 	string			_key;
-	// 	int				_maxUser;
+		string			_key;
+		int				_maxUser;
 
-	// 	bool			_inviteOnly;
-	// 	bool			_needKey;
-	// 	bool			_limitUser;
+		bool			_inviteOnly;
+		bool			_needKey;
+		bool			_limitUser;
 
 		vector<User*>	_userList;
 	// 	vector<User*>	_banList;
 		vector<User*> 	_operatorList;
-	// 	vector<User*>	_invited;
+		vector<User*>	_invited;
 };
 
 #endif

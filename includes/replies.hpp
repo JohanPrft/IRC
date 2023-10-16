@@ -1,6 +1,7 @@
 #ifndef IRC_REPLIES_HPP
 # define IRC_REPLIES_HPP
 
+
 // 001 - Server::sendWelcome
 # define RPL_WELCOME(nickName, user, host) ( ":" + SERVERNAME + " 001 " + nickName \
 		+ " :Welcome to the Internet Relay Network, " + nickName + "!" + user + "@" + host + "\r\n")
@@ -158,5 +159,9 @@
 // SPE_CODE - WALLOPS
 # define RPL_WALLOPS(nickname, user, host, text) ( ":" + nickname + "!" + user + "@" + host + " WALLOPS " \
 	+ text + "\r\n")
+
+
+# define RPL_JOIN(user_id, channel) (user_id + " JOIN :#" +  channel + "\r\n")
+
 
 #endif //IRC_REPLIES_HPP

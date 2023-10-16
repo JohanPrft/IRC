@@ -16,29 +16,34 @@ bool	isChannelNameValid(string name)
 // ///////// PUBLIC FUNCTION OF CLASS CHANNEL ///////////////////
 
 Channel::Channel(string name, string modes, User* owner) :
-	_name(name)
+	_name(name),
 	// _topic("not define"),
-	// _key("no key"),
-	// _maxUser(-1),
-	// _inviteOnly(false),
-	// _needKey(false),
-	// _limitUser(false)
+	_key("no key"),
+	_maxUser(-1),
+	_inviteOnly(false),
+	_needKey(false),
+	_limitUser(false)
 {	
 	(void) modes;
 	_userList.push_back(owner);
+	_operatorList.push_back(owner);
 	cout << "a channel named :" << name << "has been created" << endl;
 }
 
-// Channel::Channel(string name, string modes, User *owner, string key) :
-// 	_name(name),
-// 	_topic("not define"),
-// 	_key(key),
-// 	_maxUser(-1),
-// 	_inviteOnly(false),
-// 	_needKey(false),
-// 	_limitUser(false)
-// {	
-// }
+Channel::Channel(string name, string modes, User *owner, string key) :
+	_name(name),
+	// _topic("not define"),
+	_key(key),
+	_maxUser(-1),
+	_inviteOnly(false),
+	_needKey(true),
+	_limitUser(false)
+{	
+	(void)modes;
+	_userList.push_back(owner);
+	_operatorList.push_back(owner);
+	cout << "a channel named :" << name << "has been created" << endl;
+}
 
 Channel::~Channel()
 {
@@ -61,21 +66,53 @@ string	Channel::getName() const
 // 	return (_topic);
 // }
 
-// bool	Channel::getNeedKey() const
-// {
-// 	return (_needKey);
-// }
+bool	Channel::getNeedKey() const
+{
+	return (_needKey);
+}
 
-// bool	Channel::getInviteOnly() const
-// {
-// 	return (_inviteOnly);
-// }
+bool	Channel::getInviteOnly() const
+{
+	return (_inviteOnly);
+}
 
-// bool	Channel::getLimitUSer() const
-// {
-// 	return (_limitUser);
-// }
+bool	Channel::getLimitUser() const
+{
+	return (_limitUser);
+}
 
+bool	Channel::isInvite(User *user)
+{
+	vector<User *>::iterator it = std::find(_invited.begin(), _invited.end(), user);
+	if (it != _invited.end()) 
+   		return true;
+ 	else 
+    	return false;
+}
+
+bool Channel::isOperator(User *user)
+{
+	vector<User *>::iterator it = std::find(_operatorList.begin(), _operatorList.end(), user);
+	if (it != _operatorList.end()) 
+   		return true;
+ 	else 
+    	return false;
+}
+
+string Channel::getKey()
+{
+	return(_key);
+}
+
+int	Channel::getLimit()
+{
+	return (_maxUser);
+}
+
+int Channel::getNbrUser()
+{
+	return(_userList.size());
+}
 
 
 // //setters
