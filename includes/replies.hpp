@@ -159,4 +159,7 @@
 # define RPL_WALLOPS(nickname, user, host, text) ( ":" + nickname + "!" + user + "@" + host + " WALLOPS " \
 	+ text + "\r\n")
 
+// PRIVMSG
+# define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
+
 #endif //IRC_REPLIES_HPP
