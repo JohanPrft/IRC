@@ -50,6 +50,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 		username(user, splitedCommand);
     else if (command =="PRIVMSG")
         privmsg(user, splitedCommand);
+	else if (command == "JOIN")
+		join(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)
@@ -237,9 +239,12 @@ void Server::cerr_server(const string & msg) {
 }
 
 
-//channel
+bool Server::channelExist(string channelName)
+{
+	map<string, Channel*>::iterator it = _channels.find(channelName);
 
-//bool channelExist(string channelName)
-//{
-//
-//}
+    if (it != _channels.end())
+        return true;
+     else 
+        return false;
+}

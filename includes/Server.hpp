@@ -50,7 +50,7 @@ class Server {
 			sockaddr_in				_serverAddress;
 			vector<pollfd>			_fds;
 			map<int, User*> 		_users;
-			// map<string, Channel*>	_channels;
+			map<string, Channel*>	_channels;
 
 			// bool
 
@@ -60,7 +60,7 @@ class Server {
 
 			// commands
 
-			void join(int clientsocket, vector<string> args);
+			void join(User *user, vector<string> args);
 			void mode(User *user, vector<string> args);
 			void kick(User *user, User *toKick, Channel *channel);
 			void privmsg(User *currentUser, vector<string> args);

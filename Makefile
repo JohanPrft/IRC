@@ -29,6 +29,7 @@ SRCS_LIST		=	main.cpp		\
 					Channel.cpp		\
 					utils.cpp		\
 					command.cpp     \
+					join.cpp \
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}

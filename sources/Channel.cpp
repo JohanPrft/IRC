@@ -15,16 +15,19 @@ bool	isChannelNameValid(string name)
 
 // ///////// PUBLIC FUNCTION OF CLASS CHANNEL ///////////////////
 
-// Channel::Channel(string name, string modes, User *owner) :
-// 	_name(name),
-// 	_topic("not define"),
-// 	_key("no key"),
-// 	_maxUser(-1),
-// 	_inviteOnly(false),
-// 	_needKey(false),
-// 	_limitUser(false)
-// {	
-// }
+Channel::Channel(string name, string modes, User* owner) :
+	_name(name)
+	// _topic("not define"),
+	// _key("no key"),
+	// _maxUser(-1),
+	// _inviteOnly(false),
+	// _needKey(false),
+	// _limitUser(false)
+{	
+	(void) modes;
+	_userList.push_back(owner);
+	cout << "a channel named :" << name << "has been created" << endl;
+}
 
 // Channel::Channel(string name, string modes, User *owner, string key) :
 // 	_name(name),
@@ -113,15 +116,15 @@ bool	isChannelNameValid(string name)
 
 // }
 
-// void Channel::addUser(User *user)
-// {
-// 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+void Channel::addUser(User *user)
+{
+	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
-// 	if (it != _userList.end())
-// 		cout << "this user is already in the channel" << endl;
-// 	else
-// 		_userList.push_back(user);
-// }
+	if (it != _userList.end())
+		cout << "this user is already in the channel" << endl;
+	else
+		_userList.push_back(user);
+}
 
 // void	Channel::removeUser(User *user)
 // {

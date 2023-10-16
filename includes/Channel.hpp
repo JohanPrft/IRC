@@ -31,11 +31,11 @@ class user;
 class Channel{
 
 
-	// public :
+	public :
 
-	// 		Channel(string name, string modes, User *owner);
-	// 		Channel(string name, string modes, User *owner, string key);
-	// 		~Channel();
+			Channel(string name, string modes, User *owner);
+			Channel(string name, string modes, User *owner, string key);
+			~Channel();
 
 	// 		void	init(string modes, User *owner);
 
@@ -50,7 +50,7 @@ class Channel{
 
 
 	// 		//setters
-	// 		void	setKey(string key);
+	// 		void	setKey(string key);user
 	// 		void	setTopic(string topic);
 	// 		void	modifyInvite(bool ok);
 	// 		void	modifyNeedKey(bool ok);
@@ -58,7 +58,7 @@ class Channel{
 
 	// 		//commands
 	// 		void	sendMsgAllUser(User *user, string msg);
-	// 		void	addUser(User *user);
+			void	addUser(User *user);
 	// 		void	removeUser(User *user);
 
 	// 		void	addOperator(User *user);
@@ -71,8 +71,8 @@ class Channel{
 		
 
 
-	// private :
-	// 	string			_name;
+	private :
+		string			_name;
 	// 	string			_topic;
 	// 	string			_key;
 	// 	int				_maxUser;
@@ -81,13 +81,10 @@ class Channel{
 	// 	bool			_needKey;
 	// 	bool			_limitUser;
 
-	// 	vector<User*>	_userList;
+		vector<User*>	_userList;
 	// 	vector<User*>	_banList;
-	// 	vector<User*> 	_operatorList;
+		vector<User*> 	_operatorList;
 	// 	vector<User*>	_invited;
-
-	
-
 };
 
 #endif
