@@ -221,10 +221,7 @@ void	Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds, st
 
 void Server::sendMessageToUser(User *currentClient, User *targetClient, string msg)
 {
-	string message;
-
-    message = currentClient->getUsername() + " says " + msg;
-    sendStringSocket(targetClient->getSocket(), message);
+    sendStringSocket(targetClient->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), targetClient->getNickname(), msg));
     return ;
 }
 
