@@ -5,6 +5,7 @@ void sendStringSocket(int socket, const string& str)
     ssize_t bytesSent = send(socket, str.c_str(), str.length(), 0);
     if (bytesSent == -1)
         cerr << "Error sending data to client" << endl;
+	
 }
 
 void split(string input, char del, vector<string> &tokens)
