@@ -162,7 +162,6 @@
 # define RPL_WALLOPS(nickname, user, host, text) ( ":" + nickname + "!" + user + "@" + host + " WALLOPS " \
 	+ text + "\r\n")
 
-
 # define RPL_JOIN(user_id, channel) (user_id + " JOIN :#" +  channel + "\r\n")
 
 // PRIVMSG

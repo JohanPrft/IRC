@@ -65,6 +65,7 @@ class Server {
 			void join(User *user, vector<string> args);
 			void mode(User *user, vector<string> args);
 			void kick(User *user, User *toKick, Channel *channel);
+			void invite(User *invitator, User *invitated, Channel *channel);
 
 			void privmsg(User *currentUser, vector<string> args);
 			void privmsgChannel(User *currentUser, vector<string> args);
