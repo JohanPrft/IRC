@@ -208,14 +208,14 @@ void    Server::confirmClientConnection(User *currentClient)
 	sendStringSocket(currentClient->getSocket(), buffer);
 }
 
-void	Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds, string msg)
+void	Server::sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg)
 {
-    for (size_t i = 0; i < clientsFds.size() ; i++)
+    vector<User *>listClient = currentChannel->getUserList();
+    for (size_t i = 0; i < listClient.size() ; i++)
     {
-        if (clientsFds[i] != currentClient->getSocket())
+        if (listClient[i]->getSocket() != currentClient->getSocket())
         {
-            string message = currentClient->getUsername() + " says " + msg;
-            sendStringSocket(clientsFds[i], message);
+            sendStringSocket(listClient[i]->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), currentChannel->getName(), msg));
         }
     }
 	return ;
@@ -223,10 +223,7 @@ void	Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds, st
 
 void Server::sendMessageToUser(User *currentClient, User *targetClient, string msg)
 {
-	string message;
-
-    message = currentClient->getUsername() + " says " + msg;
-    sendStringSocket(targetClient->getSocket(), message);
+    sendStringSocket(targetClient->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), targetClient->getNickname(), msg));
     return ;
 }
 

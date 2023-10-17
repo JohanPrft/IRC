@@ -2,28 +2,72 @@
 
 void Server::privmsg(User *currentUser, vector<string> args)
 {
+    if (args[1][0] != '#')
+        privmsgUser(currentUser, args);
+    else
+        privmsgChannel(currentUser, args);
+}
+
+void Server::privmsgChannel(User *currentUser, vector<string> args)
+{
     //Check errors
-    if (args.size() != 3)
+    if (args.size()  < 3)
     {
-        Server::cerr_server("privmsg : not enough parameters !");
+        Server::cerr_server("privmsg : not enough parameters : /msg <channel> <message>");
+        return ;
+    }
+    // Find channel
+    string channelToFind = args[1];
+    Channel *targetChannel = NULL;
+    std::map<string, Channel *>::iterator itChannel = _channels.begin();
+    while (itChannel != _channels.end())
+    {
+        if(itChannel->first == channelToFind)
+            targetChannel = itChannel->second;
+        itChannel++;
+    }
+    if (targetChannel == NULL)
+        Server::cerr_server(channelToFind + " channel does not exist.");
+    
+    //If channel found, send message to all users in channel
+    else
+    {
+        string message;
+        for (size_t i = 2; i < args.size(); i++)
+            message += " " + args[i];
+        sendMessageToChannel(targetChannel, currentUser, message);
+    }
+}
+
+void Server::privmsgUser(User *currentUser, vector<string> args)
+{
+    //Check errors
+    if (args.size()  < 3)
+    {
+        Server::cerr_server("privmsg : not enough parameters : /msg <nickname> <message>");
         return ;
     }
     // Find user
-    string usernameToFind = args[1];
+    string nicknameToFind = args[1];
     User *targetUser = NULL;
     std::map<int, User *>::iterator itClient = _users.begin();
     while (itClient != _users.end())
     {
-        if(itClient->second->getUsername() == usernameToFind)
+        if(itClient->second->getNickname() == nicknameToFind)
             targetUser = itClient->second;
         itClient++;
     }
     if (targetUser == NULL)
-        Server::cerr_server(usernameToFind + " is not connected on the server.");
+        Server::cerr_server(nicknameToFind + " is not connected on the server.");
     
     //If user found, send message
     else
-        sendMessageToUser(currentUser, targetUser, args[2]);
+    {
+        string message;
+        for (size_t i = 2; i < args.size(); i++)
+            message += " " + args[i];
+        sendMessageToUser(currentUser, targetUser, message);
+    }
 }
 
 void	ping(int clientSocket, vector<string> splitedCommand)

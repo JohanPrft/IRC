@@ -61,6 +61,11 @@ string	Channel::getName() const
 	return (_name);
 }
 
+vector <User*>	Channel::getUserList() const
+{
+	return (_userList);
+}
+
 // string	Channel::getTopic() const
 // {
 // 	return (_topic);
@@ -143,17 +148,6 @@ int Channel::getNbrUser()
 
 
 //commands
-
-void	Channel::sendMsgAllUser(User *user, string msg)
-{
-	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++)
-		if (user->getNickname() != (*it)->getNickname())
-		{
-			cout<<"utiliesr la fonction send message de la class server"<< endl;
-		}
-	(void) msg;
-
-}
 
 void Channel::addUser(User *user)
 {

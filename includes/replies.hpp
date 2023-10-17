@@ -165,5 +165,7 @@
 
 # define RPL_JOIN(user_id, channel) (user_id + " JOIN :#" +  channel + "\r\n")
 
+// PRIVMSG
+# define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!~" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
 
 #endif //IRC_REPLIES_HPP
