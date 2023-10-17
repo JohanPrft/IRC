@@ -22,7 +22,7 @@ HEADERS_LIST	=	irc.hpp			\
 					errors.hpp		\
 					utils.hpp		\
 					command.hpp		\
-					mode.hpp
+					Mode.hpp
 
 SRCS_LIST		=	main.cpp		\
 					Server.cpp		\
@@ -30,7 +30,7 @@ SRCS_LIST		=	main.cpp		\
 					Channel.cpp		\
 					utils.cpp		\
 					command.cpp		\
-					mode.cpp
+					Mode.cpp
 
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}

@@ -1,6 +1,4 @@
 #include "../includes/irc.hpp"
-#include "User.hpp"
-
 
 // Intercept and process the first 3 messages
 

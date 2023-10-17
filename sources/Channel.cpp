@@ -1,5 +1,6 @@
 #include "../includes/irc.hpp"
 
+
 bool	isChannelNameValid(string name)
 {
 	if (name.size() > 50 || name.size() < 2)
@@ -165,3 +166,10 @@ bool	isChannelNameValid(string name)
 // 			_operatorList.erase(it);
 // 	}
 // }
+//User *Channel::getUser(const string &username) {
+// ;
+//}
+
+void Channel::setMaxUser(int maxUser) {
+	_maxUser = maxUser;
+}

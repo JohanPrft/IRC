@@ -1,5 +1,6 @@
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
+
 #include "irc.hpp"
 
 //  Then, you have to implement the commands that are specific to channel
@@ -24,45 +25,50 @@ bool		containsKey(Tc container, Tk value)
 
 bool	isChannelNameValid(string name);
 
-
-
 class user;
 
 class Channel{
 
 
-	// public :
+	 public :
+	 		Channel(string name, string modes, User *owner);
+	 		Channel(string name, string modes, User *owner, string key);
+	 		~Channel();
 
-	// 		Channel(string name, string modes, User *owner);
-	// 		Channel(string name, string modes, User *owner, string key);
-	// 		~Channel();
-
-	// 		void	init(string modes, User *owner);
+	 		void	init(string modes, User *owner);
 
 	// 		//getters
-	// 		string	getName() const;
-	// 		string	getTopic() const;
-	// 		bool	getNeedKey() const;
-	// 		bool	getInviteOnly() const;
-	// 		bool	getLimitUSer() const;
+	 		string	getName() const;
+	 		string	getTopic() const;
+	 		bool	getNeedKey() const;
+	 		bool	getInviteOnly() const;
+	 		bool	getLimitUSer() const;
+			 User *getUser(const string & username);
 
 
 
 
-	// 		//setters
-	// 		void	setKey(string key);
-	// 		void	setTopic(string topic);
-	// 		void	modifyInvite(bool ok);
-	// 		void	modifyNeedKey(bool ok);
-	// 		void	modifyLimitUser(bool ok);
+	 		//setters
+	 		void	setPassword(string password);
+	 		void	setTopic(string topic);
+	 		void	modifyInvite(bool value);
+	 		void	modifyNeedPassword(bool value);
+	 		void	modifyLimitUser(bool value);
+			 void setMaxUser(int maxUser);
+
+             //checkers
+            bool    isUserInChannel(User *user);
+            bool    isUserOperator(User *user);
+            bool    isUserInvited(User *user);
+            bool    isUserBanned(User *user);
 
 	// 		//commands
 	// 		void	sendMsgAllUser(User *user, string msg);
 	// 		void	addUser(User *user);
 	// 		void	removeUser(User *user);
 
-	// 		void	addOperator(User *user);
-	// 		void	removeOperator(User *user);
+	 		void	addOperator(User *user);
+	 		void	removeOperator(User *user);
 
 	// 		void	setMode(string modes);
 
@@ -71,20 +77,20 @@ class Channel{
 		
 
 
-	// private :
-	// 	string			_name;
-	// 	string			_topic;
-	// 	string			_key;
-	// 	int				_maxUser;
+	 private :
+	 	string			_name;
+	 	string			_topic;
+	 	string			_password;
+	 	int				_maxUser;
 
-	// 	bool			_inviteOnly;
-	// 	bool			_needKey;
-	// 	bool			_limitUser;
+	 	bool			_inviteOnly;
+	 	bool			_needPassword;
+	 	bool			_limitUser;
 
-	// 	vector<User*>	_userList;
-	// 	vector<User*>	_banList;
-	// 	vector<User*> 	_operatorList;
-	// 	vector<User*>	_invited;
+	 	vector<User*>	_userList;
+	 	vector<User*>	_banList;
+	 	vector<User*> 	_operatorList;
+	 	vector<User*>	_invited;
 
 	
 

@@ -3,7 +3,6 @@
 
 #include "irc.hpp"
 
-
 class Channel;
 class User;
 
@@ -36,7 +35,10 @@ class Server {
 			void	receiveCommand(User *currentClient);
 			void	sendCommand(int clientSocket, string command, vector<string> args);
 			void execCommand(User *user, vector<string> splitedCommand);
-			
+
+            //getter
+            Channel *getChannel(const string& name);
+
 		private :
 			
 			int					_port;
@@ -50,7 +52,7 @@ class Server {
 			sockaddr_in				_serverAddress;
 			vector<pollfd>			_fds;
 			map<int, User*> 		_users;
-			// map<string, Channel*>	_channels;
+            map<string, Channel*>	_channels;
 
 			// bool
 

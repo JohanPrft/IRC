@@ -48,7 +48,7 @@ void Server::execCommand(User *user, vector<string> splitedCommand) {
 	else if (command == "USER")
 		username(user, splitedCommand);
 	else if (command == "MODE")
-		mode(user, splitedCommand);
+		mode(this, user, splitedCommand);
 	else
 		unknown(user, splitedCommand);
 
@@ -263,6 +263,13 @@ void Server::cout_server(const string & msg) {
 
 void Server::cerr_server(const string & msg) {
 	cerr << RED << "[Server]: " << msg << RESET << endl;
+}
+
+Channel *Server::getChannel(const string& name) {
+    map<string, Channel*>::iterator iter = _channels.find(name);
+    if (iter == _channels.end())
+        return NULL;
+    return iter->second;
 }
 
 
