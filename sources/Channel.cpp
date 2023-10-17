@@ -27,7 +27,7 @@ Channel::Channel(string name, string modes, User* owner) :
 	(void) modes;
 	_userList.push_back(owner);
 	_operatorList.push_back(owner);
-	cout << "a channel named :" << name << "has been created" << endl;
+	cout << "a channel named :" << name << " has been created" << endl;
 }
 
 Channel::Channel(string name, string modes, User *owner, string key) :

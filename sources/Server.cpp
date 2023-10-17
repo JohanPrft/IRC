@@ -248,3 +248,12 @@ bool Server::channelExist(string channelName)
      else 
         return false;
 }
+
+int Server::getFdUser(User *user)
+{
+	std::map<int, User*>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it) 
+        if (it->second == user) 
+			return it->first;
+    return -1;
+}

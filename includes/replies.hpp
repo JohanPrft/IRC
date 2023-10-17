@@ -2,6 +2,8 @@
 # define IRC_REPLIES_HPP
 
 
+# define user_id(nickname, username) (":" + nickname + "!" + username + "@localhost")
+
 // 001 - Server::sendWelcome
 # define RPL_WELCOME(nickName, user, host) ( ":" + SERVERNAME + " 001 " + nickName \
 		+ " :Welcome to the Internet Relay Network, " + nickName + "!" + user + "@" + host + "\r\n")

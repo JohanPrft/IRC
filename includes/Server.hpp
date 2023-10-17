@@ -29,6 +29,8 @@ class Server {
 			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds, string msg);
 			void	sendMessageToUser(User *currentClient, User *targetClient, string msg);
 
+			//getters
+			int		getFdUser(User *user);
 
 			//	commands
 			vector<string> parseCommand(string& command);
