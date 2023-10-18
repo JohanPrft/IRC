@@ -22,78 +22,72 @@ bool		containsKey(Tc container, Tk value)
 	return container.find(value) != container.end();
 }
 
-
 bool	isChannelNameValid(string name);
 
 class user;
 
 class Channel{
 
+	private :
+		string			_name;
+		string			_topic;
+		string			_password;
+		int				_maxUser;
+		bool			_inviteOnly;
+		bool			_needPassword;
+		bool			_limitUser;
 
-	 public :
-	 		Channel(string name, string modes, User *owner);
-	 		Channel(string name, string modes, User *owner, string key);
-	 		~Channel();
+		vector<User*>	_userList;
+		vector<User*>	_banList;
+		vector<User*> 	_operatorList;
+		vector<User*>	_invited;
 
-	 		void	init(string modes, User *owner);
-
-	// 		//getters
-	 		string	getName() const;
-	 		string	getTopic() const;
-	 		bool	getNeedKey() const;
-	 		bool	getInviteOnly() const;
-	 		bool	getLimitUSer() const;
-			 User *getUser(const string & username);
-
-
+		Channel();
 
 
-	 		//setters
-	 		void	setPassword(string password);
-	 		void	setTopic(string topic);
-	 		void	modifyInvite(bool value);
-	 		void	modifyNeedPassword(bool value);
-	 		void	modifyLimitUser(bool value);
-			 void setMaxUser(int maxUser);
-
-             //checkers
-            bool    isUserInChannel(User *user);
-            bool    isUserOperator(User *user);
-            bool    isUserInvited(User *user);
-            bool    isUserBanned(User *user);
-
-	// 		//commands
-	// 		void	sendMsgAllUser(User *user, string msg);
-	// 		void	addUser(User *user);
-	// 		void	removeUser(User *user);
-
-	 		void	addOperator(User *user);
-	 		void	removeOperator(User *user);
-
-	// 		void	setMode(string modes);
+	public :
+		Channel(const string& name, User *owner);
+		Channel(const Channel & cpy);
+		~Channel();
+		Channel &operator=(const Channel & src);
 
 
+		//getters
+		string	getName() const;
+		string	getTopic() const;
+		string getPassword() const;
+		int 	getMaxUser() const;
+		bool	getInviteOnly() const;
+		bool	getNeedPassword() const;
+		bool	getLimitUSer() const;
 
-		
+		User *getUser(const string & username);
 
 
-	 private :
-	 	string			_name;
-	 	string			_topic;
-	 	string			_password;
-	 	int				_maxUser;
+		//setters
+		void	setTopic(const string& topic);
+		void	setPassword(const string& password);
+		void 	setMaxUser(int maxUser);
+		void	setInviteOnly(bool value);
+		void	setNeedPassword(bool value);
+		void	setLimitUser(bool value);
 
-	 	bool			_inviteOnly;
-	 	bool			_needPassword;
-	 	bool			_limitUser;
+		//checkers
+		bool    isUserInChannel(User *user);
+		bool    isUserOperator(User *user);
+		bool    isUserInvited(User *user);
+		bool    isUserBanned(User *user);
 
-	 	vector<User*>	_userList;
-	 	vector<User*>	_banList;
-	 	vector<User*> 	_operatorList;
-	 	vector<User*>	_invited;
-
-	
-
+ 		//commands
+// 		void	sendMsgAllUser(User *user, string msg);
+ 		void	addUser(User *user);
+ 		void	removeUser(User *user);
+		void	addOperator(User *user);
+		void	removeOperator(User *user);
+		void	addBan(User *user);
+		void	removeBan(User *user);
+		void	addInvited(User *user);
+		void	removeInvited(User *user);
 };
 
 #endif

@@ -64,8 +64,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		User::cout_user(currentClient->getNickname() + " says: " + str);
-		User::cout_user(str);
+		User::cout_user(currentClient->getNickname() + ": " + str);
 		vector<string> splitedCommand = parseCommand(str);
 		execCommand(currentClient, splitedCommand);
 	}		

@@ -1,5 +1,5 @@
 #include "../includes/irc.hpp"
-
+#include "Channel.hpp"
 
 bool	isChannelNameValid(string name)
 {
@@ -12,164 +12,263 @@ bool	isChannelNameValid(string name)
 	return (true);
 }
 
+Channel::Channel() {
 
-// ///////// PUBLIC FUNCTION OF CLASS CHANNEL ///////////////////
+}
 
-// Channel::Channel(string name, string modes, User *owner) :
-// 	_name(name),
-// 	_topic("not define"),
-// 	_key("no key"),
-// 	_maxUser(-1),
-// 	_inviteOnly(false),
-// 	_needKey(false),
-// 	_limitUser(false)
-// {	
-// }
+Channel::Channel(const string& name, User *owner) :
+ 	_name(name),
+ 	_topic("not define"),
+ 	_password("no password"),
+ 	_maxUser(-1),
+ 	_inviteOnly(false),
+ 	_needPassword(false),
+ 	_limitUser(false)
+{
+	_userList.push_back(owner);
+ 	_operatorList.push_back(owner);
+ 	_invited.push_back(owner);
+}
 
-// Channel::Channel(string name, string modes, User *owner, string key) :
-// 	_name(name),
-// 	_topic("not define"),
-// 	_key(key),
-// 	_maxUser(-1),
-// 	_inviteOnly(false),
-// 	_needKey(false),
-// 	_limitUser(false)
-// {	
-// }
+Channel::Channel(const Channel &cpy) {
+	if (this == &cpy)
+		return;
+	_name = cpy._name;
+	_topic = cpy._topic;
+	_password = cpy._password;
+	_maxUser = cpy._maxUser;
+	_inviteOnly = cpy._inviteOnly;
+	_needPassword = cpy._needPassword;
+	_limitUser = cpy._limitUser;
+	//complete with lists;
+}
 
-// Channel::~Channel()
-// {
-// }
+Channel::~Channel()
+{
+	//free lists?
+}
 
-// void	Channel::init(string modes, User *owner)
-// {
+//	getters
 
-// }
+string	Channel::getName() const {
+ 	return (_name);
+}
 
-// //getters
+string	Channel::getTopic() const {
+ 	return (_topic);
+}
 
-// string	Channel::getName() const
-// {
-// 	return (_name);
-// }
+string Channel::getPassword() const {
+	return (_password);
+}
 
-// string	Channel::getTopic() const
-// {
-// 	return (_topic);
-// }
+int Channel::getMaxUser() const {
+	return (_maxUser);
+}
 
-// bool	Channel::getNeedKey() const
-// {
-// 	return (_needKey);
-// }
+bool	Channel::getNeedPassword() const {
+ 	return (_needPassword);
+}
 
-// bool	Channel::getInviteOnly() const
-// {
-// 	return (_inviteOnly);
-// }
+bool	Channel::getInviteOnly() const {
+ 	return (_inviteOnly);
+}
 
-// bool	Channel::getLimitUSer() const
-// {
-// 	return (_limitUser);
-// }
+bool	Channel::getLimitUSer() const {
+ 	return (_limitUser);
+}
 
-
-
-// //setters
-
-// void	Channel::setKey(string key)
-// {
-// 	_key = key;
-// }
-
-// void	Channel::setTopic(string topic)
-// {
-// 	_topic = topic;
-// }
-
-// void	Channel::modifyInvite(bool ok)
-// {
-// 	_inviteOnly = ok;
-// }
-// void	Channel::modifyNeedKey(bool ok)
-// {
-// 	_needKey = ok;
-// }
-// void	Channel::modifyLimitUser(bool ok)
-// {
-// 	_limitUser = ok;
-// }
+User *Channel::getUser(const string &username) {
+	for (size_t i = 0; i < _userList.size(); i++)
+	{
+		if (_userList[i]->getNickname() == username)
+			return (_userList[i]);
+	}
+	return (NULL);
+}
 
 
+//	setters
 
-// //commands
+void	Channel::setTopic(const string& topic) {
+	_topic = topic;
+}
 
-// void	Channel::sendMsgAllUser(User *user, string msg)
-// {
+void	Channel::setPassword(const string& password) {
+ 	_password = password;
+}
+
+void Channel::setMaxUser(int maxUser) {
+	_maxUser = maxUser;
+}
+
+void	Channel::setInviteOnly(bool value) {
+ 	_inviteOnly = value;
+}
+
+void	Channel::setNeedPassword(bool value) {
+ 	_needPassword = value;
+}
+
+void	Channel::setLimitUser(bool value) {
+	_limitUser = value;
+}
+
+//	checkers
+
+bool Channel::isUserInChannel(User *user) {
+	if (find(_userList.begin(), _userList.end(), user) != _userList.end())
+		return (true);
+	return (false);
+}
+
+bool Channel::isUserOperator(User *user) {
+	if (find(_operatorList.begin(), _operatorList.end(), user) != _operatorList.end())
+		return (true);
+	return (false);
+}
+
+bool Channel::isUserInvited(User *user) {
+	if (find(_invited.begin(), _invited.end(), user) != _invited.end())
+		return (true);
+	return (false);
+}
+
+bool Channel::isUserBanned(User *user) {
+	if (find(_banList.begin(), _banList.end(), user) != _banList.end())
+		return (true);
+	return (false);
+}
+
+//	commands
+
+//void	Channel::sendMsgAllUser(User *user, string msg)
+//{
 // 	for (vector<User *>::iterator it = _userList.begin(); it != _userList.end(); it++)
 // 		if (user->getNickname() != (*it)->getNickname())
 // 			cout<<"utiliesr la fonction send message de la class server"<< endl;
 // 	//en attente de la class serveur
-
-// }
-
-// void Channel::addUser(User *user)
-// {
-// 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
-
-// 	if (it != _userList.end())
-// 		cout << "this user is already in the channel" << endl;
-// 	else
-// 		_userList.push_back(user);
-// }
-
-// void	Channel::removeUser(User *user)
-// {
-// 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
-
-// 	if (it == _userList.end())
-// 		cout << "this user is not in the channel" << endl;
-// 	else
-// 		_userList.erase(it);
-// }
-
-// void	Channel::addOperator(User *user)
-// {
-// 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
-
-// 	if (it == _userList.end())
-// 		cout << "this user is not in the channel" << endl;
-// 	else
-// 	{
-// 		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
-
-// 		if (it != _operatorList.end())
-// 			cout << "this user is already an operator" << endl;
-// 		else
-// 			_operatorList.push_back(user);
-// 	}
-// }
-
-// void	Channel::removeOperator(User *user)
-// {
-// 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
-
-// 	if (it == _userList.end())
-// 		cout << "this user is not in the channel" << endl;
-// 	else
-// 	{
-// 		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
-
-// 		if (it == _operatorList.end())
-// 			cout << "this user is not an operator" << endl;
-// 		else
-// 			_operatorList.erase(it);
-// 	}
-// }
-//User *Channel::getUser(const string &username) {
-// ;
+//
 //}
 
-void Channel::setMaxUser(int maxUser) {
-	_maxUser = maxUser;
+void Channel::addUser(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it != _userList.end())
+ 		Server::cout_server(user->getNickname() + "is already in the channel");
+ 	else
+ 		_userList.push_back(user);
+}
+
+void	Channel::removeUser(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 		_userList.erase(it);
+}
+
+void	Channel::addOperator(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
+
+ 		if (it != _operatorList.end())
+			Server::cout_server(user->getNickname() + " is already an operator");
+ 		else
+ 			_operatorList.push_back(user);
+ 	}
+}
+
+void	Channel::removeOperator(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_operatorList.begin(), _operatorList.end(), user);
+
+ 		if (it == _operatorList.end())
+			Server::cout_server(user->getNickname() + " is not an operator");
+ 		else
+ 			_operatorList.erase(it);
+ 	}
+}
+
+void	Channel::addBan(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_banList.begin(), _banList.end(), user);
+
+ 		if (it != _banList.end())
+			Server::cout_server(user->getNickname() + " is already banned");
+ 		else
+ 			_banList.push_back(user);
+ 	}
+}
+
+void	Channel::removeBan(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_banList.begin(), _banList.end(), user);
+
+ 		if (it == _banList.end())
+			Server::cout_server(user->getNickname() + " is not banned");
+ 		else
+ 			_banList.erase(it);
+ 	}
+}
+
+void Channel::addInvited(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_invited.begin(), _invited.end(), user);
+
+ 		if (it != _invited.end())
+			Server::cout_server(user->getNickname() + " is already invited");
+ 		else
+ 			_invited.push_back(user);
+ 	}
+}
+
+void Channel::removeInvited(User *user)
+{
+ 	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
+
+ 	if (it == _userList.end())
+		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	else
+ 	{
+ 		vector<User*>::iterator it = find(_invited.begin(), _invited.end(), user);
+
+ 		if (it == _invited.end())
+			Server::cout_server(user->getNickname() + " is not invited");
+ 		else
+ 			_invited.erase(it);
+ 	}
 }
