@@ -13,7 +13,8 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
     //Check errors
     if (args.size()  < 3)
     {
-        Server::cerr_server("privmsg : not enough parameters : /msg <channel> <message>");
+        Server::cerr_server("Error : PRIVMSG : no text to send");
+        sendStringSocket(currentUser->getSocket(), ERR_NOTEXTTOSEND(currentUser->getNickname()));
         return ;
     }
     // Find channel
@@ -27,8 +28,12 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
         itChannel++;
     }
     if (targetChannel == NULL)
+    {
         Server::cerr_server(channelToFind + " channel does not exist.");
-    
+        sendStringSocket(currentUser->getSocket(), ERR_NOSUCHCHANNEL(currentUser->getNickname(), channelToFind));
+       
+    }
+        
     //If channel found, send message to all users in channel
     else
     {
@@ -44,7 +49,8 @@ void Server::privmsgUser(User *currentUser, vector<string> args)
     //Check errors
     if (args.size()  < 3)
     {
-        Server::cerr_server("privmsg : not enough parameters : /msg <nickname> <message>");
+        Server::cerr_server("Error : PRIVMSG : no text to send");
+        sendStringSocket(currentUser->getSocket(), ERR_NOTEXTTOSEND(currentUser->getNickname()));
         return ;
     }
     // Find user
@@ -58,8 +64,11 @@ void Server::privmsgUser(User *currentUser, vector<string> args)
         itClient++;
     }
     if (targetUser == NULL)
+    {
         Server::cerr_server(nicknameToFind + " is not connected on the server.");
-    
+        sendStringSocket(currentUser->getSocket(), ERR_NOSUCHNICK(currentUser->getNickname(), nicknameToFind));
+        
+    }
     //If user found, send message
     else
     {

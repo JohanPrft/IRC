@@ -50,7 +50,9 @@ ${NAME}			:	${DIR_OBJS} ${OBJS} ${HEADERS}
 					${CPP} ${CFLAGS} -I ${DIR_HEADERS} ${OBJS} ${LIBRARY} -o ${NAME}
 
 run				:	${NAME}
-					./${NAME} 8080 passwd
+					gnome-terminal --tab  -- bash -c "./${NAME} 6667 pass"
+					gnome-terminal --tab  -- bash -c "irssi -c localhost -p 6667 -w pass"
+					gnome-terminal --tab  -- bash -c "irssi -c localhost -p 6667 -w pass -n foo"
 
 ${OBJS}			:	${DIR_OBJS}%.o:	${DIR_SRCS}%.cpp ${HEADERS} Makefile
 					${CPP} ${CFLAGS} -I ${DIR_HEADERS} -c $< -o $@
