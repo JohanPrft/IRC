@@ -12,24 +12,11 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
     }
     string channel = splitedCommand[0];
     Channel *chan = serv->getChannel(channel);
-	cout << "channel: " << channel << endl;
 	if (!chan) //user mode -> ignore
 	{
 		Server::cout_server("channel not found");
 		return;
 	}
-//	Server::cout_server("name: " + chan->getName());
-//	Server::cout_server("topic: " + chan->getTopic());
-//	Server::cout_server("password: " + chan->getPassword());
-//	if (chan->getInviteOnly())
-//		Server::cout_server(string("invite only: ") + "true");
-//	Server::cout_server(string("invite only: ") + "false");
-//	if (chan->getNeedPassword())
-//		Server::cout_server(string("need password: ") + "true");
-//	Server::cout_server(string("need password: ") + "false");
-//	if (chan->getLimitUSer())
-//		Server::cout_server(string("limit user: ") + "true");
-//	Server::cout_server(string("limit user: ") + "false");
     string mode = splitedCommand[1];
 	Server::cout_server(channel + " " + mode);
     if (mode == "+i" || mode == "-i") //invite only
@@ -47,7 +34,6 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
         sendStringSocket(user->getSocket(), ERR_UNKNOWNCOMMAND(user->getNickname(), "MODE" + mode));
         Server::cout_server(ERR_UNKNOWNCOMMAND(user->getNickname(), "MODE" + mode));
     }
-
 }
 
 void inviteOnly(Server *serv, Channel *chan, User *user, const string& mode)

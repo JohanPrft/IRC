@@ -1,5 +1,5 @@
 #include "../includes/irc.hpp"
-#include "Channel.hpp"
+#include "../includes/Channel.hpp"
 
 bool	isChannelNameValid(string name)
 {
@@ -87,6 +87,13 @@ User *Channel::getUser(const string &username) {
 	return (NULL);
 }
 
+vector<User *> Channel::getUserList() const {
+	return (_userList);
+}
+
+int Channel::getUserCount() {
+	return (_userList.size());
+}
 
 //	setters
 
@@ -164,7 +171,6 @@ void Channel::addUser(User *user)
 void	Channel::removeUser(User *user)
 {
  	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
-
  	if (it == _userList.end())
 		Server::cout_server(user->getNickname() + " is not in the channel");
  	else

@@ -44,7 +44,6 @@ class Channel{
 
 		Channel();
 
-
 	public :
 		Channel(const string& name, User *owner);
 		Channel(const Channel & cpy);
@@ -55,14 +54,14 @@ class Channel{
 		//getters
 		string	getName() const;
 		string	getTopic() const;
-		string getPassword() const;
+		string	getPassword() const;
 		int 	getMaxUser() const;
 		bool	getInviteOnly() const;
 		bool	getNeedPassword() const;
 		bool	getLimitUSer() const;
-
-		User *getUser(const string & username);
-
+		int		getUserCount();
+		User	*getUser(const string & username);
+		vector<User*>	getUserList() const;
 
 		//setters
 		void	setTopic(const string& topic);

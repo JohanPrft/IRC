@@ -25,12 +25,13 @@ class Server {
 			void	handleExistingClient(vector<int> &clients, size_t index);
       
       		void    confirmClientConnection(User *currentClient);
-			void	sendMessage(User *currentClient, vector<int> &clients);
-			void	sendMessageToGroup(User *currentClient, vector<int> &clientsFds);
-			void	sendMessageToUser(User *currentClient, User *targetClient);
+			void	sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg);
+			void	sendMessageToUser(User *currentClient, User *targetClient, string msg);
 
+			//getters
+			int		getFdUser(User *user);
 
-			//commands
+			//	commands
 			vector<string> parseCommand(string& command);
 			void	receiveCommand(User *currentClient);
 			void	sendCommand(int clientSocket, string command, vector<string> args);
@@ -39,7 +40,7 @@ class Server {
             //getter
             Channel *getChannel(const string& name);
 
-		private :
+private :
 			
 			int					_port;
 			int					_serverSocket;
@@ -52,19 +53,21 @@ class Server {
 			sockaddr_in				_serverAddress;
 			vector<pollfd>			_fds;
 			map<int, User*> 		_users;
-            map<string, Channel*>	_channels;
+			map<string, Channel*>	_channels;
 
 			// bool
-
 			bool userExist(string username);
 			bool channelExist(string name);
 			bool userInChannel(string username, string channel);
 
 			// commands
+			void join(User *user, vector<string> args);
+			void kick(User *user, User *toKick, Channel *channel);
+			void invite(User *invitator, User *invitated, Channel *channel);
 
-			void join(int clientsocket, vector<string> args);
-			// void mode(User *user, vector<string> args);
-			// void kick(User *user, User *toKick, Channel *channel);
+			void privmsg(User *currentUser, vector<string> args);
+			void privmsgChannel(User *currentUser, vector<string> args);
+			void privmsgUser(User *currentUser, vector<string> args);
 
 };
 

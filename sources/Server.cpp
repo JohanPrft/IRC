@@ -36,7 +36,8 @@ vector<string> Server::parseCommand(string& command)
 		return (splitedCommand);
 }
 
-void Server::execCommand(User *user, vector<string> splitedCommand) {
+void Server::execCommand(User *user, vector<string> splitedCommand)
+{
 	if (splitedCommand.size() < 2)
 		return;
 
@@ -49,9 +50,10 @@ void Server::execCommand(User *user, vector<string> splitedCommand) {
 		username(user, splitedCommand);
 	else if (command == "MODE")
 		mode(this, user, splitedCommand);
-	else
-		unknown(user, splitedCommand);
-
+	else if (command =="PRIVMSG")
+        privmsg(user, splitedCommand);
+	else if (command == "JOIN")
+		join(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)
@@ -64,7 +66,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		User::cout_user(currentClient->getNickname() + ": " + str);
+		currentClient->cout_user(str); //do a static one
 		vector<string> splitedCommand = parseCommand(str);
 		execCommand(currentClient, splitedCommand);
 	}		
@@ -208,52 +210,23 @@ void    Server::confirmClientConnection(User *currentClient)
 	sendStringSocket(currentClient->getSocket(), buffer);
 }
 
-void	Server::sendMessageToGroup(User *currentClient, vector<int> &clientsFds)
+void	Server::sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg)
 {
-	char buffer[BUFFER_SIZE];
-	ssize_t bytesRead;
-
-	memset(buffer, 0, sizeof(buffer)); // clear the buffer
-	bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
-	if (bytesRead > 0)
-	{
-		User::cout_user(currentClient->getNickname() + " says: " + buffer);
-		for (size_t i = 0; i < clientsFds.size(); i++)
-		{
-			if (clientsFds[i] != currentClient->getSocket()) // don't send the message back to the client that sent it
-			{
-				put_str_fd(currentClient->getNickname(), clientsFds[i]);
-				put_str_fd(" says: ", clientsFds[i]);
-				write(clientsFds[i], buffer, bytesRead);
-			}
-		}
-	}
-	else
-	{
-		throw std::runtime_error("Error reading from client socket");
-	}
+    vector<User *>listClient = currentChannel->getUserList();
+    for (size_t i = 0; i < listClient.size() ; i++)
+    {
+        if (listClient[i]->getSocket() != currentClient->getSocket())
+        {
+            sendStringSocket(listClient[i]->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), currentChannel->getName(), msg));
+        }
+    }
 	return ;
 }
 
-void Server::sendMessageToUser(User *currentClient, User *targetClient)
+void Server::sendMessageToUser(User *currentClient, User *targetClient, string msg)
 {
-	char buffer[BUFFER_SIZE];
-	ssize_t bytesRead;
-
-	memset(buffer, 0, sizeof(buffer)); // clear the buffer
-	bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
-	if (bytesRead > 0)
-	{
-		User::cout_user(currentClient->getNickname() + " says: " + buffer);
-		put_str_fd(currentClient->getNickname(), targetClient->getSocket());
-		put_str_fd(" says: ", targetClient->getSocket());
-		write(targetClient->getSocket(), buffer, bytesRead);
-	}
-	else
-	{
-		throw std::runtime_error("Error reading from client socket");
-	}
-	return ;
+    sendStringSocket(targetClient->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), targetClient->getNickname(), msg));
+    return ;
 }
 
 void Server::cout_server(const string & msg) {
@@ -271,10 +244,21 @@ Channel *Server::getChannel(const string& name) {
     return iter->second;
 }
 
+bool Server::channelExist(string channelName)
+{
+	map<string, Channel*>::iterator it = _channels.find(channelName);
 
-//channel
+    if (it != _channels.end())
+        return true;
+     else 
+        return false;
+}
 
-//bool channelExist(string channelName)
-//{
-//
-//}
+int Server::getFdUser(User *user)
+{
+	std::map<int, User*>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it) 
+        if (it->second == user) 
+			return it->first;
+    return -1;
+}
