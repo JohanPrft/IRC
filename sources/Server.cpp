@@ -48,7 +48,9 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 		nick(user, splitedCommand);
 	else if (command == "USER")
 		username(user, splitedCommand);
-    else if (command =="PRIVMSG")
+	else if (command == "MODE")
+		mode(this, user, splitedCommand);
+	else if (command =="PRIVMSG")
         privmsg(user, splitedCommand);
 	else if (command == "JOIN")
 		join(user, splitedCommand);
@@ -64,7 +66,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		currentClient->cout_user(str);
+		currentClient->cout_user(str); //do a static one
 		vector<string> splitedCommand = parseCommand(str);
 		execCommand(currentClient, splitedCommand);
 	}		
@@ -235,6 +237,12 @@ void Server::cerr_server(const string & msg) {
 	cerr << RED << "[Server]: " << msg << RESET << endl;
 }
 
+Channel *Server::getChannel(const string& name) {
+    map<string, Channel*>::iterator iter = _channels.find(name);
+    if (iter == _channels.end())
+        return NULL;
+    return iter->second;
+}
 
 bool Server::channelExist(string channelName)
 {

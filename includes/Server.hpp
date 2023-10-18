@@ -3,7 +3,6 @@
 
 #include "irc.hpp"
 
-
 class Channel;
 class User;
 
@@ -36,10 +35,12 @@ class Server {
 			vector<string> parseCommand(string& command);
 			void	receiveCommand(User *currentClient);
 			void	sendCommand(int clientSocket, string command, vector<string> args);
-			void 	execCommand(User *user, vector<string> splitedCommand);
+			void execCommand(User *user, vector<string> splitedCommand);
 
-			
-		private :
+            //getter
+            Channel *getChannel(const string& name);
+
+private :
 			
 			int					_port;
 			int					_serverSocket;
@@ -55,15 +56,12 @@ class Server {
 			map<string, Channel*>	_channels;
 
 			// bool
-
 			bool userExist(string username);
 			bool channelExist(string name);
 			bool userInChannel(string username, string channel);
 
 			// commands
-
 			void join(User *user, vector<string> args);
-			void mode(User *user, vector<string> args);
 			void kick(User *user, User *toKick, Channel *channel);
 			void invite(User *invitator, User *invitated, Channel *channel);
 
