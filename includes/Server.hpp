@@ -62,7 +62,7 @@ private :
 
 			// commands
 			void join(User *user, vector<string> args);
-			void kick(User *user, User *toKick, Channel *channel);
+			void kick(User *user, vector<string> args);
 			void invite(User *invitator, User *invitated, Channel *channel);
 
 			void privmsg(User *currentUser, vector<string> args);
