@@ -87,6 +87,7 @@ class Channel{
 		void	removeBan(User *user);
 		void	addInvited(User *user);
 		void	removeInvited(User *user);
+		void printInfo() const;
 };
 
 #endif

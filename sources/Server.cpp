@@ -32,6 +32,15 @@ vector<string> Server::parseCommand(string& command)
 		vector<string> splitedCommand;
 		replaceAll(command, "\r", "");
 		replaceAll(command, "\n", " ");
+		for (size_t i = 0; i < command.length(); ++i) //force space after <+/-><letter>
+		{
+			if ((command[i] == '+' || command[i] == '-') && i + 1 < command.length() && command[i + 1] != ' '
+				&& i + 2 < command.length() && command[i + 2] != ' ')
+			{
+				command.insert(i + 2, " ");
+				i += 2;
+			}
+		}
 		split(command, ' ' , splitedCommand);
 		return (splitedCommand);
 }
@@ -66,7 +75,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		currentClient->cout_user(str); //do a static one
+		currentClient->cout_user(str);
 		vector<string> splitedCommand = parseCommand(str);
 		execCommand(currentClient, splitedCommand);
 	}		

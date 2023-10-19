@@ -16,6 +16,7 @@ void	Server::join(User *user, vector<string> args)
 		channel = new Channel(args[1], user);
 		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 		_channels.insert(std::make_pair(args[1], channel));
+
 	}
 	else
 	{
