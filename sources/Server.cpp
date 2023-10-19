@@ -63,6 +63,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         privmsg(user, splitedCommand);
 	else if (command == "JOIN")
 		join(user, splitedCommand);
+    else if (command == "KICK")
+        kick(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)

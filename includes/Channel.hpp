@@ -60,7 +60,7 @@ class Channel{
 		bool	getNeedPassword() const;
 		bool	getLimitUSer() const;
 		int		getUserCount();
-		User	*getUser(const string & username);
+		User	*getUser(const string & nickname);
 		vector<User*>	getUserList() const;
 
 		//setters
@@ -78,7 +78,6 @@ class Channel{
 		bool    isUserBanned(User *user);
 
  		//commands
-// 		void	sendMsgAllUser(User *user, string msg);
  		void	addUser(User *user);
  		void	removeUser(User *user);
 		void	addOperator(User *user);

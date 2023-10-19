@@ -78,10 +78,10 @@ bool	Channel::getLimitUSer() const {
  	return (_limitUser);
 }
 
-User *Channel::getUser(const string &username) {
+User *Channel::getUser(const string &nickname) {
 	for (size_t i = 0; i < _userList.size(); i++)
 	{
-		if (_userList[i]->getNickname() == username)
+		if (_userList[i]->getNickname() == nickname)
 			return (_userList[i]);
 	}
 	return (NULL);

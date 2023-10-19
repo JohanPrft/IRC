@@ -31,7 +31,8 @@ SRCS_LIST		=	main.cpp		\
 					utils.cpp		\
 					Mode.cpp		\
 					command.cpp     \
-					join.cpp
+					join.cpp        \
+					kick.cpp
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
 
@@ -52,7 +53,7 @@ ${NAME}			:	${DIR_OBJS} ${OBJS} ${HEADERS}
 
 run				:	${NAME}
 					gnome-terminal --tab  -- bash -c "./${NAME} 6667 pass"
-					gnome-terminal --tab  -- bash -c "irssi -c localhost -p 6667 -w pass"
+					gnome-terminal --tab  -- bash -c "irssi -c localhost -p 6667 -w pass -n bar"
 					gnome-terminal --tab  -- bash -c "irssi -c localhost -p 6667 -w pass -n foo"
 
 ${OBJS}			:	${DIR_OBJS}%.o:	${DIR_SRCS}%.cpp ${HEADERS} Makefile
