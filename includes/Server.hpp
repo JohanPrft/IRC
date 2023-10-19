@@ -32,13 +32,17 @@ class Server {
 			int		getFdUser(User *user);
 
 			//	commands
-			vector<string> parseCommand(string& command);
-			void	receiveCommand(User *currentClient);
-			void	sendCommand(int clientSocket, string command, vector<string> args);
-			void execCommand(User *user, vector<string> splitedCommand);
+			vector<string>	parseCommand(string& command);
+			void			receiveCommand(User *currentClient);
+			void			sendCommand(int clientSocket, string command, vector<string> args);
+			void			execCommand(User *user, vector<string> splitedCommand);
 
             //getter
             Channel *getChannel(const string& name);
+
+			// bool
+			User * userExist(string username);
+			bool channelExist(string name);
 
 private :
 			
@@ -55,10 +59,6 @@ private :
 			map<int, User*> 		_users;
 			map<string, Channel*>	_channels;
 
-			// bool
-			bool userExist(string username);
-			bool channelExist(string name);
-			bool userInChannel(string username, string channel);
 
 			// commands
 			void join(User *user, vector<string> args);

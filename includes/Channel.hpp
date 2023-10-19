@@ -77,8 +77,8 @@ class Channel{
 		bool    isUserInvited(User *user);
 		bool    isUserBanned(User *user);
 
- 		//commands
-// 		void	sendMsgAllUser(User *user, string msg);
+ 		//	commands
+		// 		void	sendMsgAllUser(User *user, string msg);
  		void	addUser(User *user);
  		void	removeUser(User *user);
 		void	addOperator(User *user);
@@ -89,4 +89,4 @@ class Channel{
 		void	removeInvited(User *user);
 };
 
-#endif
+#endif	

@@ -54,6 +54,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         privmsg(user, splitedCommand);
 	else if (command == "JOIN")
 		join(user, splitedCommand);
+	else if (command == "INVITE")
+		invite(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)
@@ -262,3 +264,13 @@ int Server::getFdUser(User *user)
 			return it->first;
     return -1;
 }
+
+User* Server::userExist(string username)
+{
+	std::map<int, User*>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it) 
+        if (it->second->getNickname() == username) 
+			return it->second;
+	return NULL;
+}
+
