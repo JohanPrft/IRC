@@ -42,7 +42,6 @@ vector<string> Server::parseCommand(string& command)
 			}
 		}
 		split(command, ' ' , splitedCommand);
-		cout << command << endl;
 		return (splitedCommand);
 }
 
@@ -76,7 +75,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		currentClient->cout_user(str); //do a static one
+		currentClient->cout_user(str);
 		vector<string> splitedCommand = parseCommand(str);
 		execCommand(currentClient, splitedCommand);
 	}		

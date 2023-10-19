@@ -174,10 +174,10 @@ void User::fillUserInfo(const string& userInfo, const string& password) {
 }
 
 void User::cout_user(const string & msg) {
-	cout << CYAN << "[" << this->_username << "]: "<< msg << RESET << endl;
+	cout << CYAN << "[" << this->_username << "]: "<< msg << RESET;
 }
 
 void User::cerr_user(const string & msg) {
-	cerr << RED << "[Client]: " << msg << RESET << endl;
+	cerr << RED << "[Client]: " << msg << RESET;
 }
 

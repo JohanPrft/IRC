@@ -22,7 +22,7 @@
 
 // 221 - MODE
 # define RPL_UMODEIS(nickName, userModes) ( ":" + SERVERNAME + " 221 " + nickName \
-		+ " :+" + userModes + "\r\n")
+		+ " :" + userModes + "\r\n")
 
 // 307 - WHOIS
 # define RPL_WHOISREGNICK(nickName, userSearched) ( ":" + SERVERNAME + " 307 " + nickName \

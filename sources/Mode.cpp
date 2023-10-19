@@ -25,7 +25,9 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
     string channel = splitedCommand[0];
 	string mode = splitedCommand[1];
     Channel *chan = serv->getChannel(channel);
-	if (!chan) //user mode -> ignore
+	if (channel == user->getNickname()) //user mode -> ignore
+		return;
+	if (!chan) //chan doesnt exist
 	{
 		Server::cout_server("channel not found");
 		return;
@@ -42,10 +44,9 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
         limitNumberUser(serv, chan, user, splitedCommand);
     else
     {
-        sendStringSocket(user->getSocket(), ERR_UNKNOWNCOMMAND(user->getNickname(), "MODE" + mode));
-        Server::cout_server(ERR_UNKNOWNCOMMAND(user->getNickname(), "MODE" + mode));
+        sendStringSocket(user->getSocket(), ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+        Server::cout_server(ERR_UMODEUNKNOWNFLAG(user->getNickname()));
     }
-	chan->printInfo();
 }
 
 void inviteOnly(Server *serv, Channel *chan, User *user, const string& mode)
@@ -53,9 +54,17 @@ void inviteOnly(Server *serv, Channel *chan, User *user, const string& mode)
 	(void)serv;
 	(void)user;
     if (mode.find('+') != string::npos)
+	{
 		chan->setInviteOnly(true);
+		sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), mode));
+		user->cout_user(RPL_UMODEIS(user->getNickname(), mode));
+	}
     else if (mode.find('-') != string::npos)
+	{
 		chan->setInviteOnly(false);
+		sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), mode));
+		user->cout_user(RPL_UMODEIS(user->getNickname(), mode));
+	}
 }
 
 void topic(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
@@ -81,8 +90,9 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 	else if (splitedCommand[1].find("-") != string::npos)
 	{
 		chan->setTopic("no topic");
-		return;
 	}
+	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
+	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
 
 void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
@@ -110,6 +120,8 @@ void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> spl
 		chan->setNeedPassword(false);
 		chan->setPassword("no password");
 	}
+	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
+	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
 
 void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
@@ -151,6 +163,8 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 			it++;
 		}
 	}
+	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
+	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
 
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
@@ -175,4 +189,6 @@ void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> spl
 		chan->setLimitUser(false);
 		chan->setMaxUser(-1);
 	}
+	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
+	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
