@@ -32,7 +32,17 @@ vector<string> Server::parseCommand(string& command)
 		vector<string> splitedCommand;
 		replaceAll(command, "\r", "");
 		replaceAll(command, "\n", " ");
+		for (size_t i = 0; i < command.length(); ++i) //force space after <+/-><letter>
+		{
+			if ((command[i] == '+' || command[i] == '-') && i + 1 < command.length() && command[i + 1] != ' '
+				&& i + 2 < command.length() && command[i + 2] != ' ')
+			{
+				command.insert(i + 2, " ");
+				i += 2;
+			}
+		}
 		split(command, ' ' , splitedCommand);
+		cout << command << endl;
 		return (splitedCommand);
 }
 

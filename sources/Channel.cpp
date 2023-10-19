@@ -278,3 +278,13 @@ void Channel::removeInvited(User *user)
  			_invited.erase(it);
  	}
 }
+
+void Channel::printInfo() const{
+	std::cout << "Name: " << _name << std::endl;
+	std::cout << "Topic: " << _topic << std::endl;
+	std::cout << "Password: " << _password << std::endl;
+	std::cout << "Max Users: " << _maxUser << std::endl;
+	std::cout << "Invite Only: " << (_inviteOnly ? "Yes" : "No") << std::endl;
+	std::cout << "Need Password: " << (_needPassword ? "Yes" : "No") << std::endl;
+	std::cout << "Limit User: " << (_limitUser ? "Yes" : "No") << std::endl;
+}
