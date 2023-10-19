@@ -3,12 +3,11 @@
 
 void	Server::invite(User *invitator, vector<string> args)
 {
-	cout << "test" << endl;
+	cout << invitator->getNickname() <<endl;
 	//verifier aue le channel existe
 	if (!channelExist(args[2]))
 		return;
 	string channel = args[2];
-	cout << "test" << endl;
 
 	//verifier que le user qui invite est bien dans le channel
 	if(!_channels[channel]->isUserInChannel(invitator))
@@ -20,7 +19,7 @@ void	Server::invite(User *invitator, vector<string> args)
 	//verifier que le user existe
 	if (!userExist(args[1]))
 	{
-
+		cout << "test" << endl;
 		return;
 	}
 	User *invitated = userExist(args[1]);
@@ -38,6 +37,6 @@ void	Server::invite(User *invitator, vector<string> args)
 	//ajouter le User a la liste des invites
 	_channels[channel]->addInvited(invitated);
 	sendStringSocket(invitator->getSocket(),RPL_INVITING(user_id(invitator->getNickname(), invitator->getNickname()), invitator->getNickname(), invitated->getNickname(), channel));
-	
+	sendStringSocket(invitated->getSocket(),RPL_INVITE(user_id(invitator->getNickname(), invitator->getNickname()), invitated->getNickname(), channel));
 
 }
