@@ -86,13 +86,15 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 			it++;
 		}
 		chan->setTopic(topic);
+		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], topic));
+		user->cout_user(RPL_TOPIC(user->getNickname(), splitedCommand[0], topic));
 	}
 	else if (splitedCommand[1].find("-") != string::npos)
 	{
 		chan->setTopic("no topic");
+		sendStringSocket(user->getSocket(), RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
+		user->cout_user(RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
 	}
-	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
-	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
 
 void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
