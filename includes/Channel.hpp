@@ -89,4 +89,4 @@ class Channel{
 		void printInfo() const;
 };
 
-#endif
+#endif	

@@ -1,4 +1,4 @@
-#include "../includes/Server.hpp"
+#include "../includes/irc.hpp"
 #include "command.hpp"
 
 Server::Server(int port, string password, struct tm * timeinfo) :
@@ -65,6 +65,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 		join(user, splitedCommand);
     else if (command == "KICK")
         kick(user, splitedCommand);
+	else if (command == "INVITE")
+		invite(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)
@@ -273,3 +275,13 @@ int Server::getFdUser(User *user)
 			return it->first;
     return -1;
 }
+
+User* Server::userExist(string username)
+{
+	std::map<int, User*>::iterator it;
+	for (it = _users.begin(); it != _users.end(); ++it) 
+        if (it->second->getNickname() == username) 
+			return it->second;
+	return NULL;
+}
+

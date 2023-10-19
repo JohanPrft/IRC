@@ -89,9 +89,9 @@
 # define RPL_TOPICWHOTIME(nickname, channel, nick_topic, setat) ( ":" + SERVERNAME + " 333 " + nickname + " " \
 		+ channel + " " + nick_topic + " " + setat + "\r\n")
 
-// 341 - INVITE
-# define RPL_INVITING(nickName, invited, channel) ( ":" + SERVERNAME + " 341 " + nickName \
-		+ " " + invited + " " + channel + "\r\n")
+// // 341 - INVITE
+// # define RPL_INVITING(nickName, invited, channel) ( ":" + SERVERNAME + " 341 " + nickName \
+// 		+ " " + invited + " " + channel + "\r\n")
 
 // 352 - WHO
 # define RPL_WHOREPLY(client, nickname, username, realname, host, channel, flags) ( ":" + SERVERNAME \
@@ -151,8 +151,8 @@
 	+ channel + " " + sign + mode + " " + arg + "\r\n")
 
 // SPE_CODE - INVITE
-# define RPL_INVITE(nickname, user, host, channel) ( ":" + nickname + "!" + user + "@" + host + " INVITE " \
-	+ nickname + " " + channel + "\r\n")
+// # define RPL_INVITE(nickname, user, host, channel) ( ":" + nickname + "!" + user + "@" + host + " INVITE " \
+// 	+ nickname + " " + channel + "\r\n")
 
 // SPE_CODE - KICK
 # define RPL_KICK(nickname, user, host, channel, kicked, reason) ( ":" + nickname + "!" + user + "@" + host + " KICK " \
@@ -162,9 +162,18 @@
 # define RPL_WALLOPS(nickname, user, host, text) ( ":" + nickname + "!" + user + "@" + host + " WALLOPS " \
 	+ text + "\r\n")
 
-# define RPL_JOIN(user_id, channel) (user_id + " JOIN :#" +  channel + "\r\n")
+# define RPL_JOIN(user_id, channel) (user_id + " JOIN :" +  channel + "\r\n")
 
 // PRIVMSG
 # define RPL_PRIVMSG(nick, username, target, message) (":" + nick + "!~" + username + "@localhost PRIVMSG " + target + " " + message + "\r\n")
+
+
+//INVITE
+
+
+# define RPL_INVITING(user_id, client, nick, channel) (user_id + " 341 " + client + " " + nick + " #" + channel + "\r\n")
+# define RPL_INVITE(user_id, invited, channel) (user_id + " INVITE " + invited + " #" + channel + "\r\n")
+
+
 
 #endif //IRC_REPLIES_HPP

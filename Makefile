@@ -32,7 +32,8 @@ SRCS_LIST		=	main.cpp		\
 					Mode.cpp		\
 					command.cpp     \
 					join.cpp        \
-					kick.cpp
+					kick.cpp		\
+					invite.cpp
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
 
