@@ -17,8 +17,28 @@ void put_str_fd(const string& str, int fd)
     write(fd, str.c_str(), str.length());
 }
 
+bool User::isNickValid(Server *serv, User *user)
+{
+	if (serv->userExist(user->_nickname))
+	{
+		sendStringSocket(user->getSocket(), ERR_NICKNAMEINUSE(user->_nickname));
+		Server::cout_server(ERR_NICKNAMEINUSE(user->_nickname));
+		sendStringSocket(_clientSocket, "You aren't logged in, please reconnect with a valid nickname (already in use)\n");
+		return (false);
+	}
+	else if (user->_nickname.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]{}\\|") != string::npos)
+	{
+		sendStringSocket(user->getSocket(), ERR_ERRONEUSNICKNAME(user->_nickname));
+		Server::cout_server(ERR_ERRONEUSNICKNAME(user->_nickname));
+		sendStringSocket(_clientSocket, "You aren't logged in, please reconnect with a valid nickname (forbidden char)\n");
+		return (false);
+	}
+	else
+		return (true);
+}
+
 //register client
-User::User(int clientSocket, const string& password)
+User::User(Server *serv, int clientSocket, const string &password)
 {
     _clientSocket = clientSocket;
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
@@ -31,6 +51,8 @@ User::User(int clientSocket, const string& password)
         put_str_fd("You aren't logged in, please reconnect with password\n", _clientSocket);
         while (1);
     }
+	if (!isNickValid(serv, this))
+		while (1);
     put_str_fd("You are now registered, welcome!\n", _clientSocket);
 }
 

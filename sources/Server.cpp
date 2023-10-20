@@ -94,6 +94,7 @@ void Server::handleNewConnection(vector<int> &clients)
         cerr_server("Error accepting client socket");
         return;
     }
+
     clients.push_back(clientSocket);
 
     pollfd clientFd;
@@ -101,7 +102,7 @@ void Server::handleNewConnection(vector<int> &clients)
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
 
-    _users.insert(std::pair<int, User *>(clientSocket, new User(clientSocket, _password)));
+    _users.insert(std::pair<int, User *>(clientSocket, new User(this, clientSocket, _password)));
     confirmClientConnection(_users[clientSocket]);
     map<int, User *>::iterator it = _users.find(clientSocket);
 	cout_server("New connection from : " + it->second->getFullname());
