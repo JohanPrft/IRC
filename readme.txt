@@ -15,3 +15,6 @@ https://datatracker.ietf.org/doc/html/rfc2812
 
 ex d'IRC bien verbal:
 https://github.com/marineks/Ft_irc
+
+syntaxe des RPL et ERR (numeric replies) IRC :
+https://modern.ircdocs.horse/
