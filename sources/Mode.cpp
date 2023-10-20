@@ -16,12 +16,6 @@
 void mode(Server *serv, User *user, vector<string> splitedCommand)
 {
     splitedCommand.erase(splitedCommand.begin());
-    if (splitedCommand.size() < 2)
-    {
-        sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
-        Server::cout_server(ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
-        return;
-    }
     string channel = splitedCommand[0];
 	string mode = splitedCommand[1];
     Channel *chan = serv->getChannel(channel);
