@@ -33,9 +33,11 @@ class Channel{
 		string			_topic;
 		string			_password;
 		int				_maxUser;
+
 		bool			_inviteOnly;
 		bool			_needPassword;
 		bool			_limitUser;
+		bool			_topicOperator;
 
 		vector<User*>	_userList;
 		vector<User*>	_banList;
