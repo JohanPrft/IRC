@@ -17,20 +17,38 @@ void put_str_fd(const string& str, int fd)
     write(fd, str.c_str(), str.length());
 }
 
-bool User::isNickValid(Server *serv, User *user)
+bool User::isNickValidOnConnect(Server *serv, User *user)
 {
 	if (serv->userExist(user->_nickname))
 	{
-		sendStringSocket(user->getSocket(), ERR_NICKNAMEINUSE(user->_nickname));
-		Server::cout_server(ERR_NICKNAMEINUSE(user->_nickname));
+		sendStringSocket(user->getSocket(), ERR_NICKNAMEINUSE(user->_nickname, user->_nickname));
+		Server::cout_server(ERR_NICKNAMEINUSE(user->_nickname, user->_nickname));
 		sendStringSocket(_clientSocket, "You aren't logged in, please reconnect with a valid nickname (already in use)\n");
 		return (false);
 	}
-	else if (user->_nickname.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]{}\\|") != string::npos)
+	else if (user->_nickname.find_first_not_of(AUTHORISED_CHAR_NICK) != string::npos)
 	{
-		sendStringSocket(user->getSocket(), ERR_ERRONEUSNICKNAME(user->_nickname));
-		Server::cout_server(ERR_ERRONEUSNICKNAME(user->_nickname));
+		sendStringSocket(user->getSocket(), ERR_ERRONEUSNICKNAME(user->_nickname, user->_nickname));
+		Server::cout_server(ERR_ERRONEUSNICKNAME(user->_nickname, user->_nickname));
 		sendStringSocket(_clientSocket, "You aren't logged in, please reconnect with a valid nickname (forbidden char)\n");
+		return (false);
+	}
+	else
+		return (true);
+}
+
+bool User::isNickValid(Server *serv, const string & nick, int clientSocket)
+{
+	if (serv->userExist(nick))
+	{
+		sendStringSocket(clientSocket, ERR_NICKNAMEINUSE(nick, nick));
+		Server::cout_server(ERR_NICKNAMEINUSE(nick, nick));
+		return (false);
+	}
+	else if (nick.find_first_not_of(AUTHORISED_CHAR_NICK) != string::npos)
+	{
+		sendStringSocket(clientSocket, ERR_ERRONEUSNICKNAME(nick, nick));
+		Server::cout_server(ERR_ERRONEUSNICKNAME(nick, nick));
 		return (false);
 	}
 	else
@@ -51,7 +69,7 @@ User::User(Server *serv, int clientSocket, const string &password)
         put_str_fd("You aren't logged in, please reconnect with password\n", _clientSocket);
         while (1);
     }
-	if (!isNickValid(serv, this))
+	if (!isNickValidOnConnect(serv, this))
 		while (1);
     put_str_fd("You are now registered, welcome!\n", _clientSocket);
 }

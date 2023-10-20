@@ -54,7 +54,7 @@ public:
 
     void	setLogged(bool logged);
 	void	setNickname(const string & nick);
-	bool isNickValid(Server *serv, User *user);
+	bool	isNickValidOnConnect(Server *serv, User *user);
 	void	setUsername(const string & username);
 
 	string getUserInfo(int clientSocket) const;
@@ -63,6 +63,8 @@ public:
 
 	void cout_user(const std::string &msg);
 	static void cerr_user(const std::string &msg);
+	static bool	isNickValid(Server *serv, const string &nick, int clientSocket);
+
 
 };
 

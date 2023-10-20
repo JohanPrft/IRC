@@ -73,7 +73,7 @@ void Server::kick(User *user, vector<string> args)
 
         //Kick target user
         targetChannel->removeUser(targetUser);
-        sendStringSocket(targetUser->getSocket(), RPL_KICK(user->getNickname(), user->getUsername(), user->getUsername(), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
+        sendStringSocket(targetUser->getSocket(), RPL_KICK(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
         cout_server(user->getNickname() + " kicked " + targetUser->getNickname() + " of " + targetChannel->getName() + " for " + reasonOfKick);
         return ;   
     }
