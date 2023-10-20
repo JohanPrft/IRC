@@ -40,7 +40,7 @@ class InvalideRealnameException : public exception {
 
 public:
 	User();
-	User(int clientSocket, const string& password);
+	User(Server *serv, int clientSocket, const string &password);
 	User(const User &src);
 	User &operator=(const User &cpy);
 	~User();
@@ -54,6 +54,7 @@ public:
 
     void	setLogged(bool logged);
 	void	setNickname(const string & nick);
+	bool isNickValid(Server *serv, User *user);
 	void	setUsername(const string & username);
 
 	string getUserInfo(int clientSocket) const;
