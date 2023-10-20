@@ -90,7 +90,7 @@
 		+ channel + " " + nick_topic + " " + setat + "\r\n")
 
 // // 341 - INVITE
-// # define RPL_INVITING(nickName, invited, channel) ( ":" + SERVERNAME + " 341 " + nickName \
+// # define RPL_INVITING(nickName, invited, channel) ( ":" + SERVERNAME + " 341 " + nickName //add backslash
 // 		+ " " + invited + " " + channel + "\r\n")
 
 // 352 - WHO
@@ -151,7 +151,7 @@
 	+ channel + " " + sign + mode + " " + arg + "\r\n")
 
 // SPE_CODE - INVITE
-// # define RPL_INVITE(nickname, user, host, channel) ( ":" + nickname + "!" + user + "@" + host + " INVITE " \
+// # define RPL_INVITE(nickname, user, host, channel) ( ":" + nickname + "!" + user + "@" + host + " INVITE " /add backslash
 // 	+ nickname + " " + channel + "\r\n")
 
 // SPE_CODE - KICK
