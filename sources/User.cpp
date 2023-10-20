@@ -208,7 +208,11 @@ void User::fillUserInfo(const string& userInfo, const string& password) {
         user_password = userInfo.substr(pos + 5, endPos - (pos + 5));
     }
     if (user_password != password)
-        _isLogged = false;
+	{
+		_isLogged = false;
+		sendStringSocket(_clientSocket, ERR_PASSWDMISMATCH(_nickname));
+		Server::cout_server(ERR_PASSWDMISMATCH(_nickname));
+	}
     else
         _isLogged = true;
 }
