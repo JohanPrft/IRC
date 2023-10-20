@@ -52,15 +52,17 @@ class Channel{
 
 
 		//getters
-		string			getName() const;
-		string			getTopic() const;
-		string			getPassword() const;
-		int 			getMaxUser() const;
-		bool			getInviteOnly() const;
-		bool			getNeedPassword() const;
-		bool			getLimitUSer() const;
-		int				getUserCount();
-		User			*getUser(const string & nickname);
+		string	getName() const;
+		string	getTopic() const;
+		string	getPassword() const;
+		int 	getMaxUser() const;
+		bool	getTopicExist() const;
+		bool	getInviteOnly() const;
+		bool	getNeedPassword() const;
+		bool	getLimitUSer() const;
+		int		getUserCount();
+		User	*getUser(const string & username);
+
 		vector<User*>	getUserList() const;
 
 		//setters
