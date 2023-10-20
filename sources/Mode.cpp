@@ -40,11 +40,11 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
     else
     {
 		sendStringSocket(user->getSocket(), RPL_CHANNELMODEIS(user->getNickname(), chan->getName(),
-		(chan->getTopicExist() ? "t" : ""), (chan->getLimitUSer() ? "l" : ""), (chan->getInviteOnly() ? "i" : ""),
-		(chan->getNeedPassword() ? "k" : "")));
+		(chan->getTopicExist() ? "t" : "") + (chan->getLimitUSer() ? "l" : "") + (chan->getInviteOnly() ? "i" : "")
+		 + (chan->getNeedPassword() ? "k" : "")));
         Server::cout_server(RPL_CHANNELMODEIS(user->getNickname(), chan->getName(),
-		(chan->getTopicExist() ? "t" : ""), (chan->getLimitUSer() ? "l" : ""), (chan->getInviteOnly() ? "i" : ""),
-		(chan->getNeedPassword() ? "k" : "")));
+		(chan->getTopicExist() ? "t" : "") + (chan->getLimitUSer() ? "l" : "") + (chan->getInviteOnly() ? "i" : "")
+		+ (chan->getNeedPassword() ? "k" : "")));
     }
 }
 
