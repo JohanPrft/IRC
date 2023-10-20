@@ -64,6 +64,7 @@ private :
 			void join(User *user, vector<string> args);
 			void kick(User *user, vector<string> args);
 			void invite(User *invitator, vector<string> args);
+			void topic(User *user, vector<string> splitedCommand);
 
 			void privmsg(User *currentUser, vector<string> args);
 			void privmsgChannel(User *currentUser, vector<string> args);

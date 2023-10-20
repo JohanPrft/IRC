@@ -125,4 +125,7 @@
 // ERROR Message - PASS - KILL
 # define ERROR_MESSAGE(reason) ("ERROR :" + reason + "\r\n")
 
+# define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + channel + " :No such channel\r\n")
+
+
 #endif //IRC_ERRORS_HPP

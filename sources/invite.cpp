@@ -6,7 +6,10 @@ void	Server::invite(User *invitator, vector<string> args)
 	cout << invitator->getNickname() <<endl;
 	//verifier aue le channel existe
 	if (!channelExist(args[2]))
+	{
+		sendStringSocket(invitator->getSocket(),ERR_NOSUCHCHANNEL(invitator->getNickname(), channel_name));
 		return;
+	}
 	string channel = args[2];
 
 	//verifier que le user qui invite est bien dans le channel

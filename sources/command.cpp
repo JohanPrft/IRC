@@ -107,3 +107,28 @@ void unknown(User *user, vector<string> splitedCommand)
 	sendStringSocket(user->getSocket(), ERR_UNKNOWNCOMMAND(user->getNickname(), splitedCommand[0]));
 	Server::cout_server(ERR_UNKNOWNCOMMAND(user->getNickname(), splitedCommand[0]));
 }
+
+
+void Server::topic(User *user, vector<string> splitedCommand)
+{
+	string channel_name = splitedCommand[1];
+	string topic = std::accumulate(splitedCommand.begin() + 1, splitedCommand.end(), string());
+	if (!channelExist(channel_name))
+	{
+		sendStringSocket(user->getSocket(),ERR_NOSUCHCHANNEL(user->getNickname(), channel_name));
+		return;
+	}
+
+	if(!_channels[channel_name]->isUserInChannel(user))
+	{
+		sendStringSocket(user->getSocket(), ERR_NOTONCHANNEL(user->getNickname(), channel_name));
+		return;
+	}
+	if (topic.empty())
+	{
+		if (_channels[channel_name]->getTopic().empty() == false)
+			sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), channel_name, _channels[channel_name]->getTopic()));
+		else
+			sendStringSocket(user->getSocket(), RPL_NOTOPIC(user->getNickname(), channel_name));	
+	}
+}
