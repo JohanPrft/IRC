@@ -70,8 +70,8 @@
 # define RPL_LISTEND(nickName) ( ":" + SERVERNAME + " 323 " + nickName + " : End of List\r\n")
 
 // 324 - MODE
-# define RPL_CHANNELMODEIS(nickName, channel, channelModes) ( ":" + SERVERNAME + " 324 " + nickName \
-		+ " " + channel + " :+" + channelModes + "\r\n")
+# define RPL_CHANNELMODEIS(nickName, channel, topic, maxUser, limitUser, needPassword) ( ":" + SERVERNAME + " 324 " + nickName \
+		+ " " + channel + " :+" + topic + maxUser + limitUser + needPassword + "\r\n")
 
 // 329 - MODE
 # define RPL_CREATIONTIME(nickName, channel, creationTime) ( ":" + SERVERNAME + " 329 " + nickName \

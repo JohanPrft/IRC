@@ -29,7 +29,8 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
 		return;
 	if (!chan) //chan doesnt exist
 	{
-		Server::cout_server("channel not found");
+		sendStringSocket(user->getSocket(), ERR_NOSUCHCHANNEL(user->getNickname(), channel));
+		Server::cout_server(ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		return;
 	}
     if (mode == "+i" || mode == "-i") //invite only
@@ -44,8 +45,12 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
         limitNumberUser(serv, chan, user, splitedCommand);
     else
     {
-        sendStringSocket(user->getSocket(), ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-        Server::cout_server(ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+		sendStringSocket(user->getSocket(), RPL_CHANNELMODEIS(user->getNickname(), chan->getName(),
+		(chan->getTopicExist() ? "t" : ""), (chan->getLimitUSer() ? "l" : ""), (chan->getInviteOnly() ? "i" : ""),
+		(chan->getNeedPassword() ? "k" : "")));
+        Server::cout_server(RPL_CHANNELMODEIS(user->getNickname(), chan->getName(),
+		(chan->getTopicExist() ? "t" : ""), (chan->getLimitUSer() ? "l" : ""), (chan->getInviteOnly() ? "i" : ""),
+		(chan->getNeedPassword() ? "k" : "")));
     }
 }
 
@@ -72,8 +77,8 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 	(void)serv;
     if (!chan->isUserOperator(user))
 	{
-		sendStringSocket(user->getSocket(), ERR_NOPRIVILEGES(user->getNickname()));
-		Server::cout_server(ERR_NOPRIVILEGES(user->getNickname()));
+		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
+		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
 	if (splitedCommand[1].find("+") != string::npos)
@@ -91,7 +96,7 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 	}
 	else if (splitedCommand[1].find("-") != string::npos)
 	{
-		chan->setTopic("no topic");
+		chan->setTopic("not define");
 		sendStringSocket(user->getSocket(), RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
 		user->cout_user(RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
 	}
@@ -102,8 +107,8 @@ void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> spl
 	(void)serv;
 	if (!chan->isUserOperator(user))
 	{
-		sendStringSocket(user->getSocket(), ERR_NOPRIVILEGES(user->getNickname()));
-		Server::cout_server(ERR_NOPRIVILEGES(user->getNickname()));
+		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
+		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
 	if (splitedCommand.size() < 2)
@@ -131,8 +136,8 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 	(void)serv;
 	if (!chan->isUserOperator(user))
 	{
-		sendStringSocket(user->getSocket(), ERR_NOPRIVILEGES(user->getNickname()));
-		Server::cout_server(ERR_NOPRIVILEGES(user->getNickname()));
+		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
+		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
 	if (splitedCommand.size() < 2)
@@ -174,8 +179,8 @@ void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> spl
 	(void)serv;
 	if (!chan->isUserOperator(user))
 	{
-		sendStringSocket(user->getSocket(), ERR_NOPRIVILEGES(user->getNickname()));
-		Server::cout_server(ERR_NOPRIVILEGES(user->getNickname()));
+		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
+		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
 	if (splitedCommand[1].find("+") != string::npos)

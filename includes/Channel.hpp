@@ -56,6 +56,7 @@ class Channel{
 		string	getTopic() const;
 		string	getPassword() const;
 		int 	getMaxUser() const;
+		bool	getTopicExist() const;
 		bool	getInviteOnly() const;
 		bool	getNeedPassword() const;
 		bool	getLimitUSer() const;

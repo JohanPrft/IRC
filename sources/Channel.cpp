@@ -66,6 +66,12 @@ int Channel::getMaxUser() const {
 	return (_maxUser);
 }
 
+bool	Channel::getTopicExist() const {
+	if (_topic == "not define")
+		return (false);
+	return (true);
+}
+
 bool	Channel::getNeedPassword() const {
  	return (_needPassword);
 }
