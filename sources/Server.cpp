@@ -95,14 +95,20 @@ void Server::handleNewConnection(vector<int> &clients)
         return;
     }
 
-    clients.push_back(clientSocket);
+	User *user = new User(this, clientSocket, _password);
+	if (!user->getIsLogged())
+	{
+		delete user;
+		return;
+	}
 
+    clients.push_back(clientSocket);
     pollfd clientFd;
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
 
-    _users.insert(std::pair<int, User *>(clientSocket, new User(this, clientSocket, _password)));
+    _users.insert(std::pair<int, User *>(clientSocket, user));
     confirmClientConnection(_users[clientSocket]);
     map<int, User *>::iterator it = _users.find(clientSocket);
 	cout_server("New connection from : " + it->second->getFullname());

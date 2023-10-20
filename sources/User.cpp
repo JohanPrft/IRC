@@ -96,7 +96,7 @@ User &User::operator=(const User &cpy) {
 }
 
 User::~User() {
-
+	close(_clientSocket);
 }
 
 ostream& operator<<(ostream& os, const User& user) {
