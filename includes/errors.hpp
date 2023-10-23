@@ -41,7 +41,5 @@
 
 # define ERR_ALREADYREGISTERED(client) (":localhost 462 " + client + " :You may not reregister.\r\n")
 
-# define ERR_NOSUCHCHANNEL(client, channel) (":localhost 403 " + client + channel + " :No such channel\r\n")
-
 
 #endif //IRC_ERRORS_HPP
