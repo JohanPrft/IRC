@@ -56,7 +56,7 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 	else if (command == "NICK")
 		nick(this, user, splitedCommand);
 	else if (command == "USER")
-		username(user, splitedCommand);
+		username(user);
 	else if (command == "MODE")
 		mode(this, user, splitedCommand);
 	else if (command =="PRIVMSG")
