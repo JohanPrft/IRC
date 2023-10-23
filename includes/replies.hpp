@@ -41,7 +41,7 @@
 
 # define RPL_PART(user_id, channel, reason) (user_id + " PART " + channel + " " + (reason.empty() ? "." : reason ) + "\r\n")
 
-# define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n")
+# define RPL_PONG(user_id, token) (user_id + " PONG :" + token + "\r\n")
 
 # define RPL_QUIT(user_id, reason) (user_id + " QUIT :Quit: " + reason + "\r\n")
 

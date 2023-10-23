@@ -81,8 +81,8 @@ void Server::privmsgUser(User *currentUser, vector<string> args)
 
 void ping(int clientSocket, User *user, vector<string> splitedCommand)
 {
-	Server::RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]);
 	sendStringSocket(clientSocket, RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
+	user->cout_user(RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
 //	put_str_fd(pong, clientSocket);
 //	send(clientSocket, pong.c_str(), pong.length(), 0);
 }
