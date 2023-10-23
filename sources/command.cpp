@@ -17,6 +17,7 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
         sendStringSocket(currentUser->getSocket(), ERR_NOTEXTTOSEND(currentUser->getNickname()));
         return ;
     }
+    
     // Find channel
     string channelToFind = args[1];
     Channel *targetChannel = NULL;
@@ -33,7 +34,15 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
         sendStringSocket(currentUser->getSocket(), ERR_NOSUCHCHANNEL(currentUser->getNickname(), channelToFind));
         return ;
     }
-        
+
+    // Check if user is in channel
+    if (!targetChannel->isUserInChannel(currentUser))
+    {
+        Server::cerr_server(currentUser->getNickname() + " is not in " + channelToFind + " channel.");
+        sendStringSocket(currentUser->getSocket(), ERR_CANNOTSENDTOCHAN(currentUser->getNickname(), channelToFind));
+        return ;
+    }
+
     //If channel found, send message to all users in channel
     else
     {
