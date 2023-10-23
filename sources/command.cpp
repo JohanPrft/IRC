@@ -92,8 +92,8 @@ void nick(Server *serv, User *user, vector<string> splitedCommand)
 {
 	if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
 		return ;
-	put_str_fd(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]), user->getSocket());
-	Server::cout_server(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]));
+	sendStringSocket(user->getSocket(), RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
+	Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
 	user->setNickname(splitedCommand[1]);
 }
 
