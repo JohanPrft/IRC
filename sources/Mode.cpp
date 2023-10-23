@@ -19,8 +19,15 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
     string channel = splitedCommand[0];
 	string mode = splitedCommand[1];
     Channel *chan = serv->getChannel(channel);
-	if (channel == user->getNickname()) //user mode -> ignore
+	if (channel == user->getNickname()) //user mode at startup
+	{
+		if (mode == "+i")
+		{
+			sendStringSocket(user->getSocket(), MODE_USERMSG(user->getNickname(), mode));
+			user->cout_user(MODE_USERMSG(user->getNickname(), mode));
+		}
 		return;
+	}
 	if (!chan) //chan doesnt exist
 	{
 		sendStringSocket(user->getSocket(), ERR_NOSUCHCHANNEL(user->getNickname(), channel));
