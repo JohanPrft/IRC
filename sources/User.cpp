@@ -43,12 +43,16 @@ bool User::isNickValid(Server *serv, User *user, const string &nick, int clientS
 	{
 		sendStringSocket(clientSocket, ERR_NICKNAMEINUSE(user->getNickname(), nick));
 		Server::cout_server(ERR_NICKNAMEINUSE(user->getNickname(), nick));
+		sendStringSocket(clientSocket, RPL_NICK(user->getNickname(), user->getUsername(), user->getNickname()));
+		Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), user->getNickname()));
 		return (false);
 	}
 	else if (nick.find_first_not_of(AUTHORISED_CHAR_NICK) != string::npos)
 	{
 		sendStringSocket(clientSocket, ERR_ERRONEUSNICKNAME(user->getNickname(), nick));
 		Server::cout_server(ERR_ERRONEUSNICKNAME(user->getNickname(), nick));
+		sendStringSocket(clientSocket, RPL_NICK(user->getNickname(), user->getUsername(), user->getNickname()));
+		Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), user->getNickname()));
 		return (false);
 	}
 	else
@@ -138,7 +142,7 @@ void	User::setLogged(bool logged) {
 }
 
 void User::setNickname(const string &nick) {
-	_nickname = nick;
+	_nickname = (_nickname.size() > 9) ? nick.substr(0, 9) : nick;
 }
 
 void User::setUsername(const string &username) {

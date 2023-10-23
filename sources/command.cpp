@@ -88,11 +88,10 @@ void Server::privmsgUser(User *currentUser, vector<string> args)
     }
 }
 
-void	ping(int clientSocket, vector<string> splitedCommand)
+void ping(int clientSocket, User *user, vector<string> splitedCommand)
 {
-	string pong = "PONG :" + splitedCommand[1];
-	Server::cout_server(pong);
-	sendStringSocket(clientSocket, pong);
+	sendStringSocket(clientSocket, RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
+	user->cout_user(RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
 //	put_str_fd(pong, clientSocket);
 //	send(clientSocket, pong.c_str(), pong.length(), 0);
 }
@@ -101,8 +100,8 @@ void nick(Server *serv, User *user, vector<string> splitedCommand)
 {
 	if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
 		return ;
-	put_str_fd(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]), user->getSocket());
-	Server::cout_server(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]));
+	sendStringSocket(user->getSocket(), RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
+	Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
 	user->setNickname(splitedCommand[1]);
 }
 

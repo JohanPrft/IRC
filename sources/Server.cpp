@@ -52,7 +52,7 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 
 	string command = splitedCommand[0];
 	if (command == "PING")
-		ping(user->getSocket(), splitedCommand);
+		ping(user->getSocket(), user, splitedCommand);
 	else if (command == "NICK")
 		nick(this, user, splitedCommand);
 	else if (command == "USER")
@@ -81,6 +81,7 @@ void	Server::receiveCommand(User *currentClient)
 		string str(buffer);
 		currentClient->cout_user(str);
 		vector<string> splitedCommand = parseCommand(str);
+		currentClient->cout_user(str);
 		execCommand(currentClient, splitedCommand);
 	}		
     return ;
@@ -226,19 +227,7 @@ void    Server::confirmClientConnection(User *currentClient)
     buffer += RPL_YOURHOST(currentClient->getNickname(), SERVERNAME, VERSION);
     buffer += RPL_CREATED(currentClient->getNickname(), _datetime);
     buffer += RPL_MYINFO(currentClient->getNickname(), SERVERNAME, VERSION, USERMODE, CHANMODE, CHANMODE);
-	buffer += RPL_ISUPPORT(currentClient->getNickname(),
-						   "Modes:\n"
-						   "i - Make the channel invite only : `/mode $chan +i`\n"
-						   "\n"
-						   "t - Only Ops can change the topic: `/mode $chan +t`\n"
-						   "\n"
-						   "k - Give the channel a password or key : `/mode $chan +k key`\n"
-						   "\n"
-						   "o - Give a user Op status in the channel : `/mode $chan +o nick` \n"
-						   "\n"
-						   "l - Set a limit to the number of users allowed in the  channel : `/mode $chan +l n`"
-						   "\n"
-	);
+	buffer += RPL_ISUPPORT(currentClient->getNickname(), "CHANNELLEN=32 NICKLEN=9 TOPICLEN=307");
 	sendStringSocket(currentClient->getSocket(), buffer);
 }
 
