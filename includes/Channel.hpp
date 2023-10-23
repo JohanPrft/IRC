@@ -33,6 +33,7 @@ class Channel{
 		string			_topic;
 		string			_password;
 		int				_maxUser;
+		bool			_isTopicProtected;
 		bool			_inviteOnly;
 		bool			_needPassword;
 		bool			_limitUser;
@@ -56,6 +57,7 @@ class Channel{
 		string	getTopic() const;
 		string	getPassword() const;
 		int 	getMaxUser() const;
+		bool	getIsTopicProtected() const;
 		bool	getTopicExist() const;
 		bool	getInviteOnly() const;
 		bool	getNeedPassword() const;
@@ -67,6 +69,7 @@ class Channel{
 
 		//setters
 		void	setTopic(const string& topic);
+		void	setIsTopicProtected(bool value);
 		void	setPassword(const string& password);
 		void 	setMaxUser(int maxUser);
 		void	setInviteOnly(bool value);

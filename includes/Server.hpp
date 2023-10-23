@@ -26,6 +26,7 @@ class Server {
       
       		void    confirmClientConnection(User *currentClient);
 			void	sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg);
+			void	sendMessageToChannel(Channel *currentChannel, const string & msg);
 			void	sendMessageToUser(User *currentClient, User *targetClient, string msg);
 
 			//getters
