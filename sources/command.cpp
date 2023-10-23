@@ -88,10 +88,9 @@ void	ping(int clientSocket, vector<string> splitedCommand)
 //	send(clientSocket, pong.c_str(), pong.length(), 0);
 }
 
-//!!! Makes weird things: connection becomes unstable (client prompted with welcome, disconnected)
 void nick(Server *serv, User *user, vector<string> splitedCommand)
 {
-	if (!User::isNickValid(serv, splitedCommand[1], user->getSocket()))
+	if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
 		return ;
 	put_str_fd(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]), user->getSocket());
 	Server::cout_server(RPL_NICK(user->getNickname(), user->getNickname(), splitedCommand[1]));

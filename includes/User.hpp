@@ -63,7 +63,7 @@ public:
 
 	void cout_user(const std::string &msg);
 	static void cerr_user(const std::string &msg);
-	static bool	isNickValid(Server *serv, const string &nick, int clientSocket);
+	static bool isNickValid(Server *serv, User *user, const string &nick, int clientSocket);
 
 
 };

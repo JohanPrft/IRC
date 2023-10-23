@@ -37,18 +37,18 @@ bool User::isNickValidOnConnect(Server *serv, User *user)
 		return (true);
 }
 
-bool User::isNickValid(Server *serv, const string & nick, int clientSocket)
+bool User::isNickValid(Server *serv, User *user, const string &nick, int clientSocket)
 {
 	if (serv->userExist(nick))
 	{
-		sendStringSocket(clientSocket, ERR_NICKNAMEINUSE(nick, nick));
-		Server::cout_server(ERR_NICKNAMEINUSE(nick, nick));
+		sendStringSocket(clientSocket, ERR_NICKNAMEINUSE(user->getNickname(), nick));
+		Server::cout_server(ERR_NICKNAMEINUSE(user->getNickname(), nick));
 		return (false);
 	}
 	else if (nick.find_first_not_of(AUTHORISED_CHAR_NICK) != string::npos)
 	{
-		sendStringSocket(clientSocket, ERR_ERRONEUSNICKNAME(nick, nick));
-		Server::cout_server(ERR_ERRONEUSNICKNAME(nick, nick));
+		sendStringSocket(clientSocket, ERR_ERRONEUSNICKNAME(user->getNickname(), nick));
+		Server::cout_server(ERR_ERRONEUSNICKNAME(user->getNickname(), nick));
 		return (false);
 	}
 	else
