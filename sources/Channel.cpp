@@ -50,6 +50,20 @@ Channel::~Channel()
 
 //	getters
 
+string	Channel::getNicksuser(string nickname)
+{
+	string result;
+
+	for (vector<User*>::const_iterator it = getUserList().begin(); it != getUserList().end(); ++it) 
+	{
+       		User* userPtr = *it;
+			if (userPtr->getNickname() != nickname)
+				result += userPtr->getNickname() + " ";
+	}
+	return result;
+}
+
+
 string	Channel::getName() const {
  	return (_name);
 }

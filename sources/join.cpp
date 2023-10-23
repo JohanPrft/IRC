@@ -1,6 +1,8 @@
 #include "../includes/irc.hpp"
 
 
+
+
 void	Server::join(User *user, vector<string> args)
 {
 	if (args.size() > 2)
@@ -35,6 +37,16 @@ void	Server::join(User *user, vector<string> args)
 		 for (vector<User*>::const_iterator it = _channels[args[1]]->getUserList().begin(); it != _channels[args[1]]->getUserList().end(); ++it) {
        		User* userPtr = *it;
 			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
+
+			if (_channels[args[1]]->getTopic().empty() == false)
+				sendStringSocket(userPtr->getSocket(), RPL_TOPIC(user->getNickname(), args[1], _channels[args[1]]->getTopic()));
+
+			string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
+			sendStringSocket(userPtr->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
+			sendStringSocket(userPtr->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
+
+
+
 		 }
 	}
 }

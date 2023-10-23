@@ -54,6 +54,7 @@ class Channel{
 
 
 		//getters
+		string	getNicksuser(string nickname);
 		string	getName() const;
 		string	getTopic() const;
 		string	getPassword() const;

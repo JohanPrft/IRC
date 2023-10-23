@@ -30,7 +30,7 @@
 #define RPL_MOTD(client, motd_line) (":localhost 372 " + client + " :" + motd_line + "\r\n")
 #define RPL_ENDOFMOTD(client) (":localhost 376 " + client + " :End of /MOTD command.\r\n")
 
-# define RPL_NAMREPLY(client, symbol, channel, list_of_nicks) (":localhost 353 " + client + " " + symbol + " " + channel + " :" + list_of_nicks + "\r\n")
+# define RPL_NAMREPLY(client, channel, list_of_nicks) (":localhost 353 " + client + " " + "=" + " " + channel + " :" + list_of_nicks + "\r\n")
 # define RPL_ENDOFNAMES(client, channel) (":localhost 366 " + client + " " + channel + " :End of /NAMES list.\r\n")
 
 # define RPL_NICK(oldClient, userClient, newClient) (":" + oldClient + "!" + userClient + "@localhost NICK " +  newClient + "\r\n")
