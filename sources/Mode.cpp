@@ -30,7 +30,7 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
 	}
 	if (!chan) //chan doesnt exist
 	{
-		sendStringSocket(user->getSocket(), ERR_NOSUCHCHANNEL(user->getNickname(), channel));
+		sendStringSocket(user->getSocket(),  ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		Server::cout_server(ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		return;
 	}
