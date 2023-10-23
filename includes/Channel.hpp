@@ -37,6 +37,7 @@ class Channel{
 		bool			_inviteOnly;
 		bool			_needPassword;
 		bool			_limitUser;
+		bool			_topicOperator;
 
 		vector<User*>	_userList;
 		vector<User*>	_banList;

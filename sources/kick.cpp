@@ -58,6 +58,13 @@ void Server::kick(User *user, vector<string> args)
         return ;
     }
 
+    //Check if user has the right to kick
+    if (!targetChannel->isUserOperator(user))
+    {
+        Server::cerr_server(user->getNickname() + " is not operator of " + targetChannel->getName() + " channel.");
+        sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), targetChannel->getName()));
+        return ;
+    }
     //If everything is checked, kick user from channel
     else
     {
