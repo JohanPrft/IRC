@@ -30,6 +30,11 @@ void	Server::join(User *user, vector<string> args)
 		
 		_channels[args[1]]->addUser(user);
 		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
-		cout << CYAN << user->getNickname() << " join  " << args[1] << WHITE << endl;
+		user->cout_user(RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
+	}
+	if (_channels[args[1]]->getTopicExist())
+	{
+		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), _channels[args[1]]->getName(), _channels[args[1]]->getTopic()));
+		user->cout_user(RPL_TOPIC(user->getNickname(), _channels[args[1]]->getName(), _channels[args[1]]->getTopic()));
 	}
 }

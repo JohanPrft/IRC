@@ -244,6 +244,16 @@ void	Server::sendMessageToChannel(Channel *currentChannel, User *currentClient, 
 	return ;
 }
 
+void	Server::sendMessageToChannel(Channel *currentChannel, const string & msg)
+{
+    vector<User *>listClient = currentChannel->getUserList();
+    for (size_t i = 0; i < listClient.size() ; i++)
+    {
+		sendStringSocket(listClient[i]->getSocket(), msg);
+    }
+	return ;
+}
+
 void Server::sendMessageToUser(User *currentClient, User *targetClient, string msg)
 {
     sendStringSocket(targetClient->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), targetClient->getNickname(), msg));
