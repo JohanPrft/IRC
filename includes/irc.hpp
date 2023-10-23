@@ -41,8 +41,8 @@ using std::ostream;
 
 const string SERVERNAME = "irc.pictochat.net";
 const string VERSION = "0.1";
-const string USERMODE = "to complete";
-const string CHANMODE = "to complete";
+const string USERMODE = "i";
+const string CHANMODE = "itkol";
 
 
 // utils

@@ -52,7 +52,7 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 
 	string command = splitedCommand[0];
 	if (command == "PING")
-		ping(user->getSocket(), splitedCommand);
+		ping(user->getSocket(), user, splitedCommand);
 	else if (command == "NICK")
 		nick(this, user, splitedCommand);
 	else if (command == "USER")
