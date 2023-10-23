@@ -17,6 +17,7 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
         sendStringSocket(currentUser->getSocket(), ERR_NOTEXTTOSEND(currentUser->getNickname()));
         return ;
     }
+    
     // Find channel
     string channelToFind = args[1];
     Channel *targetChannel = NULL;
@@ -33,7 +34,15 @@ void Server::privmsgChannel(User *currentUser, vector<string> args)
         sendStringSocket(currentUser->getSocket(), ERR_NOSUCHCHANNEL(currentUser->getNickname(), channelToFind));
         return ;
     }
-        
+
+    // Check if user is in channel
+    if (!targetChannel->isUserInChannel(currentUser))
+    {
+        Server::cerr_server(currentUser->getNickname() + " is not in " + channelToFind + " channel.");
+        sendStringSocket(currentUser->getSocket(), ERR_CANNOTSENDTOCHAN(currentUser->getNickname(), channelToFind));
+        return ;
+    }
+
     //If channel found, send message to all users in channel
     else
     {
@@ -79,19 +88,20 @@ void Server::privmsgUser(User *currentUser, vector<string> args)
     }
 }
 
-void	ping(int clientSocket, vector<string> splitedCommand)
+void ping(int clientSocket, User *user, vector<string> splitedCommand)
 {
-	string pong = "PONG :" + splitedCommand[1];
-	Server::cout_server(pong);
-	put_str_fd(pong, clientSocket);
-	send(clientSocket, pong.c_str(), pong.length(), 0);
+	sendStringSocket(clientSocket, RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
+	user->cout_user(RPL_PONG(user_id(user->getNickname(), user->getUsername()), splitedCommand[1]));
+//	put_str_fd(pong, clientSocket);
+//	send(clientSocket, pong.c_str(), pong.length(), 0);
 }
 
-//!!! Makes weird things: connection becomes unstable (client prompted with welcome, disconnected)
-void nick(User *user, vector<string> splitedCommand)
+void nick(Server *serv, User *user, vector<string> splitedCommand)
 {
-	put_str_fd(RPL_NICK(user->getNickname(), splitedCommand[1], user->getUsername(), user->getHostname()), user->getSocket());
-	Server::cout_server(RPL_NICK(user->getNickname(), splitedCommand[1], user->getUsername(), user->getHostname()));
+	if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
+		return ;
+	sendStringSocket(user->getSocket(), RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
+	Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
 	user->setNickname(splitedCommand[1]);
 }
 

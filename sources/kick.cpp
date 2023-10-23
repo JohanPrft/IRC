@@ -58,6 +58,13 @@ void Server::kick(User *user, vector<string> args)
         return ;
     }
 
+    //Check if user has the right to kick
+    if (!targetChannel->isUserOperator(user))
+    {
+        Server::cerr_server(user->getNickname() + " is not operator of " + targetChannel->getName() + " channel.");
+        sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), targetChannel->getName()));
+        return ;
+    }
     //If everything is checked, kick user from channel
     else
     {
@@ -73,7 +80,7 @@ void Server::kick(User *user, vector<string> args)
 
         //Kick target user
         targetChannel->removeUser(targetUser);
-        sendStringSocket(targetUser->getSocket(), RPL_KICK(user->getNickname(), user->getUsername(), user->getUsername(), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
+        sendStringSocket(targetUser->getSocket(), RPL_KICK(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
         cout_server(user->getNickname() + " kicked " + targetUser->getNickname() + " of " + targetChannel->getName() + " for " + reasonOfKick);
         return ;   
     }

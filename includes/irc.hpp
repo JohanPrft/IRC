@@ -42,8 +42,8 @@ using std::ostream;
 
 const string SERVERNAME = "irc.pictochat.net";
 const string VERSION = "0.1";
-const string USERMODE = "to complete";
-const string CHANMODE = "to complete";
+const string USERMODE = "i";
+const string CHANMODE = "itkol";
 
 
 // utils
@@ -51,5 +51,6 @@ const string CHANMODE = "to complete";
 void split(string input, char del, vector<string> &tokens);
 #define BUFFER_SIZE 512
 const string CRLF = "/r/n";
+const string AUTHORISED_CHAR_NICK = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]{}\\|";
 
 #endif

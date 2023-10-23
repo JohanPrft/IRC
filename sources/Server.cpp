@@ -52,9 +52,9 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 
 	string command = splitedCommand[0];
 	if (command == "PING")
-		ping(user->getSocket(), splitedCommand);
+		ping(user->getSocket(), user, splitedCommand);
 	else if (command == "NICK")
-		nick(user, splitedCommand);
+		nick(this, user, splitedCommand);
 	else if (command == "USER")
 		username(user, splitedCommand);
 	else if (command == "MODE")
@@ -81,6 +81,7 @@ void	Server::receiveCommand(User *currentClient)
 		string str(buffer);
 		currentClient->cout_user(str);
 		vector<string> splitedCommand = parseCommand(str);
+		currentClient->cout_user(str);
 		execCommand(currentClient, splitedCommand);
 	}		
     return ;
@@ -95,14 +96,20 @@ void Server::handleNewConnection(vector<int> &clients)
         return;
     }
 
-    clients.push_back(clientSocket);
+	User *user = new User(this, clientSocket, _password);
+	if (!user->getIsLogged())
+	{
+		delete user;
+		return;
+	}
 
+    clients.push_back(clientSocket);
     pollfd clientFd;
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
     _fds.push_back(clientFd);
 
-    _users.insert(std::pair<int, User *>(clientSocket, new User(this, clientSocket, _password)));
+    _users.insert(std::pair<int, User *>(clientSocket, user));
     confirmClientConnection(_users[clientSocket]);
     map<int, User *>::iterator it = _users.find(clientSocket);
 	cout_server("New connection from : " + it->second->getFullname());
@@ -216,11 +223,11 @@ void    Server::confirmClientConnection(User *currentClient)
 {
     string buffer;
 
-    buffer = RPL_WELCOME(currentClient->getNickname(), currentClient->getUsername(), currentClient->getHostname());
-    buffer += RPL_YOURHOST(currentClient->getNickname());
+    buffer = RPL_WELCOME(user_id(currentClient->getNickname(), currentClient->getUsername()), currentClient->getNickname());
+    buffer += RPL_YOURHOST(currentClient->getNickname(), SERVERNAME, VERSION);
     buffer += RPL_CREATED(currentClient->getNickname(), _datetime);
-    buffer += RPL_MYINFO(currentClient->getNickname());
-    //buffer += RPL_MOTDSTART(currentClient->getNickname()); //optionnal
+    buffer += RPL_MYINFO(currentClient->getNickname(), SERVERNAME, VERSION, USERMODE, CHANMODE, CHANMODE);
+	buffer += RPL_ISUPPORT(currentClient->getNickname(), "CHANNELLEN=32 NICKLEN=9 TOPICLEN=307");
 	sendStringSocket(currentClient->getSocket(), buffer);
 }
 
