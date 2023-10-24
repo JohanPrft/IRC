@@ -67,6 +67,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         kick(user, splitedCommand);
 	else if (command == "INVITE")
 		invite(user, splitedCommand);
+    else if (command == "PART")
+        leave(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)

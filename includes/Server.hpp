@@ -63,6 +63,7 @@ private :
 
 			// commands
 			void join(User *user, vector<string> args);
+			void leave(User *user, vector<string> args);
 			void kick(User *user, vector<string> args);
 			void invite(User *invitator, vector<string> args);
 
