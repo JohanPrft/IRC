@@ -61,8 +61,6 @@ void	Server::join(User *user, vector<string> args)
 			cout << YELLOW << userPtr->getNickname()<< endl;
 			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 
-			if (_channels[args[1]]->getTopic().empty() == false)
-				sendStringSocket(userPtr->getSocket(), RPL_TOPIC(user->getNickname(), args[1], _channels[args[1]]->getTopic()));
 
 			string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
 
@@ -70,5 +68,7 @@ void	Server::join(User *user, vector<string> args)
 			sendStringSocket(userPtr->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
 			sendStringSocket(userPtr->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
 		 }
+		if (_channels[args[1]]->getTopic().empty() == false)
+			sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), args[1], _channels[args[1]]->getTopic()));
 	}
 }
