@@ -12,7 +12,8 @@ bool	isChannelNameValid(string name)
 	return (true);
 }
 
-Channel::Channel() {
+Channel::Channel() 
+{
 
 }
 
@@ -50,6 +51,21 @@ Channel::~Channel()
 }
 
 //	getters
+
+string	Channel::getNicksuser(string nickname)
+{
+	string result;
+	vector<User *> userlist = getUserList();
+
+	for (vector<User*>::const_iterator it = userlist.begin(); it != userlist.end(); ++it) 
+	{
+       		User* userPtr = *it;
+			if (userPtr->getNickname() != nickname)
+				result += userPtr->getNickname() + " ";
+	}
+	return result;
+}
+
 
 string	Channel::getName() const {
  	return (_name);

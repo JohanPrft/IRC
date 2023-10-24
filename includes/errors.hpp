@@ -42,4 +42,5 @@
 
 # define ERR_ALREADYREGISTERED(client) (":localhost 462 " + client + " :You may not reregister.\r\n")
 
+
 #endif //IRC_ERRORS_HPP

@@ -10,7 +10,6 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> splitedCommand);
 void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splitedCommand);
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand);
-
 void mode(Server *serv, User *user, vector<string> splitedCommand);
 
 

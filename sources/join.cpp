@@ -1,6 +1,8 @@
 #include "../includes/irc.hpp"
 
 
+
+
 void	Server::join(User *user, vector<string> args)
 {
 	if (args.size() > 2)
@@ -16,6 +18,11 @@ void	Server::join(User *user, vector<string> args)
 		channel = new Channel(args[1], user);
 		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 		_channels.insert(std::make_pair(args[1], channel));
+		_channels[args[1]]->addOperator(user);
+
+		string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
+		sendStringSocket(user->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
+		sendStringSocket(user->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
 
 	}
 	else
@@ -43,12 +50,25 @@ void	Server::join(User *user, vector<string> args)
 
 		
 		_channels[args[1]]->addUser(user);
-		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
-		user->cout_user(RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
-	}
-	if (_channels[args[1]]->getTopicExist())
-	{
-		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), _channels[args[1]]->getName(), _channels[args[1]]->getTopic()));
-		user->cout_user(RPL_TOPIC(user->getNickname(), _channels[args[1]]->getName(), _channels[args[1]]->getTopic()));
+		// sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
+		cout << CYAN << user->getNickname() << " join  " << args[1] << WHITE << endl;
+
+		vector<User *> userlist = _channels[args[1]]->getUserList();
+
+		 for (vector<User*>::const_iterator it = userlist.begin(); it != userlist.end(); ++it) 
+		 {
+       		User* userPtr = *it;
+			
+			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
+
+
+			string	list_of_members = _channels[args[1]]->getNicksuser(userPtr->getNickname());
+
+			
+			sendStringSocket(userPtr->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
+			sendStringSocket(userPtr->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
+		 }
+		if (_channels[args[1]]->getTopic().empty() == false)
+			sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), args[1], _channels[args[1]]->getTopic()));
 	}
 }

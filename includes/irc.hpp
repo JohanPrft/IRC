@@ -18,6 +18,7 @@
 #include <map>
 #include <time.h>
 #include <sstream>
+#include <numeric>
 
 
 using std::cout;
