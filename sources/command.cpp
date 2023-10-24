@@ -129,7 +129,14 @@ void unknown(User *user, vector<string> splitedCommand)
 void Server::topic(User *user, vector<string> splitedCommand)
 {
 	string channel_name = splitedCommand[1];
-	string topic = std::accumulate(splitedCommand.begin() + 1, splitedCommand.end(), string());
+	string topic;
+	for (vector<string>::const_iterator it = splitedCommand.begin() + 1; it != splitedCommand.end(); ++it) {
+		if (it != splitedCommand.begin() + 1) {
+			topic += " ";  // Add a space between elements
+		}
+		topic += *it;  // Append the element to the topic
+	}
+
 	cout << YELLOW << topic << endl;
 	if (!channelExist(channel_name))
 	{
