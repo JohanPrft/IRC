@@ -34,10 +34,20 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
 		Server::cout_server(ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		return;
 	}
-    if (mode == "+i" || mode == "-i") //invite only
+	if (!chan->isUserInChannel(user))
+	{
+		sendStringSocket(user->getSocket(), ERR_NOTONCHANNEL(user->getNickname(), chan->getName()));
+		return;
+	}
+	if (!chan->isUserOperator(user) && splitedCommand.size() > 1)
+	{
+		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), chan->getName()));
+		return;
+	}
+	if (mode == "+i" || mode == "-i") //invite only
         inviteOnly(serv, chan, user, mode);
     else if (mode == "+t" || mode == "-t") //topic
-        topic(serv, chan, user, splitedCommand);
+        topic(serv, chan, splitedCommand);
     else if (mode == "+k" || mode == "-k") //password
         setChanPassword(serv, chan, user, splitedCommand);
     else if (mode == "+o" || mode == "-o") //operator
@@ -59,13 +69,13 @@ void inviteOnly(Server *serv, Channel *chan, User *user, const string& mode)
 {
 	(void)serv;
 	(void)user;
-    if (mode.find('+') != string::npos)
+    if (mode.find('+') != string::npos && !chan->getInviteOnly())
 	{
 		chan->setInviteOnly(true);
 		sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), mode));
 		serv->sendMessageToChannel(chan, MODE_CHANNELMSG(chan->getName(), "+i"));
 	}
-    else if (mode.find('-') != string::npos)
+    else if (mode.find('-') != string::npos && chan->getInviteOnly())
 	{
 		chan->setInviteOnly(false);
 		sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), mode));
@@ -85,57 +95,35 @@ string getTopic(vector<string> splitedCommand)
 	return topic;
 }
 
-void topic(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
+void topic(Server *serv, Channel *chan, vector<string> splitedCommand)
 {
 	(void)serv;
-    if (chan->getIsTopicProtected() && !chan->isUserOperator(user))
+	if (splitedCommand[1].find("+") != string::npos && !chan->getIsTopicProtected())
 	{
-		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
-		return;
+		chan->setIsTopicProtected(true);
+		serv->sendMessageToChannel(chan, MODE_CHANNELMSG(chan->getName(), "+t"));
 	}
-	else if (splitedCommand.size() < 3)
+	else if (splitedCommand[1].find("-") != string::npos && chan->getIsTopicProtected())
 	{
-		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
-		return;
+		chan->setIsTopicProtected(false);
+		serv->sendMessageToChannel(chan, MODE_CHANNELMSG(chan->getName(), "-t"));
 	}
-	else if (!chan->isUserInChannel(user))
-	{
-		sendStringSocket(user->getSocket(), ERR_NOTONCHANNEL(user->getNickname(), splitedCommand[0]));
-		return;
-	}
-	else if (chan->isUserOperator(user))
-	{
-		if (splitedCommand[1].find("+") != string::npos)
-			chan->setIsTopicProtected(false);
-		else if (splitedCommand[1].find("-") != string::npos)
-			chan->setIsTopicProtected(true);
-	}
-
-	string topic = getTopic(splitedCommand);
-	chan->setTopic(topic);
-	serv->sendMessageToChannel(chan, RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
 }
 
 void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
-	(void)serv;
-	if (!chan->isUserOperator(user))
-	{
-		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
-		return;
-	}
 	if (splitedCommand.size() < 2)
 	{
 		sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
 		return;
 	}
-	if (splitedCommand[1].find("+") != string::npos)
+	if (splitedCommand[1].find("+") != string::npos && chan->getNeedPassword() == false)
 	{
 		chan->setNeedPassword(true);
 		chan->setPassword(splitedCommand[2]);
 		serv->sendMessageToChannel(chan, MODE_CHANNELMSG(chan->getName(), "+k"));
 	}
-	else if (splitedCommand[1].find("-") != string::npos)
+	else if (splitedCommand[1].find("-") != string::npos && chan->getNeedPassword() == true)
 	{
 		chan->setNeedPassword(false);
 		chan->setPassword("no password");
@@ -147,11 +135,6 @@ void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> spl
 void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
 	(void)serv;
-	if (!chan->isUserOperator(user))
-	{
-		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
-		return;
-	}
 	if (splitedCommand.size() < 2)
 	{
 		sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
@@ -168,10 +151,12 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 			User *foundUser = chan->getUser(*it);
 			if (foundUser)
 			{
+				if (chan->isUserOperator(foundUser))
+					return;
 				chan->addOperator(foundUser);
 				serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "+o", foundUser->getNickname()));
 			}
-			else
+			else if (!foundUser)
 				sendStringSocket(user->getSocket(), ERR_USERNOTINCHANNEL(user->getNickname(), *it, chan->getName()));
 			it++;
 		}
@@ -183,6 +168,8 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 			User *foundUser = chan->getUser(*it);
 			if (foundUser)
 			{
+				if (!chan->isUserOperator(foundUser))
+					return;
 				chan->removeOperator(foundUser);
 				serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "-o", foundUser->getNickname()));
 			}
@@ -196,12 +183,7 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
 	(void)serv;
-	if (!chan->isUserOperator(user))
-	{
-		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
-		return;
-	}
-	if (splitedCommand[1].find("+") != string::npos)
+	if (splitedCommand[1].find("+") != string::npos && chan->getLimitUSer() == false)
 	{
 		int maxUser = atoi(splitedCommand[2].c_str());
 		if (maxUser < 1)
@@ -210,7 +192,7 @@ void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> spl
 		chan->setLimitUser(true);
 		serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "+l", splitedCommand[2]));
 	}
-	else if (splitedCommand[1].find("-") != string::npos)
+	else if (splitedCommand[1].find("-") != string::npos && chan->getLimitUSer() == true)
 	{
 		chan->setLimitUser(false);
 		chan->setMaxUser(-1);
