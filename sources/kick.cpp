@@ -79,8 +79,9 @@ void Server::kick(User *user, vector<string> args)
             reasonOfKick = "Not respecting the channel's rules.";
 
         //Kick target user
+        for (size_t i = 0; i < targetChannel->getUserList().size(); i++)
+            sendStringSocket(targetChannel->getUserList()[i]->getSocket(), RPL_KICK(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
         targetChannel->removeUser(targetUser);
-        sendStringSocket(targetUser->getSocket(), RPL_KICK(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), targetUser->getNickname(), reasonOfKick));
         cout_server(user->getNickname() + " kicked " + targetUser->getNickname() + " of " + targetChannel->getName() + " for " + reasonOfKick);
         return ;   
     }
