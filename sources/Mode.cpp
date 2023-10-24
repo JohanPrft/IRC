@@ -173,7 +173,12 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 		{
 			User *foundUser = chan->getUser(*it);
 			if (foundUser)
+			{
 				chan->addOperator(foundUser);
+				serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "+o", foundUser->getNickname()));
+			}
+			else
+				sendStringSocket(user->getSocket(), ERR_USERNOTINCHANNEL(user->getNickname(), *it, chan->getName()));
 			it++;
 		}
 	}
@@ -183,12 +188,15 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 		{
 			User *foundUser = chan->getUser(*it);
 			if (foundUser)
+			{
 				chan->removeOperator(foundUser);
+				serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "-o", foundUser->getNickname()));
+			}
+			else
+				sendStringSocket(user->getSocket(), ERR_USERNOTINCHANNEL(user->getNickname(), *it, chan->getName()));
 			it++;
 		}
 	}
-	sendStringSocket(user->getSocket(), RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
-	user->cout_user(RPL_UMODEIS(user->getNickname(), splitedCommand[1]));
 }
 
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
