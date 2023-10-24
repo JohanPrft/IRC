@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jprofit <jprofit@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: amontalb <amontalb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 09:05:40 by jprofit           #+#    #+#             */
-/*   Updated: 2023/10/19 09:05:40 by jprofit          ###   ########.fr       */
+/*   Updated: 2023/10/24 14:03:21 by amontalb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,12 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
-	else if (splitedCommand.size() < 3)
-	{
-		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
-		Server::cout_server(RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
-		return;
-	}
+	// else if (splitedCommand.size() < 3)
+	// {
+	// 	sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
+	// 	Server::cout_server(RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
+	// 	return;
+	// }
 	else if (!chan->isUserInChannel(user))
 	{
 		sendStringSocket(user->getSocket(), ERR_NOTONCHANNEL(user->getNickname(), splitedCommand[0]));
@@ -108,10 +108,15 @@ void topic(Server *serv, Channel *chan, User *user, vector<string> splitedComman
 	}
 	else if (chan->isUserOperator(user))
 	{
-		if (splitedCommand[1].find("+") != string::npos)
+		if (splitedCommand[1].find("-") != string::npos)
+		{
 			chan->setIsTopicProtected(false);
-		else if (splitedCommand[1].find("-") != string::npos)
+		}
+		else if (splitedCommand[1].find("+") != string::npos)
+		{
+			cout << "===================" << endl; 
 			chan->setIsTopicProtected(true);
+		}
 	}
 
 	string topic = getTopic(splitedCommand);

@@ -5,8 +5,6 @@
 
 void	Server::join(User *user, vector<string> args)
 {
-	if (args.size() > 2)
-		return ;
 
 	if (!isChannelNameValid(args[1]))
 		return ;
