@@ -61,13 +61,11 @@ void	Server::join(User *user, vector<string> args)
 			
 			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getUsername()), args[1]));
 
-
-			string	list_of_members = _channels[args[1]]->getNicksuser(userPtr->getNickname());
-
 			
-			sendStringSocket(userPtr->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
-			sendStringSocket(userPtr->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
 		 }
+			string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
+			sendStringSocket(user->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
+			sendStringSocket(user->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
 		if (_channels[args[1]]->getTopic().empty() == false)
 			sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), args[1], _channels[args[1]]->getTopic()));
 	}
