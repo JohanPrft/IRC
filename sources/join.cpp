@@ -30,13 +30,11 @@ void	Server::join(User *user, vector<string> args)
 		if (_channels[args[1]]->getInviteOnly() && (!_channels[args[1]]->isUserInvited(user)))
 		{
 			sendStringSocket(user->getSocket(), ERR_INVITEONLYCHAN(user_id(user->getNickname(), user->getUsername()), args[1]));
-			user->cout_user(ERR_INVITEONLYCHAN(user_id(user->getNickname(), user->getUsername()), args[1]));
 			return;
 		}
 		if (_channels[args[1]]->getNeedPassword() && (args.size() < 2 || _channels[args[1]]->getPassword() != args[2]))
 		{
 			sendStringSocket(user->getSocket(), ERR_BADCHANNELKEY(user_id(user->getNickname(), user->getUsername()), args[1]));
-			user->cout_user(ERR_BADCHANNELKEY(user_id(user->getNickname(), user->getUsername()), args[1]));
 			return;
 		}
 		//on verifie sit le nombre max de user est atteind
@@ -44,7 +42,6 @@ void	Server::join(User *user, vector<string> args)
 			&& _channels[args[1]]->getUserCount() >= _channels[args[1]]->getLimitUSer())
 		{
 			sendStringSocket(user->getSocket(), ERR_CHANNELISFULL(user_id(user->getNickname(), user->getUsername()), args[1]));
-			user->cout_user(ERR_CHANNELISFULL(user_id(user->getNickname(), user->getUsername()), args[1]));
 			return;
 		}
 
