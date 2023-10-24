@@ -17,10 +17,10 @@ void	Server::join(User *user, vector<string> args)
 		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getUsername()), args[1]));
 		_channels.insert(std::make_pair(args[1], channel));
 		_channels[args[1]]->addOperator(user);
-
 		string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
 		sendStringSocket(user->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
 		sendStringSocket(user->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
+		sendMessageToChannel(_channels[args[1]], MODE_CHANNELMSGWITHPARAM(_channels[args[1]]->getName(), "+o", user->getNickname()));
 
 	}
 	else
