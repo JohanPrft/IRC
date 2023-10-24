@@ -58,13 +58,13 @@ void	Server::join(User *user, vector<string> args)
 		 for (vector<User*>::const_iterator it = userlist.begin(); it != userlist.end(); ++it) 
 		 {
        		User* userPtr = *it;
-			cout << YELLOW << userPtr->getNickname()<< endl;
+			
 			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 
 
-			string	list_of_members = _channels[args[1]]->getNicksuser(user->getNickname());
+			string	list_of_members = _channels[args[1]]->getNicksuser(userPtr->getNickname());
 
-			cout << YELLOW << list_of_members << endl;
+			
 			sendStringSocket(userPtr->getSocket(), RPL_NAMREPLY(user->getUsername(), args[1], list_of_members));
 			sendStringSocket(userPtr->getSocket(), RPL_ENDOFNAMES(user->getUsername(), args[1]));
 		 }

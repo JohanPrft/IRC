@@ -160,7 +160,6 @@ void Server::topic(User *user, vector<string> splitedCommand)
 		{
 			_channels[channel_name]->setTopic(topic);
 			sendMessageToChannel(_channels[channel_name], RPL_TOPIC(user->getNickname(), channel_name, _channels[channel_name]->getTopic()));
-
 		}
 
 	}
