@@ -33,9 +33,9 @@ void	Server::leave(User *user, vector<string> args)
     {
         //check if a reason has been specified
         string reasonOfLeave;
-        if (args.size() > 4)
+        if (args.size() > 2)
         {
-            for (size_t i = 3; i < args.size(); i++)
+            for (size_t i = 2; i < args.size(); i++)
             reasonOfLeave += " " + args[i];
         }
         else
