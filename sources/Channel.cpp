@@ -61,7 +61,11 @@ string	Channel::getNicksuser(string nickname)
 	{
        		User* userPtr = *it;
 			if (userPtr->getNickname() != nickname)
+			{
+				if (isUserOperator(userPtr))
+					result += "@";
 				result += userPtr->getNickname() + " ";
+			}
 	}
 	return result;
 }
