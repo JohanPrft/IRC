@@ -42,8 +42,9 @@ void	Server::leave(User *user, vector<string> args)
             reasonOfLeave = "being bored.";
 
         //Leave channel
+        for (size_t i = 0; i < targetChannel->getUserList().size(); i++)
+            sendStringSocket(targetChannel->getUserList()[i]->getSocket(), RPL_PART(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), reasonOfLeave));
         targetChannel->removeUser(user);
-        sendStringSocket(user->getSocket(), RPL_PART(user_id(user->getNickname(), user->getUsername()), targetChannel->getName(), reasonOfLeave));
         cout_server(user->getNickname() + " has left the channel " + targetChannel->getName() + " for " + reasonOfLeave);
         return ;   
     }

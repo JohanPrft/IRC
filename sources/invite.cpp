@@ -39,7 +39,7 @@ void	Server::invite(User *invitator, vector<string> args)
 
 	//ajouter le User a la liste des invites
 	_channels[channel]->addInvited(invitated);
-	sendStringSocket(invitator->getSocket(),RPL_INVITING(user_id(invitator->getNickname(), invitator->getNickname()), invitator->getNickname(), invitated->getNickname(), channel));
-	sendStringSocket(invitated->getSocket(),RPL_INVITE(user_id(invitator->getNickname(), invitator->getNickname()), invitated->getNickname(), channel));
+	sendStringSocket(invitator->getSocket(),RPL_INVITING(user_id(invitator->getNickname(), invitator->getUsername()), invitator->getNickname(), invitated->getNickname(), channel));
+	sendStringSocket(invitated->getSocket(),RPL_INVITE(user_id(invitator->getNickname(), invitator->getUsername()), invitated->getNickname(), channel));
 
 }
