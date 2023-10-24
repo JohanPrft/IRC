@@ -5,7 +5,7 @@ void Server::kick(User *user, vector<string> args)
 	//Check enough parameters
     if (args.size() < 3)
     {
-        cout_server("Error : KICK : not enough parameters !");
+        cerr_server("Error : KICK : not enough parameters !");
         sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "KICK"));
         return ;
     }
