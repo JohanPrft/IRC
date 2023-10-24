@@ -117,7 +117,7 @@ void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> spl
 		sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
 		return;
 	}
-	if (splitedCommand[1].find("+") != string::npos && chan->getNeedPassword() == false)
+	if (splitedCommand[1].find("+") != string::npos)
 	{
 		chan->setNeedPassword(true);
 		chan->setPassword(splitedCommand[2]);
