@@ -56,7 +56,7 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
 	else if (command == "NICK")
 		nick(this, user, splitedCommand);
 	else if (command == "USER")
-		username(user, splitedCommand);
+		username(user);
 	else if (command == "MODE")
 		mode(this, user, splitedCommand);
 	else if (command =="PRIVMSG")
@@ -240,6 +240,16 @@ void	Server::sendMessageToChannel(Channel *currentChannel, User *currentClient, 
         {
             sendStringSocket(listClient[i]->getSocket(), RPL_PRIVMSG(currentClient->getNickname(), currentClient->getUsername(), currentChannel->getName(), msg));
         }
+    }
+	return ;
+}
+
+void	Server::sendMessageToChannel(Channel *currentChannel, const string & msg)
+{
+    vector<User *>listClient = currentChannel->getUserList();
+    for (size_t i = 0; i < listClient.size() ; i++)
+    {
+		sendStringSocket(listClient[i]->getSocket(), msg);
     }
 	return ;
 }

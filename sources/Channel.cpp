@@ -19,9 +19,10 @@ Channel::Channel()
 
 Channel::Channel(const string& name, User *owner) :
  	_name(name),
- 	_topic("not define"),
+ 	_topic(""),
  	_password("no password"),
  	_maxUser(-1),
+	 _isTopicProtected(false),
  	_inviteOnly(false),
  	_needPassword(false),
  	_limitUser(false)
@@ -82,8 +83,12 @@ int Channel::getMaxUser() const {
 	return (_maxUser);
 }
 
+bool Channel::getIsTopicProtected() const {
+	return _isTopicProtected;
+}
+
 bool	Channel::getTopicExist() const {
-	if (_topic == "not define")
+	if (_topic.empty())
 		return (false);
 	return (true);
 }
@@ -121,6 +126,10 @@ int Channel::getUserCount() {
 
 void	Channel::setTopic(const string& topic) {
 	_topic = topic;
+}
+
+void Channel::setIsTopicProtected(bool value) {
+	_isTopicProtected = value;
 }
 
 void	Channel::setPassword(const string& password) {
@@ -187,7 +196,7 @@ void Channel::addUser(User *user)
  	if (it != _userList.end())
  		Server::cout_server(user->getNickname() + "is already in the channel");
  	else
- 		_userList.push_back(user);
+		 _userList.push_back(user);
 }
 
 void	Channel::removeUser(User *user)
@@ -310,3 +319,4 @@ void Channel::printInfo() const{
 	std::cout << "Need Password: " << (_needPassword ? "Yes" : "No") << std::endl;
 	std::cout << "Limit User: " << (_limitUser ? "Yes" : "No") << std::endl;
 }
+

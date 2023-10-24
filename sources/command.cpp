@@ -98,16 +98,23 @@ void ping(int clientSocket, User *user, vector<string> splitedCommand)
 
 void nick(Server *serv, User *user, vector<string> splitedCommand)
 {
-	if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
+	if (splitedCommand.size() < 2) // never true: irssi does the (wrong) job
+	{
+		sendStringSocket(user->getSocket(), ERR_NONICKNAMEGIVEN(user->getNickname()));
+		Server::cout_server(ERR_NONICKNAMEGIVEN(user->getNickname()));
+		return ;
+	}
+	else if (!User::isNickValid(serv, user, splitedCommand[1], user->getSocket()))
 		return ;
 	sendStringSocket(user->getSocket(), RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
 	Server::cout_server(RPL_NICK(user->getNickname(), user->getUsername(), splitedCommand[1]));
 	user->setNickname(splitedCommand[1]);
 }
 
-void username(User *user, vector<string> splitedCommand)
+void username(User *user) //will not be reached because of irssi
 {
-	user->setUsername(splitedCommand[1]);
+	sendStringSocket(user->getSocket(), ERR_ALREADYREGISTERED(user->getNickname()));
+	user->cout_user(ERR_ALREADYREGISTERED(user->getNickname()));
 }
 
 void unknown(User *user, vector<string> splitedCommand)

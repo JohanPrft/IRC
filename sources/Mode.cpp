@@ -30,7 +30,7 @@ void mode(Server *serv, User *user, vector<string> splitedCommand)
 	}
 	if (!chan) //chan doesnt exist
 	{
-		sendStringSocket(user->getSocket(), ERR_NOSUCHCHANNEL(user->getNickname(), channel));
+		sendStringSocket(user->getSocket(),  ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		Server::cout_server(ERR_NOSUCHCHANNEL(user->getNickname(), channel));
 		return;
 	}
@@ -73,34 +73,50 @@ void inviteOnly(Server *serv, Channel *chan, User *user, const string& mode)
 	}
 }
 
+string getTopic(vector<string> splitedCommand)
+{
+	string topic;
+	vector<string>::iterator it = splitedCommand.begin();
+	it += 2;
+	while (it != splitedCommand.end()) {
+		topic += *it + " ";
+		it++;
+	}
+	return topic;
+}
+
 void topic(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
 	(void)serv;
-    if (!chan->isUserOperator(user))
+    if (chan->getIsTopicProtected() && !chan->isUserOperator(user))
 	{
 		sendStringSocket(user->getSocket(), ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		Server::cout_server(ERR_CHANOPRIVSNEEDED(user->getNickname(), splitedCommand[0]));
 		return;
 	}
-	if (splitedCommand[1].find("+") != string::npos)
+	else if (splitedCommand.size() < 3)
 	{
-		string topic;
-		vector<string>::iterator it = splitedCommand.begin();
-		it += 2;
-		while (it != splitedCommand.end()) {
-			topic += *it + " ";
-			it++;
-		}
-		chan->setTopic(topic);
-		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], topic));
-		user->cout_user(RPL_TOPIC(user->getNickname(), splitedCommand[0], topic));
+		sendStringSocket(user->getSocket(), RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
+		Server::cout_server(RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
+		return;
 	}
-	else if (splitedCommand[1].find("-") != string::npos)
+	else if (!chan->isUserInChannel(user))
 	{
-		chan->setTopic("not define");
-		sendStringSocket(user->getSocket(), RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
-		user->cout_user(RPL_NOTOPIC(user->getNickname(), splitedCommand[0]));
+		sendStringSocket(user->getSocket(), ERR_NOTONCHANNEL(user->getNickname(), splitedCommand[0]));
+		Server::cout_server(ERR_NOTONCHANNEL(user->getNickname(), splitedCommand[0]));
+		return;
 	}
+	else if (chan->isUserOperator(user))
+	{
+		if (splitedCommand[1].find("+") != string::npos)
+			chan->setIsTopicProtected(false);
+		else if (splitedCommand[1].find("-") != string::npos)
+			chan->setIsTopicProtected(true);
+	}
+
+	string topic = getTopic(splitedCommand);
+	chan->setTopic(topic);
+	serv->sendMessageToChannel(chan, RPL_TOPIC(user->getNickname(), splitedCommand[0], chan->getTopic()));
 }
 
 void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
