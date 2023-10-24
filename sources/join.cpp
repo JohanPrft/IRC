@@ -34,7 +34,9 @@ void	Server::join(User *user, vector<string> args)
 		sendStringSocket(user->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 		cout << CYAN << user->getNickname() << " join  " << args[1] << WHITE << endl;
 
-		 for (vector<User*>::const_iterator it = _channels[args[1]]->getUserList().begin(); it != _channels[args[1]]->getUserList().end(); ++it) {
+		vector<User *> userlist = _channels[args[1]]->getUserList();
+
+		 for (vector<User*>::const_iterator it = userlist.begin(); it != userlist.end(); ++it) {
        		User* userPtr = *it;
 			sendStringSocket(userPtr->getSocket(), RPL_JOIN(user_id(user->getNickname(), user->getFullname()), args[1]));
 
