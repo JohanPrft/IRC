@@ -12,7 +12,8 @@ bool	isChannelNameValid(string name)
 	return (true);
 }
 
-Channel::Channel() {
+Channel::Channel() 
+{
 
 }
 
