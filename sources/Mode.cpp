@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Mode.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jprofit <jprofit@student.42lyon.fr>        +#+  +:+       +#+        */
+/*   By: amontalb <amontalb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 09:05:40 by jprofit           #+#    #+#             */
-/*   Updated: 2023/10/19 09:05:40 by jprofit          ###   ########.fr       */
+/*   Updated: 2023/10/24 14:28:35 by amontalb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 				chan->addOperator(foundUser);
 				serv->sendMessageToChannel(chan, MODE_CHANNELMSGWITHPARAM(chan->getName(), "+o", foundUser->getNickname()));
 			}
-			else if (!foundUser)
+			else
 				sendStringSocket(user->getSocket(), ERR_USERNOTINCHANNEL(user->getNickname(), *it, chan->getName()));
 			it++;
 		}

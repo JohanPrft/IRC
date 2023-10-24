@@ -284,8 +284,8 @@ void Channel::addInvited(User *user)
 {
  	vector<User*>::iterator it = find(_userList.begin(), _userList.end(), user);
 
- 	if (it == _userList.end())
-		Server::cout_server(user->getNickname() + " is not in the channel");
+ 	if (it != _userList.end())
+		Server::cout_server(user->getNickname() + " is already in the channel");
  	else
  	{
  		vector<User*>::iterator it = find(_invited.begin(), _invited.end(), user);

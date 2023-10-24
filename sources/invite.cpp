@@ -22,7 +22,7 @@ void	Server::invite(User *invitator, vector<string> args)
 	//verifier que le user existe
 	if (!userExist(args[1]))
 	{
-		cout << "test" << endl;
+		sendStringSocket(invitator->getSocket(), ERR_NOSUCHNICK(args[1], channel));
 		return;
 	}
 	User *invitated = userExist(args[1]);
