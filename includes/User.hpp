@@ -20,17 +20,17 @@ private:
     bool    _isLogged;
   	string _buffer;
 
-	class InvalidNickException : public exception {
-		virtual const char *what() const throw() {
-			return ("No nickname");
-		}
-	};
+class InvalidNickException : public exception {
+	virtual const char *what() const throw() {
+		return ("No nickname");
+	}
+};
 
-	class InvalidUserException : public exception {
-		virtual const char *what() const throw() {
-			return ("No username");
-		}
-	};
+class InvalidUserException : public exception {
+	virtual const char *what() const throw() {
+		return ("No username");
+	}
+};
 
 class InvalideRealnameException : public exception {
 	virtual const char *what() const throw() {

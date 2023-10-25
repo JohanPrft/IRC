@@ -66,16 +66,18 @@ User::User(Server *serv, int clientSocket, const string &password)
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
 
 	string userInfo = getUserInfo(_clientSocket);
-	fillUserInfo(userInfo, password);
-
-    if (!_isLogged)
-    {
-        put_str_fd("You aren't logged in, please reconnect with password\n", _clientSocket);
-        while (1);
-    }
-	if (!isNickValidOnConnect(serv, this))
-		while (1);
-    put_str_fd("You are now registered, welcome!\n", _clientSocket);
+	try {
+		fillUserInfo(userInfo, password);
+	}
+	catch (const std::exception& e) {
+		Server::cerr_server(e.what());
+	}
+    if (!_isLogged || !isNickValidOnConnect(serv, this))
+	{
+		_isLogged = false;
+		put_str_fd("You aren't logged in, given infos aren't valid\nPlease reconnect\n", _clientSocket);
+	}
+	put_str_fd("You are now registered, welcome!\n", _clientSocket);
 }
 
 User::User(const User &src) {
@@ -155,8 +157,8 @@ static bool checkUserInfo(const string& userInfo)
 		return (false);
 	else if (userInfo.find("USER") == string::npos)
 		return (false);
-//	else if (userInfo.find("PASS") == string::npos && userInfo.find("pass") == string::npos) //can be written by user
-//		return (false);
+	else if (userInfo.find("PASS") == string::npos)
+		return (false);
 	return (true);
 }
 
@@ -177,6 +179,7 @@ string User::getUserInfo(int clientSocket) const {
 		userInfo += string(buffer, bytesRead);
 		bzero(buffer, sizeof(buffer));
 	}
+	cout << userInfo << endl;
 	return (userInfo);
 }
 
@@ -213,7 +216,6 @@ void User::fillUserInfo(const string& userInfo, const string& password) {
     }
     if (user_password != password)
 	{
-		_isLogged = false;
 		sendStringSocket(_clientSocket, ERR_PASSWDMISMATCH(_nickname));
 		Server::cout_server(ERR_PASSWDMISMATCH(_nickname));
 	}
