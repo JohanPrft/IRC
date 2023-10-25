@@ -47,7 +47,7 @@ Channel::Channel(const Channel &cpy) {
 
 Channel::~Channel()
 {
-
+	
 }
 
 //	getters

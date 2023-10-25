@@ -29,10 +29,12 @@ void	Server::quit(User *user, vector<string> args)
         }
         else
             reasonOfQuit = "no reason specified.";
+    
+    // Disconnect user
     sendStringSocket(user->getSocket(), RPL_QUIT(user_id(user->getNickname(), user->getUsername()), reasonOfQuit));
-    sendStringSocket(user->getSocket(), RPL_ERROR(user_id(user->getNickname(), user->getUsername()), "Closing Link: " + user->getNickname() + " (" + reasonOfQuit + ")"));
     cout_server(user->getNickname() + " has quit the server for " + reasonOfQuit);
     handleClientDisconnect(user);
+    
     return ;
 }
     

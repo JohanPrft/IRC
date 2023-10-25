@@ -28,13 +28,12 @@ Server::~Server()
 	map<string, Channel*>::iterator it = _channels.begin();
 	while (it != _channels.end())
 	{
-		delete it->second;
+        delete it->second;
+        it++;
 	}
-	map<int, User*>::iterator iter = _users.begin();
-	while (iter != _users.end())
-	{
-		delete iter->second;
-	}
+    _channels.clear();
+    _users.clear();
+    close(_serverSocket);
 }
 
 vector<string> Server::parseCommand(string& command)
@@ -120,6 +119,7 @@ void Server::handleNewConnection()
     pollfd clientFd;
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
+    clientFd.revents = 0;
     _fds.push_back(clientFd);
 
     _users.insert(std::pair<int, User *>(clientSocket, user));
@@ -135,6 +135,7 @@ void Server::handleClientDisconnect(User *user)
     
     _users.erase(clientSocket);
     delete user;
+
     for (size_t i = 0; i < _fds.size(); ++i)
     {
         if (_fds[i].fd == clientSocket)
@@ -225,10 +226,13 @@ void Server::handleEvents()
             // return;
         }
     }
-//	for (size_t i = 0; i < _fds.size(); ++i)
-//	{
-//		handleClientDisconnect(_users[_fds[i].fd]);
-//	}
+    std::map<int, User*>::iterator it = _users.begin();
+    while (it != _users.end())
+    {
+        User *userToDisconnect = it->second;
+        it++;
+        handleClientDisconnect(userToDisconnect);
+    }
 }
 
 void Server::initServer()
