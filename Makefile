@@ -35,6 +35,7 @@ SRCS_LIST		=	main.cpp		\
 					kick.cpp		\
 					invite.cpp      \
 					leave.cpp       \
+					quit.cpp        \
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
 

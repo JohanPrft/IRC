@@ -19,10 +19,10 @@ class Server {
 			static void	cout_server(const string & msg);
 			static void	cerr_server(const string & msg);
   
-			void 	handleEvents(vector<int> &clients);
-			void	handleNewConnection(vector<int> &clients);
-			void 	handleClientDisconnect(vector<int> &clients, size_t index);
-			void	handleExistingClient(vector<int> &clients, size_t index);
+			void 	handleEvents();
+			void	handleNewConnection();
+			void 	handleClientDisconnect(User *user);
+			void	handleExistingClient(User *currentUser);
       
       		void    confirmClientConnection(User *currentClient);
 			void	sendMessageToChannel(Channel *currentChannel, User *currentClient, string msg);
@@ -67,6 +67,7 @@ private :
 			void kick(User *user, vector<string> args);
 			void invite(User *invitator, vector<string> args);
 			void topic(User *user, vector<string> splitedCommand);
+			void quit(User *user, vector<string> args);
 
 			void privmsg(User *currentUser, vector<string> args);
 			void privmsgChannel(User *currentUser, vector<string> args);

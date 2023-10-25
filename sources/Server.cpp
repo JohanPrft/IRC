@@ -81,6 +81,8 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         leave(user, splitedCommand);
 	else if (command == "TOPIC")
 		topic(user, splitedCommand);
+    else if (command == "QUIT")
+        quit(user, splitedCommand);
 }
 
 void	Server::receiveCommand(User *currentClient)
@@ -99,7 +101,7 @@ void	Server::receiveCommand(User *currentClient)
     return ;
 }
 
-void Server::handleNewConnection(vector<int> &clients)
+void Server::handleNewConnection()
 {
     int clientSocket = accept(_serverSocket, NULL, NULL);
     if (clientSocket == -1)
@@ -115,7 +117,6 @@ void Server::handleNewConnection(vector<int> &clients)
 		return;
 	}
 
-    clients.push_back(clientSocket);
     pollfd clientFd;
     clientFd.fd = clientSocket;
     clientFd.events = POLLIN;
@@ -127,20 +128,25 @@ void Server::handleNewConnection(vector<int> &clients)
 	cout_server("New connection from : " + it->second->getFullname());
 }
 
-void Server::handleClientDisconnect(vector<int> &clients, size_t index)
+void Server::handleClientDisconnect(User *user)
 {
-    put_str_fd("Server is disconnecting you now.\n", _fds[index].fd);
-	cout_server(_users[_fds[index].fd]->getNickname() + " disconnected");
-    close(_fds[index].fd);
-    clients.erase(remove(clients.begin(), clients.end(), _fds[index].fd), clients.end());
-    delete _users[_fds[index].fd];
-    _users.erase(_fds[index].fd);
-    _fds.erase(_fds.begin() + index);
+    int clientSocket = user->getSocket();
+    close(clientSocket);
+    
+    _users.erase(clientSocket);
+    delete user;
+    for (size_t i = 0; i < _fds.size(); ++i)
+    {
+        if (_fds[i].fd == clientSocket)
+        {
+            _fds.erase(_fds.begin() + i);
+            break;
+        }
+    }
 }
 
-void Server::handleExistingClient(vector<int> &clients, size_t index)
+void Server::handleExistingClient(User *currentClient)
 {
-    User *currentClient = _users[_fds[index].fd];
     if (currentClient == NULL)
     {
 		cerr_server("Error finding client");
@@ -149,8 +155,9 @@ void Server::handleExistingClient(vector<int> &clients, size_t index)
     try {
         receiveCommand(currentClient);
     }
-    catch (const std::runtime_error &e) {
-        handleClientDisconnect(clients, index);
+    catch (const std::runtime_error &e)
+    {
+        handleClientDisconnect(currentClient);
     }
 }
 
@@ -186,7 +193,7 @@ void Server::addServerSocketToEvents()
     _fds.push_back(serverFd);
 }
 
-void Server::handleEvents(vector<int> &clients)
+void Server::handleEvents()
 {
     while (ctrlCPressed == false)
     {
@@ -199,16 +206,16 @@ void Server::handleEvents(vector<int> &clients)
                 {
                     if (_fds[i].fd == _serverSocket)
                     {
-                        handleNewConnection(clients);
+                        handleNewConnection();
                     }
                     else
                     {
-                        handleExistingClient(clients, i);
+                        handleExistingClient(_users[_fds[i].fd]);
                     }
                 }
                 else if (_fds[i].revents & POLLHUP)
                 {
-                    handleClientDisconnect(clients, i);
+                    handleClientDisconnect(_users[_fds[i].fd]);
                 }
             }
         }
@@ -229,8 +236,7 @@ void Server::initServer()
     initializeServerSocket();
     addServerSocketToEvents();
 
-    vector<int> clients;
-    handleEvents(clients);
+    handleEvents();
 }
 
 void    Server::confirmClientConnection(User *currentClient)
