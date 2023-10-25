@@ -101,8 +101,9 @@ User &User::operator=(const User &cpy) {
 	return (*this);
 }
 
-User::~User() {
-	close(_clientSocket);
+User::~User()
+{
+	return ;
 }
 
 ostream& operator<<(ostream& os, const User& user) {
