@@ -225,10 +225,10 @@ void Server::handleEvents()
             // return;
         }
     }
-	for (size_t i = 0; i < _fds.size(); ++i)
-	{
-		handleClientDisconnect(clients, i);
-	}
+//	for (size_t i = 0; i < _fds.size(); ++i)
+//	{
+//		handleClientDisconnect(_users[_fds[i].fd]);
+//	}
 }
 
 void Server::initServer()
