@@ -93,9 +93,7 @@ void	Server::receiveCommand(User *currentClient)
 	if (bytesRead > 0)
     {
 		string str(buffer);
-		currentClient->cout_user(str);
 		vector<string> splitedCommand = parseCommand(str);
-		currentClient->cout_user(str);
 		execCommand(currentClient, splitedCommand);
 	}		
     return ;
@@ -111,7 +109,7 @@ void Server::handleNewConnection(vector<int> &clients)
     }
 
 	User *user = new User(this, clientSocket, _password);
-	if (!user->getIsLogged())
+	if (user->getIsLogged() == false)
 	{
 		delete user;
 		return;
@@ -148,12 +146,10 @@ void Server::handleExistingClient(vector<int> &clients, size_t index)
 		cerr_server("Error finding client");
         return;
     }
-    try
-    {
+    try {
         receiveCommand(currentClient);
     }
-    catch (const std::runtime_error &e)
-    {
+    catch (const std::runtime_error &e) {
         handleClientDisconnect(clients, index);
     }
 }
