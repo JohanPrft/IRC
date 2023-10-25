@@ -19,6 +19,7 @@
 #include <time.h>
 #include <sstream>
 #include <numeric>
+#include <csignal>
 
 
 using std::cout;
@@ -52,5 +53,6 @@ void split(string input, char del, vector<string> &tokens);
 #define BUFFER_SIZE 512
 const string CRLF = "/r/n";
 const string AUTHORISED_CHAR_NICK = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]{}\\|";
+extern bool ctrlCPressed;
 
 #endif

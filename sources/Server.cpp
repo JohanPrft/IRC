@@ -192,7 +192,7 @@ void Server::addServerSocketToEvents()
 
 void Server::handleEvents(vector<int> &clients)
 {
-    while (true)
+    while (ctrlCPressed == false)
     {
         int activity = poll(&_fds[0], _fds.size(), -1);
         if (activity >= 0)
@@ -222,6 +222,10 @@ void Server::handleEvents(vector<int> &clients)
             // return;
         }
     }
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		handleClientDisconnect(clients, i);
+	}
 }
 
 void Server::initServer()

@@ -1,4 +1,4 @@
-#include "../includes/irc.hpp"
+#include "../includes/utils.hpp"
 
 void sendStringSocket(int socket, const string& str)
 {
@@ -40,4 +40,12 @@ void replaceAll(string& str, const string& from, const string& to) {
 		str.replace(start_pos, from.length(), to);
 		start_pos += to.length();
 	}
+}
+
+bool ctrlCPressed = false;
+
+void handleSignal(int signal)
+{
+	(void)signal;
+	ctrlCPressed = true;
 }
