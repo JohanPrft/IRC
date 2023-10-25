@@ -25,6 +25,16 @@ Server::Server(int port, string password, struct tm * timeinfo) :
 
 Server::~Server()
 {
+	map<string, Channel*>::iterator it = _channels.begin();
+	while (it != _channels.end())
+	{
+		delete it->second;
+	}
+	map<int, User*>::iterator iter = _users.begin();
+	while (iter != _users.end())
+	{
+		delete iter->second;
+	}
 }
 
 vector<string> Server::parseCommand(string& command)
