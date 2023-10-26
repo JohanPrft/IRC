@@ -82,19 +82,35 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         quit(user, splitedCommand);
 }
 
-void	Server::receiveCommand(User *currentClient)
+void	Server::receiveCommand(User *user)
 {
 	char buffer[1024];
     ssize_t bytesRead;
 
     memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
-	if (bytesRead > 0)
+    bytesRead = recv(user->getSocket(), buffer, sizeof(buffer), 0);
+	if (bytesRead < 0)
     {
-		string str(buffer);
-		vector<string> splitedCommand = parseCommand(str);
-		execCommand(currentClient, splitedCommand);
-	}		
+		cerr_server("Error reading from client socket");
+		return;
+	}
+	if (bytesRead == 0)
+	{
+		cout_server("Client disconnected");
+		handleClientDisconnect(user);
+		return;
+	}
+	else
+	{
+		user->concatBuffer(buffer);
+		if (user->getBuffer().find("\r\n") != string::npos)
+		{
+			string str = user->getBuffer();
+			vector<string> splitedCommand = parseCommand(str);
+			execCommand(user, splitedCommand);
+			user->clearBuffer();
+		}
+	}
     return ;
 }
 
@@ -282,12 +298,8 @@ void Server::sendMessageToUser(User *currentClient, User *targetClient, string m
     return ;
 }
 
-void Server::cout_server(const string & msg)
-{
-    if (msg.find('\r') != std::string::npos)
-        cout << GREEN << "[Server]: " << msg << RESET;
-    else
-        cout << GREEN << "[Server]: " << msg << RESET << endl;
+void Server::cout_server(const string & msg) {
+	cout << GREEN << "[Server]: " << msg << RESET << endl;
 }
 
 void Server::cerr_server(const string & msg) {
