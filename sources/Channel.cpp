@@ -54,18 +54,18 @@ Channel::~Channel()
 
 string	Channel::getNicksuser(string nickname)
 {
+	(void) nickname;
 	string result;
 	vector<User *> userlist = getUserList();
 
 	for (vector<User*>::const_iterator it = userlist.begin(); it != userlist.end(); ++it) 
 	{
        		User* userPtr = *it;
-			if (userPtr->getNickname() != nickname)
-			{
+			
 				if (isUserOperator(userPtr))
 					result += "@";
 				result += userPtr->getNickname() + " ";
-			}
+		
 	}
 	return result;
 }
