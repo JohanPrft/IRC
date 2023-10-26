@@ -105,6 +105,7 @@ void	Server::receiveCommand(User *user)
 		user->concatBuffer(buffer);
 		if (user->getBuffer().find("\r\n") != string::npos)
 		{
+            user->cout_user(user->getBuffer());
 			vector<string> splitedCommand = parseCommand(user->getBuffer());
             user->getBuffer().clear();
 			execCommand(user, splitedCommand);
