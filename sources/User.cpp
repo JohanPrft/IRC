@@ -68,7 +68,7 @@ User::User(Server *serv, int clientSocket, const string &password)
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
 
 	string userInfo = getUserInfo(_clientSocket);
-	cout <<  userInfo << endl;
+	cout_user(userInfo);
 	try {
 		fillUserInfo(userInfo, password);
 	}
@@ -239,11 +239,11 @@ string User::getBuffer() const {
 	return (_buffer);
 }
 
-void User::setBuffer(const string &buffer) {
-	_buffer = buffer;
+void User::concatBuffer(const string &buffer) {
+	_buffer += buffer;
 }
 
-void User::resetBuffer() {
+void User::clearBuffer() {
 	_buffer.clear();
 }
 
