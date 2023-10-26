@@ -117,7 +117,7 @@ void setChanPassword(Server *serv, Channel *chan, User *user, vector<string> spl
 		sendStringSocket(user->getSocket(), ERR_NEEDMOREPARAMS(user->getNickname(), "MODE"));
 		return;
 	}
-	if (splitedCommand[1].find("+") != string::npos)
+	if (splitedCommand[1].find("+") != string::npos && splitedCommand.size() > 2)
 	{
 		chan->setNeedPassword(true);
 		chan->setPassword(splitedCommand[2]);
@@ -183,7 +183,7 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
 	(void)serv;
-	if (splitedCommand[1].find("+") != string::npos && chan->getLimitUSer() == false)
+	if (splitedCommand[1].find("+") != string::npos && splitedCommand.size() > 2 && chan->getLimitUSer() == false)
 	{
 		int maxUser = atoi(splitedCommand[2].c_str());
 		if (maxUser < 1)
