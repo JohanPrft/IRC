@@ -30,12 +30,14 @@ SRCS_LIST		=	main.cpp		\
 					Channel.cpp		\
 					utils.cpp		\
 					Mode.cpp		\
-					command.cpp     \
-					join.cpp        \
-					kick.cpp		\
-					invite.cpp      \
-					leave.cpp       \
-					quit.cpp        \
+					commands/command.cpp     \
+					commands/invite.cpp    \
+					commands/join.cpp        \
+					commands/kick.cpp		\
+					commands/leave.cpp       \
+					commands/quit.cpp        \
+					commands/privmsg.cpp      \
+					commands/topic.cpp        \
 
 HEADERS			=	${HEADERS_LIST:%.hpp=${DIR_HEADERS}%.hpp}
 
@@ -64,6 +66,7 @@ ${OBJS}			:	${DIR_OBJS}%.o:	${DIR_SRCS}%.cpp ${HEADERS} Makefile
 
 ${DIR_OBJS}		:
 					mkdir -p ${DIR_OBJS}
+					mkdir -p ${DIR_OBJS}commands
 
 clean			:
 					${RM} ${OBJS}

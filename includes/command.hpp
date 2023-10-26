@@ -3,9 +3,8 @@
 
 #include "irc.hpp"
 
-void nick(Server *serv, User *user, vector<string> splitedCommand);
-void username(User *user);
-void ping(int clientSocket, User *user, vector<string> splitedCommand);
+void    nick(Server *serv, User *user, vector<string> splitedCommand);
+void    ping(int clientSocket, User *user, vector<string> splitedCommand);
 void	unknown(User *user, vector<string> splitedCommand);
 
 #endif

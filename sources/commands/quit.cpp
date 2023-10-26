@@ -1,4 +1,4 @@
-#include "../includes/irc.hpp"
+#include "../../includes/irc.hpp"
 
 void	Server::quit(User *user, vector<string> args)
 {
