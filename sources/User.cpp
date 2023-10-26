@@ -12,7 +12,9 @@ User::User()
     _hostname = "Undefined";
     _clientSocket = -1;
     _isLogged = false;
+    _buffer = "";
 }
+
 
 void put_str_fd(const string& str, int fd)
 {
@@ -79,7 +81,8 @@ User::User(Server *serv, int clientSocket, const string &password)
 	{
 		_isLogged = false;
 		put_str_fd("You aren't logged in, given infos aren't valid\nPlease reconnect\n", _clientSocket);
-	}
+        close(_clientSocket);
+    }
 }
 
 User::User(const User &src) {

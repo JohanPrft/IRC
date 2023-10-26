@@ -183,7 +183,7 @@ void makeOperator(Server *serv, Channel *chan, User *user, vector<string> splite
 void limitNumberUser(Server *serv, Channel *chan, User *user, vector<string> splitedCommand)
 {
 	(void)serv;
-	if (splitedCommand[1].find("+") != string::npos && splitedCommand.size() > 2 && chan->getLimitUSer() == false)
+	if (splitedCommand[1].find("+") != string::npos && splitedCommand.size() > 2)
 	{
 		int maxUser = atoi(splitedCommand[2].c_str());
 		if (maxUser < 1)

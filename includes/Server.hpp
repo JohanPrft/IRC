@@ -49,10 +49,7 @@ private :
 			
 			int					_port;
 			int					_serverSocket;
-			// unsigned			_nbrUserMax;
-			// unsigned			_nbrUser;
-			string			_buffer;
-			string			_datetime;
+			string			    _datetime;
 
 			string					_password;
 			sockaddr_in				_serverAddress;

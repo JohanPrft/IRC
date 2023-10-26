@@ -121,7 +121,6 @@ void Server::handleNewConnection()
         cerr_server("Error accepting client socket");
         return;
     }
-
 	User *user = new User(this, clientSocket, _password);
 	if (user->getIsLogged() == false)
 	{
