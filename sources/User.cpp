@@ -77,7 +77,6 @@ User::User(Server *serv, int clientSocket, const string &password)
 		_isLogged = false;
 		put_str_fd("You aren't logged in, given infos aren't valid\nPlease reconnect\n", _clientSocket);
 	}
-	put_str_fd("You are now registered, welcome!\n", _clientSocket);
 }
 
 User::User(const User &src) {
@@ -180,13 +179,14 @@ string User::getUserInfo(int clientSocket) const {
 		userInfo += string(buffer, bytesRead);
 		bzero(buffer, sizeof(buffer));
 	}
-	cout << userInfo << endl;
+	replaceAll(userInfo, "\r", "");
+	replaceAll(userInfo, "\n", " ");
 	return (userInfo);
 }
 
 void User::fillUserInfo(const string& userInfo, const string& password) {
 	size_t pos = userInfo.find("NICK");
-	size_t endPos = userInfo.find('\r', pos + 5);
+	size_t endPos = userInfo.find(' ', pos + 5);
 	if (pos == std::string::npos || endPos == std::string::npos)
 		throw InvalidNickException();
 	_nickname = userInfo.substr(pos + 5, endPos - (pos + 5));
@@ -205,14 +205,14 @@ void User::fillUserInfo(const string& userInfo, const string& password) {
 	pos = userInfo.find(':');
 	if (pos == string::npos)
 		throw InvalideRealnameException();
-	endPos = userInfo.find('\r', pos + 1);
+	endPos = userInfo.find(' ', pos + 1);
 	_fullname = userInfo.substr(pos + 1, endPos - (pos + 1));
 
     //check password
     string user_password;
     pos = userInfo.find("PASS");
     if (pos != string::npos) {
-        endPos = userInfo.find('\r', pos + 5);  // \r\n at the end of the pass
+        endPos = userInfo.find(' ', pos + 5);  // \r\n at the end of the pass
         user_password = userInfo.substr(pos + 5, endPos - (pos + 5));
     }
     if (user_password != password)
