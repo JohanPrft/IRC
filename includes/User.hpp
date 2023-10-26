@@ -51,7 +51,7 @@ public:
     string	getFullname() const;
     string	getHostname() const;
     int		getIsLogged() const;
-	string	getBuffer() const;
+	string & getBuffer();
 
     void	setLogged(bool logged);
 	void	setNickname(const string & nick);

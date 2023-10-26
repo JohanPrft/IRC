@@ -235,7 +235,7 @@ void User::cerr_user(const string & msg) {
 	cerr << RED << "[Client]: " << msg << RESET;
 }
 
-string User::getBuffer() const {
+string & User::getBuffer() {
 	return (_buffer);
 }
 

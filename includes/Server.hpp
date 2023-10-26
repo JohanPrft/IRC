@@ -33,7 +33,7 @@ class Server {
 			int		getFdUser(User *user);
 
 			//	commands
-			vector<string>	parseCommand(string& command);
+			vector<string>	parseCommand(string command);
 			void			receiveCommand(User *user);
 			void			sendCommand(int clientSocket, string command, vector<string> args);
 			void			execCommand(User *user, vector<string> splitedCommand);

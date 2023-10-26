@@ -36,7 +36,7 @@ Server::~Server()
     close(_serverSocket);
 }
 
-vector<string> Server::parseCommand(string& command)
+vector<string> Server::parseCommand(string command)
 {
 		vector<string> splitedCommand;
 		replaceAll(command, "\r", "");
@@ -105,10 +105,9 @@ void	Server::receiveCommand(User *user)
 		user->concatBuffer(buffer);
 		if (user->getBuffer().find("\r\n") != string::npos)
 		{
-			string str = user->getBuffer();
-			vector<string> splitedCommand = parseCommand(str);
+			vector<string> splitedCommand = parseCommand(user->getBuffer());
+            user->getBuffer().clear();
 			execCommand(user, splitedCommand);
-			user->clearBuffer();
 		}
 	}
     return ;
