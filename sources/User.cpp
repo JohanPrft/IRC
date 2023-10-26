@@ -1,4 +1,6 @@
 #include "../includes/irc.hpp"
+#include "User.hpp"
+
 
 // Intercept and process the first 3 messages
 
@@ -66,6 +68,7 @@ User::User(Server *serv, int clientSocket, const string &password)
     put_str_fd("Welcome to the IRC server!\n", _clientSocket);
 
 	string userInfo = getUserInfo(_clientSocket);
+	cout <<  userInfo << endl;
 	try {
 		fillUserInfo(userInfo, password);
 	}
@@ -230,5 +233,17 @@ void User::cout_user(const string & msg) {
 
 void User::cerr_user(const string & msg) {
 	cerr << RED << "[Client]: " << msg << RESET;
+}
+
+string User::getBuffer() const {
+	return (_buffer);
+}
+
+void User::setBuffer(const string &buffer) {
+	_buffer = buffer;
+}
+
+void User::resetBuffer() {
+	_buffer.clear();
 }
 

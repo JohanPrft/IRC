@@ -51,11 +51,14 @@ public:
     string	getFullname() const;
     string	getHostname() const;
     int		getIsLogged() const;
+	string getBuffer() const;
 
     void	setLogged(bool logged);
 	void	setNickname(const string & nick);
 	bool	isNickValidOnConnect(Server *serv, User *user);
 	void	setUsername(const string & username);
+	void	setBuffer(const string &buffer);
+	void	resetBuffer();
 
 	string getUserInfo(int clientSocket) const;
 	void fillUserInfo(const string& userInfo, const string& password);

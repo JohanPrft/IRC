@@ -84,20 +84,37 @@ void Server::execCommand(User *user, vector<string> splitedCommand)
         quit(user, splitedCommand);
 }
 
-void	Server::receiveCommand(User *currentClient)
+void	Server::receiveCommand(User *user)
 {
 	char buffer[1024];
     ssize_t bytesRead;
 
     memset(buffer, 0, sizeof(buffer)); // clear the buffer
-    bytesRead = recv(currentClient->getSocket(), buffer, sizeof(buffer), 0);
-	if (bytesRead > 0)
+    bytesRead = recv(user->getSocket(), buffer, sizeof(buffer), 0);
+	if (bytesRead <= -1)
     {
-		string str(buffer);
-		vector<string> splitedCommand = parseCommand(str);
-		execCommand(currentClient, splitedCommand);
-	}		
-    return ;
+		cerr_server("Error reading from client socket");
+		return;
+	}
+	else if (bytesRead == 0)
+	{
+		cerr_server("Client disconnected");
+		return;
+	}
+	else
+	{
+		user->setBuffer(buffer);
+		if (user->getBuffer().find(CRLF) != string::npos)
+		{
+			string command = user->getBuffer();
+			vector<string> splitedCommand = parseCommand(command);
+			execCommand(user, splitedCommand);
+			user->resetBuffer();
+		}
+		else
+			return;
+	}
+    return;
 }
 
 void Server::handleNewConnection()
