@@ -37,7 +37,7 @@ void	Server::join(User *user, vector<string> args)
 		}
 		//on verifie sit le nombre max de user est atteind
 		if (_channels[args[1]]->getMaxUser() && _channels[args[1]]->getMaxUser() != -1
-			&& _channels[args[1]]->getUserCount() >= _channels[args[1]]->getLimitUSer())
+			&& _channels[args[1]]->getUserCount() >= _channels[args[1]]->getMaxUser())
 		{
 			sendStringSocket(user->getSocket(), ERR_CHANNELISFULL(user->getNickname(), args[1]));
 			return;
