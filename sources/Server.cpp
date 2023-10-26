@@ -301,8 +301,12 @@ void Server::sendMessageToUser(User *currentClient, User *targetClient, string m
     return ;
 }
 
-void Server::cout_server(const string & msg) {
-	cout << GREEN << "[Server]: " << msg << RESET << endl;
+void Server::cout_server(const string & msg)
+{
+    if (msg.find('\r') != std::string::npos)
+        cout << GREEN << "[Server]: " << msg << RESET;
+    else
+        cout << GREEN << "[Server]: " << msg << RESET << endl;
 }
 
 void Server::cerr_server(const string & msg) {
