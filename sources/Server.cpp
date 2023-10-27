@@ -265,6 +265,9 @@ void    Server::confirmClientConnection(User *currentClient)
     buffer += RPL_CREATED(currentClient->getNickname(), _datetime);
     buffer += RPL_MYINFO(currentClient->getNickname(), SERVERNAME, VERSION, USERMODE, CHANMODE, CHANMODE);
 	buffer += RPL_ISUPPORT(currentClient->getNickname(), "CHANNELLEN=32 NICKLEN=9 TOPICLEN=307");
+	buffer += RPL_MOTDSTART(currentClient->getNickname(), SERVERNAME);
+	buffer += MOTD;
+	buffer += RPL_ENDOFMOTD(currentClient->getNickname());
 	sendStringSocket(currentClient->getSocket(), buffer);
 }
 
